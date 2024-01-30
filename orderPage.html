@@ -1,0 +1,3089 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            background-color: #535353;
+            justify-content: center;
+            height: auto;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        @media only screen and (max-width: 1000px) {
+            body {
+                overflow: auto;
+            }
+        }
+        .TopLay {
+            background-color: #303030;
+            width: 98vw;
+            height: 6vw;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: solid black;
+        }
+        .TopMid1 {
+            width: 15vw;
+            height: 6vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: solid black;
+        }
+        .TopMid2 {
+            width: 68vw;
+            height: 6vw;
+            display: flex;
+            align-items: center;
+            border: solid black;
+        }
+        .TopMid3 {
+            width: 15vw;
+            height: 6vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: solid black;
+        }
+        .TopMid3 h2 {
+            color: white;
+            font-size: 1.5vw;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .Mid {
+            width: 98vw;
+            height: 78vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: solid black;
+        }
+/*____________________________________________________________________________________________________________*/
+        .LeftLay {
+            background-color: #303030;
+            width: 15.4vw;
+            height: 78vh;
+            display: flex;
+            flex-direction: column;
+            border: solid black;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .LeftLay ul {
+            margin: 0;
+            padding: 0;
+        }
+        .list-item {
+            box-sizing: border-box;
+            list-style: none;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid #303030;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+        }
+        .list-item:last-child {
+            border-bottom: 0.3vw solid black;;
+        }
+        .list-item.active {
+            border-color: #1E90FF;
+        }
+        #floorContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+        #unitContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+/*____________________________________________________________________________________________________________*/
+        .MidLay {
+            background-color: #1f1f1f;
+            width: 70vw;
+            height: 78vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: solid black;
+            overflow-x: auto;
+        }
+        .MidLayy {
+            background-color: #1f1f1f;
+            width: 70vw;
+            height: 78vh;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: solid black;
+            font-size: 1vw;
+        }
+        .image-box {
+            width: 20vw;
+            height: 28vw;
+            margin: 0.8vw;
+            text-align: center;
+            cursor: pointer;
+        }
+        .image-box img {
+            width: 100%;
+            height: 80%;
+        }
+        .image-column {
+            text-align: center;
+        }
+        .image-column img {
+            max-width: 28vw;
+            max-height: 30vw;
+        }
+        @media only screen and (min-width: 800px) and (max-width: 50000px) {
+          .form-container {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;                              
+              margin-top: 6vw;
+          }
+        }
+        @media only screen and (max-width: 800px) {
+          .form-container {
+            display: flex;
+            flex-direction: column;                             
+            margin-top: 6vw;
+            }
+        }
+        .form-group {
+            display: flex;
+            align-items: center; /* Vertically align input boxes with the submit button */
+            width: auto;
+            height: auto;
+            margin-bottom: 0.4vw;
+        }
+        .form-group label {
+            margin-right: 1vw;
+            text-align: right;
+            color: white;
+        }
+        .form-group input {
+            flex: 1; /* Make the input boxes expand to fill the available space */
+            font-size: 1vw;
+        }
+        .form-group2 {
+            display: flex;
+            align-items: center; /* Vertically align input boxes with the submit button */
+            margin-bottom: 0.4vw;
+        }
+        .form-group2 label {
+            min-width: 3vw;
+            margin-right: 1vw;
+            text-align: right;
+            color: white;
+        }
+        .form-group2 input {
+            width: 1.5vw; /* Make the input boxes expand to fill the available space */
+            font-size: 1.2vw;
+        }
+        .submit-btn {
+            margin-top: 1.2vw; /* Add some space between forms and the submit button */
+            width: 100%; /* Set the width of the submit button to match the form boxes */
+            text-align: center;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 0.4vw;
+            cursor: pointer;
+            margin: 0.4vw 0;
+            padding: 0.4vw 1.2vw;
+            font-size: 1vw;
+        }
+
+        /* Styling for selected answer buttons */
+        .answer-btn {
+            border: 0.2vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 0.2vw 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+        }
+        #answer-btn2 {
+            border: 0.2vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 0.2vw 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+        }
+
+        .answer-btn.selected {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.6vw;
+        }
+        .header-container {
+          bottom: 10%;
+        }
+
+        @media only screen and (orientation: landscape) {
+          .header {
+              position: absolute;
+              bottom: 77%;
+              left: 19%;
+              font-size: 3vw;
+              font-weight: bold;
+              color: white;
+              white-space: nowrap;
+          }
+        }
+        @media only screen and (orientation: portrait) {
+          .header {
+              font-size: 3vw;
+              font-weight: bold;
+              color: white;
+              white-space: nowrap;
+          }
+        }
+/*____________________________________________________________________________________________________________*/
+        .RightLay {
+            background-color: #303030;
+            width: 15.4vw;
+            height: 78vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: solid black;
+            overflow-y: auto;
+        }
+        .part {
+          cursor: pointer;
+          box-sizing: border-box;
+          border-top: 0.3vw solid black;
+          border-bottom: 0.3vw solid #303030;
+          border-left: 0.3vw solid #303030;
+          border-right: 0.3vw solid #303030;
+          padding: 0.8vh;
+          width: 14.8vw;
+          color: white;
+          text-align: center;
+          background-color: #4b4b4b;
+          background-clip: border-box;
+        }
+        .part:last-child {
+          border-bottom: 0.3vw solid black;;
+        }
+        .details {
+            display: none;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .details div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .details span, .details input {
+            flex: 1;
+            margin-right: 5px;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #555555;
+            margin: 5px auto;
+            border-radius: 4px;
+            position: relative;
+        }
+
+    .progress-bar {
+        width: 1%;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        background-color: #1E90FF;
+        border-radius: 4px;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="TopLay">
+        <div class="TopMid1">
+            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 75%;">
+        </div>
+        <div class="TopMid2">
+            <button style="display: flex; justify-content: center; align-items: center; width: 5vw; height: 4vw; font-size: 3vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; padding: 6px 20px; margin-left: 2vw;" id="gbck">&larr;</button>
+            <div style="flex: 0.414;"></div>
+            <h1 style="color: white; font-size: 3vw;">Order Page</h1>
+        </div>
+        <div class="TopMid3">
+            <h2 style="color: white;" id="curUser">User:&nbsp</h2>
+            <h2 style="color: white;" id="HourHour"></h2>
+            <button style="width: fit-content; height: 2vw; font-size: 1.5vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer;" id="Discon">Disconnect</button>
+        </div>
+    </div>
+    <div class="Mid">
+        <div class="LeftLay">
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Worksite:</h2>
+            <ul id="listContainer"></ul>
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Floor:</h2>
+            <ul id="floorContainer"></ul>
+            <div style="display: none; flex-direction: row; align-content: center; justify-content: center; margin-top: 1vw;" id="floorBC">
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delFloor">Delete</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edFloor">Edit</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addFloor">Add</button>
+            </div>
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Unit:</h2>
+            <ul id="unitContainer"></ul>
+            <div style="display: none; flex-direction: row; align-content: center; justify-content: center; margin-top: 1vw;" id="unitBC">
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delUnit">Delete</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edUnit">Edit</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addUnit">Add</button>
+            </div>
+        </div>
+        <div class="MidLay" id="MidLay1">
+            <div class="image-box" id="part1">
+                  <img src="https://192.168.2.32:443/image1" alt="90° Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">90° Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part2">
+                  <img src="https://192.168.2.32:443/image2" alt="30° Knife Edge">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">30° Knife Edge</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part3">
+                  <img src="https://192.168.2.32:443/image3" alt="45° Knife Edge">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">45° Knife Edge</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part4">
+                  <img src="https://192.168.2.32:443/image4" alt="90° 3 Way Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">90° 3 Way Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part15">
+                <img src="https://192.168.2.32:443/image15" alt="90° 4 Way Profile">
+                <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">90° 4 Way Profile</h2>
+              </a>
+            </div>
+              <div class="image-box" id="part5">
+                  <img src="https://192.168.2.32:443/image5" alt="135° Bulkhead Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">135° Bulkhead Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part6">
+                  <img src="https://192.168.2.32:443/image6" alt="135° Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">135° Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part7">
+                  <img src="https://192.168.2.32:443/image7" alt="C-Cap Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">C-Cap Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part8">
+                  <img src="https://192.168.2.32:443/image8" alt="Column Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Column Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part9">
+                  <img src="https://192.168.2.32:443/image9" alt="Fire Rated Enclosure Double">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Fire Rated Enclosure Double</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part10">
+                  <img src="https://192.168.2.32:443/image10" alt="Fire Rated Enclosure">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Fire Rated Enclosure</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part11">
+                  <img src="https://192.168.2.32:443/image11" alt="Hat Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Hat Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part12">
+                  <img src="https://192.168.2.32:443/image12" alt="Multi-Step profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Multi-Step profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part13">
+                  <img src="https://192.168.2.32:443/image13" alt="Radius Bulkhead">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Radius Bulkhead</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part14">
+                  <img src="https://192.168.2.32:443/image14" alt="Radius Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Radius Profile</h2>
+                </a>
+              </div>
+        </div> 
+        <div class="MidLayy" id="MidLay2">
+          <div class="image-column">
+            <div class="header-container">
+              <div class="header">90° Profile</div>
+            </div>
+            <img src="image1" alt="Big Picture">
+          </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Length (Ft):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                      <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+ 
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div> 
+        <div class="MidLayy" id="MidLay3">
+            <div class="image-column">
+                <div class="header-container">
+                <div class="header">30° Knife Edge</div>
+                </div>
+                <img src="image2" alt="Big Picture">
+            </div>
+        
+            <!-- Form container -->
+            <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                    <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <label>Thickness (Ft):</label>
+                    <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+        
+                <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                </div>
+            
+                <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                </div>
+        
+                <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                    <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                    <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                    <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                    <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                    <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                    <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                </div>
+                <div class="form-group2">
+                  <label for="qty">Quantity:</label>
+                  <input type="text" id="qty" name="quantity" value="1" required>
+                </div>
+        
+                <!-- Submit button -->
+                <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+            </div>  
+        </div> 
+        <div class="MidLayy" id="MidLay4">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">45° Knife Edge</div>
+                </div>
+                <img src="image3" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay5">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">90° 3 Way Profile</div>
+                </div>
+                <img src="image4" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay6">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">135° Bulkhead Profile</div>
+                </div>
+                <img src="image5" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay7">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">135° Profile</div>
+                </div>
+                <img src="image6" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay8">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">C-Cap Profile</div>
+                </div>
+                <img src="image7" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay9">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Column Profile</div>
+                </div>
+                <img src="image8" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                  <label for="dD">Dimension D (Inches):</label>
+                  <input type="text" id="dD" name="dD" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dE">Dimension E (Inches):</label>
+                      <input type="text" id="dE" name="dE" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay10">
+          <div class="image-column">
+            <div class="header-container">
+              <div class="header">Fire Rated Enclosure Double</div>
+            </div>
+            <img src="image9" alt="Big Picture">
+          </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay11">
+          <div class="image-column">
+            <div class="header-container">
+              <div class="header">Fire Rated Enclosure</div>
+            </div>
+            <img src="image10" alt="Big Picture">
+          </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+                    <div class="form-group2">
+                      <label for="qty">Quantity:</label>
+                      <input type="text" id="qty" name="quantity" value="1" required>
+                    </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay12">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Hat Profile</div>
+                </div>
+                <img src="image11" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                  <label for="dD">Dimension D (Inches):</label>
+                  <input type="text" id="dD" name="dD" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dE">Dimension E (Inches):</label>
+                      <input type="text" id="dE" name="dE" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay13">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Multi-Step profile</div>
+                </div>
+                <img src="image12" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                  <label for="dD">Dimension D (Inches):</label>
+                  <input type="text" id="dD" name="dD" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 1:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge1" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge 2:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Plain">Plain</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Tapered">Tapered</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="D200">D200</button>
+                      <button type="button" class="answer-btn" data-name="edge2" data-value="Fabric">Fabric</button>
+                    </div>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay14">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Radius Bulkhead</div>
+                </div>
+                <img src="image13" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="d1A">Dimension 1A (Inches):</label>
+                    <input type="text" id="d1A" name="d1A" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="d2A">Dimension 2A (Inches):</label>
+                    <input type="text" id="d2A" name="d2A" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="d1B">Dimension 1B (Inches):</label>
+                      <input type="text" id="d1B" name="d1B" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                      <label for="d2B">Dimension 2B (Inches):</label>
+                      <input type="text" id="d2B" name="d2B" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dR">Dimension R (Inches):</label>
+                      <input type="text" id="dR" name="dR" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dR_P">Dimension R' (Inches):</label>
+                      <input type="text" id="dR_P" name="dR_P" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                      <label for="dH">Dimension H (Inches):</label>
+                      <input type="text" id="dH" name="dH" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dW">Dimension W (Inches): </label>
+                      <input type="text" id="dW" name="dW" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay15">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Radius Profile</div>
+                </div>
+                <img src="image14" alt="Big Picture">
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension ØA (Inches):</label>
+                    <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="text" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                  <button type="button" class="submit-btn" id="addOrder">Submit</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay16">
+          <div class="image-column">
+              <div class="header-container">
+                <div class="header">90° 4 Way Profile</div>
+              </div>
+              <img src="image15" alt="Big Picture">
+            </div>
+        
+            <!-- Form container -->
+            <div class="form-container">
+              <form id="pictureForm">
+                <div class="form-group">
+                  <label>Drywall Type:</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Dimensioned Side:</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                    <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                  </div>
+                </div>
+        
+                <div class="form-group">
+                  <label>Thickness:</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                  </div>
+                </div>
+        
+                <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+                </div>
+        
+                <div class="form-group">
+                  <label for="dA">Dimension A (Inches):</label>
+                  <input type="text" id="dA" name="dA" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                </div>
+            
+                <div class="form-group">
+                  <label for="dB">Dimension B (Inches):</label>
+                  <input type="text" id="dB" name="dB" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                </div>
+        
+                <div class="form-group">
+                  <label for="dC">Dimension C (Inches):</label>
+                  <input type="text" id="dC" name="dC" required>
+                    <span class="greenP" style="transform: translateX(-160%); color: rgb(255, 255, 255); font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                </div>
+                <div class="form-group2">
+                  <label for="qty">Quantity:</label>
+                  <input type="text" id="qty" name="quantity" value="1" required>
+                </div>
+
+                <!-- Submit button -->
+                <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                <button type="button" class="submit-btn" id="addOrder">Submit</button>
+              </form>
+            </div>
+      </div>
+        <div class="RightLay">
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Group Order:</h2>
+          <div id="parts-list"></div>
+          <button style="width: fit-content; height: 2vw; font-size: 1.3vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 0.7vw; display: none;" id="submitButton">Submit</button>
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Order Progress:</h2>
+          <div style="width: 100%;" id="progressContainer"></div>
+        </div>
+    </div>
+    <script>
+        var backendURL = "https://192.168.2.32:443";
+        var Cinfo = {
+            "time": "",
+            "user": "",
+            "worksite": "",
+            "floor": "",
+            "unit": "",
+            "part": "",
+            "type": "",
+            "side": "",
+            "thickness": "",
+            "length": "",
+            "dA": "",
+            "dB": "",
+            "dC": "",
+            "dD": "",
+            "dE": "",
+            "d1A": "",
+            "d2A": "",
+            "d1B": "",
+            "d2B": "",
+            "dR": "",
+            "dR_P": "",
+            "dH": "",
+            "dW": "",
+            "edge1": "",
+            "edge2": "",
+            "price": "",
+            "check": "",
+            "rand": ""
+        }
+        const partData = {
+            part1: {
+                title: "90° Profile",
+            },
+            part2: {
+                title: "30° Knife Edge",
+            },
+            part3: {
+                title: "45° Knife Edge",
+            },
+            part4: {
+                title: "90° 3 Way Profile",
+            },
+            part5: {
+                title: "135° Bulkhead Profile",
+            },
+            part6: {
+                title: "135° Profile",
+            },
+            part7: {
+                title: "C-Cap Profile",
+            },
+            part8: {
+                title: "Column Profile",
+            },
+            part9: {
+                title: "Fire Rated Enclosure Double",
+            },
+            part10: {
+                title: "Fire Rated Enclosure",
+            },
+            part11: {
+                title: "Hat Profile",
+            },
+            part12: {
+                title: "Multi-Step profile",
+            },
+            part13: {
+                title: "Radius Bulkhead",
+            },
+            part14: {
+                title: "Radius Profile",
+            },
+            part15: {
+                title: "90° 4 Way Profile",
+            }
+        };
+        var GroupOrder = [];
+        var tmpT = 0;
+//____________________________________________________________________________________________________________________________________________________
+//Top right info logic
+
+        const getUser = async () => {
+            try {
+                const response = await fetch(backendURL + '/getCurUser');
+                const data = await response.json();
+                Cinfo.user = data.user
+                document.getElementById('curUser').textContent = ('User: ' + Cinfo.user);
+            } catch (error) {
+                console.error('Error getting user info:', error);
+            }
+        };
+
+        function UpdateTime() {
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = currentDate.getMinutes();
+            const currentSecond = currentDate.getSeconds();
+            const currentDay = currentDate.getDate();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            const formattedDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`;
+            const formattedTime = `${currentHour}:${currentMinute}`;
+            const combinedText = `${formattedTime} / ${formattedDate}`;
+            document.getElementById('HourHour').textContent = combinedText;
+            tmpT = (60 - currentSecond) * 1000;
+            return currentMinute
+        }
+
+        document.getElementById('Discon').addEventListener('click', function() {
+            window.location.href = backendURL;
+        });
+
+        getUser();
+        UpdateTime();
+        setInterval(UpdateTime, tmpT);
+
+//____________________________________________________________________________________________________________________________________________________
+//Location logic
+
+        const listContainer = document.getElementById('listContainer');
+        const floorContainer = document.getElementById('floorContainer');
+        const unitContainer = document.getElementById('unitContainer');
+
+        const toggleActive = (element) => {
+            // Clear 'active' class from siblings
+            const siblings = element.parentNode.children;
+            for (let i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove('active');
+            }
+            // Set 'active' class for clicked element
+            element.classList.add('active');
+        };
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(backendURL + '/getWorksites');
+                const data = await response.json();
+
+                data.worksites.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-item';
+                    listItem.textContent = item.worksite;
+                    listItem.addEventListener('click', () => {
+                        if (GroupOrder.length > 0) {
+                                  alert("Please send the Group Order, or delete it");
+                                  return; // Return early to prevent the rest of the logic from executing
+                        }
+                        toggleActive(listItem);
+                        selectWorksite(item.worksite);
+                        document.getElementById('unitBC').style.display = 'none';
+                    });
+                    listContainer.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching worksites:', error);
+            }
+        };
+
+        const selectWorksite = async (worksite) => {
+            Cinfo.unit = "";
+            Cinfo.worksite = worksite;
+            try {
+                await fetch(backendURL + '/selectWorksite', {
+                    method: 'POST',
+                    body: JSON.stringify({ worksite }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                unitContainer.innerHTML = '';
+                fetchFloors(worksite);
+            } catch (error) {
+                console.error('Error selecting worksite:', error);
+            }
+            fetchProgressData();
+        };
+
+        const fetchFloors = async (worksite) => {
+            try {
+                const response = await fetch(backendURL + '/getFloors2'); 
+                const data = await response.json();
+                floorContainer.innerHTML = '';
+
+                if (Array.isArray(data.floors)) { 
+                    data.floors.forEach(item => {
+                        const floorItem = document.createElement('li');
+                        floorItem.className = 'list-item';
+                        floorItem.textContent = item.floor;
+                        floorItem.setAttribute('data-floor', item.floor);
+                        
+                        floorItem.addEventListener('click', async () => {
+                            if (GroupOrder.length > 0) {
+                                alert("Please send the Group Order, or delete it");
+                                return; // Return early to prevent the rest of the logic from executing
+                            }
+                            toggleActive(floorItem);
+                            Cinfo.unit = "";
+                            Cinfo.floor = item.floor;
+
+                            // Send the selected floor to /selectFloor
+                            try {
+                                const floorResponse = await fetch(backendURL + '/selectFloor', {
+                                    method: 'POST',
+                                    body: JSON.stringify({ floor: item.floor }),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (!floorResponse.ok) {
+                                    throw new Error('Network response was not ok for selectFloor');
+                                }
+
+                                // If the POST request was successful, fetch units for the selected floor
+                                fetchUnits(item.floor);
+                            } catch (floorError) {
+                                console.error('Error selecting floor:', floorError);
+                            }
+                        });
+
+                        floorContainer.appendChild(floorItem);
+                    });
+                    document.getElementById('floorBC').style.display = 'flex';
+                } else {
+                    console.error('Received data does not contain a floors array:', data);
+                }
+
+            } catch (error) {
+                console.error('Error fetching floors:', error);
+            }
+        };
+        const fetchUnits = async (floor) => {
+            try {
+                const response = await fetch(backendURL + '/getUnits2'); 
+                const data = await response.json();
+                unitContainer.innerHTML = '';
+                document.getElementById('unitBC').style.display = 'flex';
+
+                if (Array.isArray(data.units)) {
+                    data.units.forEach(item => {
+                        const unitItem = document.createElement('li');
+                        unitItem.className = 'list-item';
+                        unitItem.textContent = item.unit;
+                        unitItem.setAttribute('data-unit', item.unit);
+
+                        // You can expand on this as needed
+                        unitItem.addEventListener('click', () => {
+                            if (GroupOrder.length > 0) {
+                                  alert("Please send the Group Order, or delete it");
+                                  return; // Return early to prevent the rest of the logic from executing
+                            }
+                            toggleActive(unitItem);
+                            Cinfo.unit = item.unit;
+                        });
+
+                        unitContainer.appendChild(unitItem);
+                    });
+                } else {
+                    console.error('Received data does not contain a units array:', data);
+                }
+
+            } catch (error) {
+                console.error('Error fetching units:', error);
+            }
+        };
+        const delFloorButton = document.getElementById('delFloor');
+        const edFloorButton = document.getElementById('edFloor');
+        const addFloorButton = document.getElementById('addFloor');
+        delFloorButton.addEventListener('click', handleDeleteFloor);
+        edFloorButton.addEventListener('click', handleEditFloor);
+        addFloorButton.addEventListener('click', handleAddFloor);
+        async function handleDeleteFloor() {
+            try {
+                const response = await fetch(backendURL + '/delFloor', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        floor: Cinfo.floor,
+                        Cinfo: Cinfo
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const responseBody = await response.text();
+                if (responseBody === "ok") {
+                  document.querySelector(`li[data-floor="${Cinfo.floor}"]`).remove();
+              } else if (responseBody === "no") {
+                  alert("Can't delete this floor, there's order in it");
+              } else {
+                  console.log("error");
+              }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        function handleEditFloor() {
+            const floorElement = document.querySelector(`li[data-floor="${Cinfo.floor}"]`);
+            const containerElement = document.createElement('div');
+            const inputElement = document.createElement('input');
+            const buttonElement = document.createElement('button');
+            containerElement.style.display = 'flex';
+            containerElement.style.flexDirection = 'column';
+            containerElement.style.alignItems = 'center';
+            buttonElement.style.width = 'fit-content';
+            buttonElement.style.height = '2vw';
+            buttonElement.style.fontSize = '0.9vw';
+            buttonElement.style.backgroundColor = '#1E90FF';
+            buttonElement.style.color = 'white';
+            buttonElement.style.border = 'none';
+            buttonElement.style.borderRadius = '5px';
+            buttonElement.style.cursor = 'pointer';
+            buttonElement.textContent = "Apply";
+            inputElement.value = Cinfo.floor;
+            containerElement.appendChild(inputElement);
+            containerElement.appendChild(buttonElement);
+            floorElement.replaceWith(containerElement);
+            inputElement.focus();
+            buttonElement.addEventListener('click', () => {
+                let event = new KeyboardEvent('keydown', {
+                    'key': 'Enter'
+                });
+                inputElement.dispatchEvent(event);
+            });
+            inputElement.addEventListener('keydown', async (event) => {
+                if (event.key === 'Enter') {
+                    try {
+                        const response = await fetch(backendURL + '/editFloor', {
+                            method: 'POST',
+                            body: JSON.stringify({ oldFloor: Cinfo.floor, floor: inputElement.value, Cinfo: Cinfo }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            fetchFloors();
+                        } else {
+                            console.error('Failed to edit floor');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+            });
+        }
+        function handleAddFloor() {
+            const containerElement = document.createElement('div');
+            const inputElement = document.createElement('input');
+            const buttonElement = document.createElement('button');
+            containerElement.style.display = 'flex';
+            containerElement.style.flexDirection = 'column';
+            containerElement.style.alignItems = 'center';
+            buttonElement.style.width = 'fit-content';
+            buttonElement.style.height = '2vw';
+            buttonElement.style.fontSize = '0.9vw';
+            buttonElement.style.backgroundColor = '#1E90FF';
+            buttonElement.style.color = 'white';
+            buttonElement.style.border = 'none';
+            buttonElement.style.borderRadius = '5px';
+            buttonElement.style.cursor = 'pointer';
+            buttonElement.textContent = "Apply";
+            containerElement.appendChild(inputElement);
+            containerElement.appendChild(buttonElement);
+            floorContainer.appendChild(containerElement);
+            inputElement.focus();
+            buttonElement.addEventListener('click', () => {
+                let event = new KeyboardEvent('keydown', {
+                    'key': 'Enter'
+                });
+                inputElement.dispatchEvent(event);
+            });
+            inputElement.addEventListener('keydown', async (event) => {
+                if (event.key === 'Enter') {
+                    try {
+                        const newFloor = inputElement.value;
+                        const response = await fetch(backendURL + '/addFloor', {
+                            method: 'POST',
+                            body: JSON.stringify({ floor: newFloor, Cinfo: Cinfo }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            fetchFloors();
+                            inputElement.hide();
+                        } else {
+                            console.error('Failed to add floor');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+            });
+        }
+        const delUnitButton = document.getElementById('delUnit');
+        const edUnitButton = document.getElementById('edUnit');
+        const addUnitButton = document.getElementById('addUnit');
+        delUnitButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch(backendURL + '/delUnit', {
+                    method: 'POST',
+                    body: JSON.stringify({ unit: Cinfo.unit, Cinfo: Cinfo }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const responseBody = await response.text();
+                if (responseBody === "ok") {
+                    const unitToDelete = document.querySelector(`[data-unit="${Cinfo.unit}"]`);
+                    if (unitToDelete) {
+                        unitToDelete.remove();
+                    }
+                } else if (responseBody === "no") {
+                  alert("Can't delete this unit, there's order in it");
+                } else {
+                    console.error('Failed to delete unit');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+        edUnitButton.addEventListener('click', () => {
+            const unitToEdit = document.querySelector(`[data-unit="${Cinfo.unit}"]`);
+            if (unitToEdit) {
+                const containerElement = document.createElement('div');
+                const inputElement = document.createElement('input');
+                const buttonElement = document.createElement('button');
+                containerElement.style.display = 'flex';
+                containerElement.style.flexDirection = 'column';
+                containerElement.style.alignItems = 'center';
+                buttonElement.style.width = 'fit-content';
+                buttonElement.style.height = '2vw';
+                buttonElement.style.fontSize = '0.9vw';
+                buttonElement.style.backgroundColor = '#1E90FF';
+                buttonElement.style.color = 'white';
+                buttonElement.style.border = 'none';
+                buttonElement.style.borderRadius = '5px';
+                buttonElement.style.cursor = 'pointer';
+                buttonElement.textContent = "Apply";
+                inputElement.value = Cinfo.unit;
+                containerElement.appendChild(inputElement);
+                containerElement.appendChild(buttonElement);
+                unitToEdit.replaceWith(containerElement);
+                inputElement.focus();
+                buttonElement.addEventListener('click', () => {
+                    let event = new KeyboardEvent('keydown', {
+                        'key': 'Enter'
+                    });
+                    inputElement.dispatchEvent(event);
+                });
+                inputElement.addEventListener('keydown', async (event) => {
+                    if (event.key === 'Enter') {
+                        try {
+                            const editedUnit = inputElement.value;
+                            const response = await fetch(backendURL + '/editUnit', {
+                                method: 'POST',
+                                body: JSON.stringify({ oldUnit: Cinfo.unit, unit: editedUnit }),
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.ok) {
+                                fetchUnits();
+                                inputElement.hide();
+                            } else {
+                                console.error('Failed to edit unit');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                    }
+                });
+            }
+        });
+        addUnitButton.addEventListener('click', () => {
+            const containerElement = document.createElement('div');
+            const inputElement = document.createElement('input');
+            const buttonElement = document.createElement('button');
+            containerElement.style.display = 'flex';
+            containerElement.style.flexDirection = 'column';
+            containerElement.style.alignItems = 'center';
+            buttonElement.style.width = 'fit-content';
+            buttonElement.style.height = '2vw';
+            buttonElement.style.fontSize = '0.9vw';
+            buttonElement.style.backgroundColor = '#1E90FF';
+            buttonElement.style.color = 'white';
+            buttonElement.style.border = 'none';
+            buttonElement.style.borderRadius = '5px';
+            buttonElement.style.cursor = 'pointer';
+            buttonElement.textContent = "Apply";
+            containerElement.appendChild(inputElement);
+            containerElement.appendChild(buttonElement);
+            unitContainer.appendChild(containerElement);
+            inputElement.focus();
+            buttonElement.addEventListener('click', () => {
+                let event = new KeyboardEvent('keydown', {
+                    'key': 'Enter'
+                });
+                inputElement.dispatchEvent(event);
+            });
+            inputElement.addEventListener('keydown', async (event) => {
+                if (event.key === 'Enter') {
+                    try {
+                        const newUnit = inputElement.value;
+                        const response = await fetch(backendURL + '/addUnit', {
+                            method: 'POST',
+                            body: JSON.stringify({ unit: newUnit, Cinfo: Cinfo }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            fetchUnits();
+                            inputElement.hide();
+                        } else {
+                            console.error('Failed to add unit');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+            });
+        });
+        // Initialize by fetching worksites when the page loads.
+        fetchData();
+//____________________________________________________________________________________________________________________________________________________
+// Parts logic
+
+        document.getElementById('MidLay2').style.display = "none";
+        document.getElementById('MidLay3').style.display = "none";
+        document.getElementById('MidLay4').style.display = "none";
+        document.getElementById('MidLay5').style.display = "none";
+        document.getElementById('MidLay6').style.display = "none";
+        document.getElementById('MidLay7').style.display = "none";
+        document.getElementById('MidLay8').style.display = "none";
+        document.getElementById('MidLay9').style.display = "none";
+        document.getElementById('MidLay10').style.display = "none";
+        document.getElementById('MidLay11').style.display = "none";
+        document.getElementById('MidLay12').style.display = "none";
+        document.getElementById('MidLay13').style.display = "none";
+        document.getElementById('MidLay14').style.display = "none";
+        document.getElementById('MidLay15').style.display = "none";
+        document.getElementById('MidLay16').style.display = "none";
+        var save2 = document.getElementById('MidLay2').innerHTML;
+        var save3 = document.getElementById('MidLay3').innerHTML;
+        var save4 = document.getElementById('MidLay4').innerHTML;
+        var save5 = document.getElementById('MidLay5').innerHTML;
+        var save6 = document.getElementById('MidLay6').innerHTML;
+        var save7 = document.getElementById('MidLay7').innerHTML;
+        var save8 = document.getElementById('MidLay8').innerHTML;
+        var save9 = document.getElementById('MidLay9').innerHTML;
+        var save10 = document.getElementById('MidLay10').innerHTML;
+        var save11 = document.getElementById('MidLay11').innerHTML;
+        var save12 = document.getElementById('MidLay12').innerHTML;
+        var save13 = document.getElementById('MidLay13').innerHTML;
+        var save14 = document.getElementById('MidLay14').innerHTML;
+        var save15 = document.getElementById('MidLay15').innerHTML;
+        var save16 = document.getElementById('MidLay16').innerHTML;
+        var imageBoxes = document.querySelectorAll('.image-box');
+        imageBoxes.forEach(function(imageBox) {
+        imageBox.addEventListener('click', handleImageClick);
+        });
+        // Function to handle the click event on the image
+        function handleImageClick(event) {
+            event.preventDefault();
+            document.getElementById('MidLay2').style.display = "none";
+            document.getElementById('MidLay3').style.display = "none";
+            document.getElementById('MidLay4').style.display = "none";
+            document.getElementById('MidLay5').style.display = "none";
+            document.getElementById('MidLay6').style.display = "none";
+            document.getElementById('MidLay7').style.display = "none";
+            document.getElementById('MidLay8').style.display = "none";
+            document.getElementById('MidLay9').style.display = "none";
+            document.getElementById('MidLay10').style.display = "none";
+            document.getElementById('MidLay11').style.display = "none";
+            document.getElementById('MidLay12').style.display = "none";
+            document.getElementById('MidLay13').style.display = "none";
+            document.getElementById('MidLay14').style.display = "none";
+            document.getElementById('MidLay15').style.display = "none";
+            document.getElementById('MidLay16').style.display = "none";
+            document.getElementById('MidLay2').innerHTML = '';
+            document.getElementById('MidLay3').innerHTML = '';
+            document.getElementById('MidLay4').innerHTML = '';
+            document.getElementById('MidLay5').innerHTML = '';
+            document.getElementById('MidLay6').innerHTML = '';
+            document.getElementById('MidLay7').innerHTML = '';
+            document.getElementById('MidLay8').innerHTML = '';
+            document.getElementById('MidLay9').innerHTML = '';
+            document.getElementById('MidLay10').innerHTML = '';
+            document.getElementById('MidLay11').innerHTML = '';
+            document.getElementById('MidLay12').innerHTML = '';
+            document.getElementById('MidLay13').innerHTML = '';
+            document.getElementById('MidLay14').innerHTML = '';
+            document.getElementById('MidLay15').innerHTML = '';
+            document.getElementById('MidLay16').innerHTML = '';
+            var imageId = this.id;
+            var divv = ''
+            var calcull = 0
+            Cinfo.part = imageId;
+            if (imageId === "part1") {
+                divv = 'MidLay2';
+                calcull = 1;
+                document.getElementById('MidLay2').innerHTML = save2;
+            } else if (imageId === "part2") {
+                divv = 'MidLay3';
+                calcull = 2;
+                document.getElementById('MidLay3').innerHTML = save3;
+            } else if (imageId === "part3") {
+                divv = 'MidLay4';
+                calcull = 3;
+                document.getElementById('MidLay4').innerHTML = save4;
+            } else if (imageId === "part4") {
+                divv = 'MidLay5';
+                calcull = 4;
+                document.getElementById('MidLay5').innerHTML = save5;
+            } else if (imageId === "part5") {
+                divv = 'MidLay6';
+                calcull = 5;
+                document.getElementById('MidLay6').innerHTML = save6;
+            } else if (imageId === "part6") {
+                divv = 'MidLay7';
+                calcull = 6;
+                document.getElementById('MidLay7').innerHTML = save7;
+            } else if (imageId === "part7") {
+                divv = 'MidLay8';
+                calcull = 7;
+                document.getElementById('MidLay8').innerHTML = save8;
+            } else if (imageId === "part8") {
+                divv = 'MidLay9';
+                calcull = 8;
+                document.getElementById('MidLay9').innerHTML = save9;
+            } else if (imageId === "part9") {
+                divv = 'MidLay10';
+                calcull = 9;
+                document.getElementById('MidLay10').innerHTML = save10;
+            } else if (imageId === "part10") {
+                divv = 'MidLay11';
+                calcull = 10;
+                document.getElementById('MidLay11').innerHTML = save11;
+            } else if (imageId === "part11") {
+                divv = 'MidLay12';
+                calcull = 11;
+                document.getElementById('MidLay12').innerHTML = save12;
+            } else if (imageId === "part12") {
+                divv = 'MidLay13';
+                calcull = 12;
+                document.getElementById('MidLay13').innerHTML = save13;
+            } else if (imageId === "part13") {
+                divv = 'MidLay14';
+                calcull = 13;
+                document.getElementById('MidLay14').innerHTML = save14;
+            } else if (imageId === "part14") {
+                divv = 'MidLay15';
+                calcull = 14;
+                document.getElementById('MidLay15').innerHTML = save15;
+            } else if (imageId === "part15") {
+                divv = 'MidLay16';
+                calcull = 15;
+                document.getElementById('MidLay16').innerHTML = save16;
+            }
+            function calcc() {
+                if (calcull === 1) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 6.66;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 7.35;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 2) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 13.63;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 14.32;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 3) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 10.64;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 11.33;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 4) {
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 8.1;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 8.79;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length)).toFixed(2);
+                } else if (calcull === 15) {
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 8.1;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 8.79;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length)).toFixed(2);
+                } else if (calcull === 5) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 9.72;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 10.41;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 6) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 6.88;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 7.57;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 7) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 9.49;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 10.18;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 8) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 14.89;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 15.58;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 9) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 64.28;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 75.78;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add).toFixed(2);
+                } else if (calcull === 10) {
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 32.14;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 37.89;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length)).toFixed(2);
+                } else if (calcull === 11) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 14.89;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 15.58;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 12) {
+                    if (Cinfo.edge1 == "Plain") {
+                        var add = 0;
+                    } else if (Cinfo.edge1 == "Tapered") {
+                        var add = 1.75;
+                    } else if (Cinfo.edge1 == "D200") {
+                        var add = 1.5;
+                    }
+                    if (Cinfo.edge2 == "Plain") {
+                        var add2 = 0;
+                    } else if (Cinfo.edge2 == "Tapered") {
+                        var add2 = 1.75;
+                    } else if (Cinfo.edge2 == "D200") {
+                        var add2 = 1.5;
+                    }
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 12.94;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 13.63;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + add + add2).toFixed(2);
+                } else if (calcull === 13) {
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 28.75;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 29.9;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + 172.5).toFixed(2);
+                } else if (calcull === 14) {
+                    if (Cinfo.thickness == "1/2") {
+                        var mul = 28.75;
+                    } else if (Cinfo.thickness == "5/8") {
+                        var mul = 29.9;
+                    }
+                    Cinfo.price = "$" + (mul * parseInt(Cinfo.length) + 172.5).toFixed(2);
+                }
+            }
+            document.getElementById(divv).style.display = "flex";
+            document.getElementById('MidLay1').style.display = "none";
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            const pictureForm = document.getElementById('pictureForm');
+            const custm = document.querySelectorAll('.custm');
+            let replacedButton = null;
+            let oldButton = null;
+            let letPass = false;
+
+            function handleCustm(event) {
+                const button = event.target;
+                const input = document.createElement('input');
+                input.required = true;
+                input.type = 'text'
+                input.style.width = '2vw';
+                input.style.fontSize = "1.1vw";
+                input.style.height = "1.7vw";
+                input.style.lineHeight = "1.7vw";
+                input.id = "len-in"
+                input.setAttribute('max', '120');
+                const mesu = document.createElement('label');
+                mesu.textContent = "inches"
+                mesu.style.marginLeft = "0.4vw"
+                const container = document.createElement('div');
+                container.className = "custumm";
+                container.appendChild(input);
+                container.appendChild(mesu);
+                button.parentNode.replaceChild(container, button);
+                input.focus();
+                document.querySelectorAll('.len-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                oldButton = null;
+                replacedButton = button;
+                letPass = true;
+                document.getElementById('len-in').addEventListener('input', handleInputChange);
+            }
+            function handleInputChange(event) {
+              let value = parseFloat(event.target.value);
+              if (value > 120) {
+                  event.target.value = 120;
+              }
+              Cinfo.length = event.target.value;
+            }
+
+            function handleAnswerSelection(event) {
+                const btnGroup = event.currentTarget.parentElement;
+                oldButton = btnGroup;
+                const groupName = event.currentTarget.getAttribute('data-name');
+                const selectedValue = event.currentTarget.getAttribute('data-value');
+                if (btnGroup.classList.contains('btn-group')) {
+                    for (const btn of btnGroup.children) {
+                        btn.classList.remove('selected');
+                    }
+                    event.currentTarget.classList.add('selected');
+                } 
+                Cinfo[groupName] = selectedValue;
+                const greensP = document.querySelectorAll('.greenP');
+                if (Cinfo.side === "Framed" && Cinfo.thickness === "1/2") {
+                  greensP.forEach(grn => {
+                      grn.textContent = "+ 1/2";
+                      grn.style.color = "rgb(1, 163, 1)";
+                  });
+                } else if (Cinfo.side === "Framed" && Cinfo.thickness === "5/8") {
+                  greensP.forEach(grn => {
+                      grn.textContent = "+ 5/8";
+                      grn.style.color = "rgb(1, 163, 1)";
+                  });
+                } else if (Cinfo.side === "Finished") {
+                  greensP.forEach(grn => {
+                      grn.style.color = "white";
+                  });
+                }
+            }
+            answerButtons.forEach(btn => {
+                btn.addEventListener('click', handleAnswerSelection);
+            });
+            document.querySelectorAll('.len-btn').forEach(btn => {
+              btn.addEventListener('click', (event) => {
+                  const input = document.querySelector(".custumm");
+                  input.parentNode.replaceChild(replacedButton, input);
+                  letPass = false;
+                  replacedButton = null;
+              });
+            });
+            custm.forEach(btn => {
+                btn.addEventListener('click', handleCustm);
+            });
+        
+            document.getElementById("addOrder").addEventListener('click', (event) => {
+            event.preventDefault();
+
+        // Check if all answer buttons are selected
+        const requiredButtons = pictureForm.querySelectorAll('.btn-group');
+        let isAllButtonsSelected = true;
+        requiredButtons.forEach(group => {
+            const selectedButton = group.querySelector('.answer-btn.selected');
+            if (!selectedButton && !letPass) {
+                isAllButtonsSelected = false;
+            }
+        });
+
+        // Check if all text inputs are filled
+        const textInputs = pictureForm.querySelectorAll('input[type="text"]');
+        let isAllTextInputsFilled = true;
+        textInputs.forEach(input => {
+            if (input.value.trim() === '') {
+            isAllTextInputsFilled = false;
+            }
+        });
+        // Check if all required fields are filled
+        if (isAllButtonsSelected && isAllTextInputsFilled && Cinfo.unit != "") {
+            // Collect text input values and store them in Cinfo
+            textInputs.forEach(input => {
+            const inputName = input.getAttribute('name');
+            const inputValue = input.value;
+            Cinfo[inputName] = inputValue;
+            });
+            calcc()
+            function generateRandomCharacterSet(length, characterPool) {
+            return Array.from({ length }, () => characterPool[Math.floor(Math.random() * characterPool.length)]).join('');
+            }
+            Cinfo.rand = generateRandomCharacterSet(20, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+            var grpO = [];
+            if (document.getElementById("qty").value > 1) {
+              for (let i = 0; i < document.getElementById("qty").value; i++) {
+                grpO.push(Cinfo);
+              }
+            } else {
+              grpO.push(Cinfo);
+            }
+            // Send Cinfo as a JSON object in a POST request
+            fetch('/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(grpO)
+            }).then(response => {
+            if (response.ok) {
+              resetCinf();
+              document.getElementById('MidLay1').style.display = "flex";
+              document.getElementById(divv).style.display = "none";
+                // You can redirect or perform any other actions here after successful submission
+            } else {
+                alert('Error submitting order.');
+            }
+            }).catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the order.');
+            });
+        } else if (!isAllButtonsSelected || !isAllTextInputsFilled) {
+            alert('Please fill in all required fields.');
+        } else if (Cinfo.unit === "") {
+            alert('Please select the location (Worksite, Floor, Unit)');
+        }
+        });
+
+        const addToGroupOrderBtn = document.getElementById('addToGroupOrderBtn');
+
+        function handleAddToGroupOrder() {
+            // Check if all answer buttons are selected
+            const requiredButtons = pictureForm.querySelectorAll('.btn-group');
+            let isAllButtonsSelected = true;
+            requiredButtons.forEach(group => {
+                const selectedButton = group.querySelector('.answer-btn.selected');
+                if (!selectedButton && !letPass) {
+                isAllButtonsSelected = false;
+                }
+            });
+
+            // Check if all text inputs are filled
+            const textInputs = pictureForm.querySelectorAll('input[type="text"]');
+            let isAllTextInputsFilled = true;
+            textInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                isAllTextInputsFilled = false;
+                }
+            });
+
+            // Check if all required fields are filled
+            if (isAllButtonsSelected && isAllTextInputsFilled && Cinfo.unit != "") {
+                // Collect text input values and store them in Cinfo
+                textInputs.forEach(input => {
+                const inputName = input.getAttribute('name');
+                const inputValue = input.value;
+                Cinfo[inputName] = inputValue;
+                });
+                calcc() 
+                const newCinfo = { ...Cinfo };               
+                GroupOrder.push(newCinfo);
+                resetCinf();
+                document.getElementById('MidLay1').style.display = "flex";
+                document.getElementById(divv).style.display = "none";
+                console.log(GroupOrder)
+                renderPartsList();
+                return
+            } else if (!isAllButtonsSelected || !isAllTextInputsFilled) {
+                alert('Please fill in all required fields.');
+            } else if (Cinfo.unit === "") {
+                alert('Please select the location (Worksite, Floor, Unit)');
+            }
+        }
+
+        addToGroupOrderBtn.addEventListener('click', handleAddToGroupOrder);
+        document.getElementById('gbck').addEventListener('click', function() {
+            document.getElementById('MidLay1').style.display = "flex";
+            document.getElementById(divv).style.display = "none";
+        });
+        }
+        
+//_____________________________________________________________________________________________________________________
+//Right Logic
+
+        const partsListDiv = document.getElementById("parts-list");
+
+        function renderPartsList() {
+            partsListDiv.innerHTML = '';  // Clear the current content
+
+            GroupOrder.forEach((item, index) => {
+                const partDiv = document.createElement('div');
+                partDiv.classList.add('part');
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.textContent = partData[item.part].title;
+                partDiv.appendChild(titleDiv);
+                
+                const detailsDiv = document.createElement('div');
+                detailsDiv.classList.add('details');
+                Object.keys(item).filter(key => item[key] !== "" && key !== "price" && key !== "user" && key !== "worksite" && key !== "floor" && key !== "unit" && key !== "part").forEach(key => {
+                    const detailDiv = document.createElement('div');
+
+                    const detailLabel = document.createElement('span');
+                    detailLabel.textContent = `${key}: `;
+                    detailDiv.appendChild(detailLabel);
+                    
+                    const detailInput = document.createElement('input');
+                    detailInput.value = item[key];
+                    detailInput.disabled = true;
+                    detailInput.style.width = '5vw';
+                    detailInput.addEventListener('change', (e) => {
+                        GroupOrder[index][key] = e.target.value;
+                    });
+                    detailDiv.appendChild(detailInput);
+
+                    detailsDiv.appendChild(detailDiv);
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.setAttribute('style', 'width: fit-content; height: fit-content; font-size: 1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.2vw;');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    GroupOrder.splice(index, 1);
+                    renderPartsList();  // Re-render the list after deletion
+                });
+                detailsDiv.appendChild(deleteButton);
+
+                const editButton = document.createElement('button');
+                editButton.setAttribute('style', 'width: fit-content; height: fit-content; font-size: 1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.2vw;');
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => {
+                    const inputs = detailsDiv.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        input.disabled = !input.disabled;
+                    });
+                });
+                detailsDiv.appendChild(editButton);
+                
+                partDiv.appendChild(detailsDiv);
+
+                titleDiv.addEventListener('click', () => {
+                    const isExpanded = detailsDiv.style.display === 'block';
+                    detailsDiv.style.display = isExpanded ? 'none' : 'block';
+                });
+
+                partsListDiv.appendChild(partDiv);
+            });
+            const submitButton = document.getElementById('submitButton');
+            if (GroupOrder.length > 0) {
+                submitButton.style.display = 'block';
+            } else {
+                submitButton.style.display = 'none';
+            }
+        }
+        function generateRandomCharacterSet(length, characterPool) {
+                return Array.from({ length }, () => characterPool[Math.floor(Math.random() * characterPool.length)]).join('');
+        }
+        document.getElementById('submitButton').addEventListener('click', () => {
+            const randomSet = generateRandomCharacterSet(20, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+            for (let i = 0; i < GroupOrder.length; i++) {
+                let item = GroupOrder[i];
+                item.rand = randomSet;
+
+                if (item.quantity > 1) {
+                    for (let j = 0; j < (item.quantity - 1); j++) {
+                        GroupOrder.splice(i + 1, 0, item);
+                        i++;
+                    }
+                }
+            }
+            fetch(backendURL + '/sendGroup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(GroupOrder)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            GroupOrder = [];
+            renderPartsList();
+        });
+
+        const fetchProgressData = async () => {
+            try {
+                await fetch(backendURL + '/unitProgress2', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        user: Cinfo.user,
+                        worksite: Cinfo.worksite
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const response = await fetch(backendURL + '/unitProgress3'); 
+                const data = await response.json();
+                updateProgressBar(data);
+            } catch (error) {
+                console.error('Error selecting worksite:', error);
+            }
+        };
+
+        function updateProgressBar(data) {
+            const container = document.getElementById('progressContainer');
+            container.innerHTML = ''; // Clear existing progress bars
+
+            data.forEach(item => {
+                if (item.unit && item.progress) {
+                    let progressBar = document.createElement('div');
+                    progressBar.classList.add('progress-container');
+                    
+                    // Create a label for the unit and percentage inside the progress bar
+                    let unitLabel = document.createElement('span');
+                    unitLabel.innerText = `${item.unit} (${item.progress}) :`;
+                    unitLabel.style.color = "white";
+                    unitLabel.style.position = "absolute";
+                    unitLabel.style.left = "5px";
+                    unitLabel.style.zIndex = "3"; // Ensure it's stacked above the progress bar
+
+                    let progress = document.createElement('div');
+                    progress.classList.add('progress-bar');
+                    progress.style.width = item.progress;
+                    progress.style.zIndex = "1"; // Ensure it's stacked below the unitLabel
+                    
+                    progressBar.appendChild(unitLabel);
+                    progressBar.appendChild(progress);
+                    container.appendChild(progressBar);
+                }
+            });
+        }
+      function resetCinf() {
+          Cinfo.part = "";
+          Cinfo.type = "";
+          Cinfo.side = "";
+          Cinfo.thickness = "";
+          Cinfo.length = "";
+          Cinfo.dA = "";
+          Cinfo.dB = "";
+          Cinfo.dC = "";
+          Cinfo.dD = "";
+          Cinfo.dE = "";
+          Cinfo.d1A = "";
+          Cinfo.d2A = "";
+          Cinfo.d1B = "";
+          Cinfo.d2B = "";
+          Cinfo.dR = "";
+          Cinfo.dR_P = "";
+          Cinfo.dH = "";
+          Cinfo.dW = "";
+          Cinfo.edge1 = "";
+          Cinfo.edge2 = "";
+          Cinfo.price = "";
+          Cinfo.rand = "";
+      }
+      setInterval(fetchProgressData, 10000);
+
+        </script>
+</body>
+</html>

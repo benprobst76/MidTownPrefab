@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            background-color: #535353;
+            justify-content: center;
+            height: auto;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        @media only screen and (max-width: 1000px) {
+            body {
+                overflow: auto;
+            }
+        }
+        .TopLay {
+            background-color: #303030;
+            width: 98vw;
+            height: 6vw;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: solid black;
+        }
+        .TopMid1 {
+            width: 15vw;
+            height: 6vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: solid black;
+        }
+        .TopMid2 {
+            width: 68vw;
+            height: 6vw;
+            display: flex;
+            align-items: center;
+            border: solid black;
+        }
+        .TopMid3 {
+            width: 15vw;
+            height: 6vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: solid black;
+        }
+        .TopMid3 h2 {
+            color: white;
+            font-size: 1.5vw;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .Mid {
+            width: 98vw;
+            height: 78vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: solid black;
+        }
+/*____________________________________________________________________________________________________________*/
+        .LeftLay {
+            background-color: #303030;
+            width: 15.4vw;
+            height: 78vh;
+            display: flex;
+            flex-direction: column;
+            border: solid black;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .LeftLay ul {
+            margin: 0;
+            padding: 0;
+        }
+        .list-item {
+            box-sizing: border-box;
+            list-style: none;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid #303030;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .list-item:last-child {
+            border-bottom: 0.3vw solid black;;
+        }
+        .list-item.active {
+            border-color: #1E90FF;
+        }
+        .list-item2 {
+            box-sizing: border-box;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid #303030;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .list-item22 {
+            box-sizing: border-box;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid black;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .list-item2:last-child {
+            border-bottom: 0.3vw solid black;;
+        }
+        .list-item2.active {
+            border-color: #1E90FF;
+        }
+        #floorContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+        #unitContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+/*____________________________________________________________________________________________________________*/
+        .MidLay {
+            background-color: #1f1f1f;
+            width: 70vw;
+            height: 78vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: solid black;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        #partListContainer {
+            background-color: #1f1f1f;
+            border-radius: 20px;
+            padding: 40px;
+            width: 80vw; /* 95% of the viewport's width */
+            height: 95%;
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .part-item {
+            width: 96%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid white;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+        .part-item > div.contentWrapper {
+            display: none;
+        }
+
+        .part-item h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            cursor: pointer; /* Making the title clickable */
+        }
+
+        .part-item ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .part-item li {
+            margin-bottom: 5px;
+        }
+
+        .part-item button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #1E90FF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Scrollbar styles */
+        #partListContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #partListContainer::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        #partListContainer::-webkit-scrollbar-thumb {
+            background-color: #585858;
+            border-radius: 20px;
+        }
+
+        #partListContainer::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+        .unit-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .unit-list::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .unit-list::-webkit-scrollbar-thumb {
+            background-color: #585858;
+            border-radius: 20px;
+        }
+
+        .unit-list::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+        .part-description { /* This will hide the description initially */
+            display: none;
+        }
+        .unit-list {
+            flex: 0 0 auto;
+            width: 45vw;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            max-height: 40vw;
+            overflow-y: scroll;
+            margin-right: 10px; /* spacing between unit lists */
+            border: 0.6vw solid #4b4b4b;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 2vw;
+            color: white;
+        }
+        .unit-list h2 {
+            font-size: 2.2vw;
+        }
+/*____________________________________________________________________________________________________________*/
+        .RightLay {
+            background-color: #303030;
+            width: 15.4vw;
+            height: 78vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: solid black;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        #changeUrlBtn {
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="TopLay">
+        <div class="TopMid1">
+            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 75%;">
+        </div>
+        <div class="TopMid2">
+            <div style="flex: 0.48;"></div>
+            <h1 style="color: white; font-size: 3vw;">Receive Page</h1>
+        </div>
+        <div class="TopMid3">
+            <h2 style="color: white;" id="curUser">User:&nbsp</h2>
+            <h2 style="color: white;" id="HourHour"></h2>
+            <button style="width: fit-content; height: 2vw; font-size: 1.5vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer;" id="Discon">Disconnect</button>
+        </div>
+    </div>
+    <div class="Mid">
+        <div class="LeftLay">
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Worksite:</h2>
+            <ul id="listContainer"></ul>
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">Sorting:</h2>
+            <button class="list-item2" id="unitB">By Unit</button>
+            <button class="list-item2" id="sizeB">By Size</button>
+            <div class="list-item2" style="display: flex; direction: row; justify-content: center; max-height: 4vw;">
+                <label>By part type:&nbsp</label>
+                <select id="dropdown" style="width: 4vw;">
+                    <option value="">All part</option>
+                    <option value="part1">90° Profile</option>
+                    <option value="part2">30° Knife Edge</option>
+                    <option value="part3">45° Knife Edge</option>
+                    <option value="part4">90° 3 Way Profile</option>
+                    <option value="part5">135° Bulkhead Profile</option>
+                    <option value="part6">135° Profile</option>
+                    <option value="part7">C-Cap Profile</option>
+                    <option value="part8">Column Profile</option>
+                    <option value="part9">Fire Rated Enclosure Double</option>
+                    <option value="part10">Fire Rated Enclosure</option>
+                    <option value="part11">Hat Profile</option>
+                    <option value="part12">Multi-Step profile</option>
+                    <option value="part13">Radius Bulkhead</option>
+                    <option value="part14">Radius Profile</option>
+                    <option value="part15">90° 4 Way Profile</option>
+                  </select>
+            </div>
+            <div class="list-item22" style="display: flex; direction: row; justify-content: center; max-height: 4vw;" id="actii">
+                <input id="partnbr" style="background-color: white; color: black; width: 18%; height: auto;" value="10">
+                <label>&nbsp&nbspParts by row</label>
+            </div>
+            <button style="display: flex; justify-content: center; align-self: center; width: fit-content; padding: 10px 20px; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 1vw;" id="apB">Apply</button>
+        </div>
+        <div class="MidLay" id="MidLay1" style="display: none;">
+            <div id="partListContainer">
+                <ul id="partList"></ul>
+            </div>
+        </div>
+        <div class="MidLay" id="MidLay2"></div>
+        <div class="RightLay">
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; border-bottom: 0.2vw solid white; box-sizing: border-box; font-size: 1.7vw;">History:</h2>
+          <button id="changeUrlBtn">View History</button>
+        </div>
+        </div>
+    </div>
+    <script>
+        var backendURL = "https://192.168.2.32:443";
+        var Cinfo = {
+            "time": "",
+            "user": "",
+            "worksite": "",
+            "floor": "",
+            "unit": "",
+            "type": "",
+            "part": "",
+            "side": "",
+            "thickness": "",
+            "length": "",
+            "dA": "",
+            "dB": "",
+            "dC": "",
+            "dD": "",
+            "dE": "",
+            "d1A": "",
+            "d2A": "",
+            "d1B": "",
+            "d2B": "",
+            "dR": "",
+            "dR_P": "",
+            "dH": "",
+            "dW": "",
+            "edge1": "",
+            "edge2": "",
+            "price": "",
+            "check": "",
+            "rand": ""
+        }
+        const partListContainer = document.getElementById("partListContainer");
+        const partListContainer2 = document.getElementById("partListContainer2");
+        const partTitles = {
+        part1: "90° Profile",
+        part2: "30° Knife Edge",
+        part3: "45° Knife Edge",
+        part4: "90° 3 Way Profile",
+        part5: "135° Bulkhead Profile",
+        part6: "135° Profile",
+        part7: "C-Cap Profile",
+        part8: "Column Profile",
+        part9: "Fire Rated Enclosure Double",
+        part10: "Fire Rated Enclosure",
+        part11: "Hat Profile",
+        part12: "Multi-Step profile",
+        part13: "Radius Bulkhead",
+        part14: "Radius Profile",
+        part15: "90° 4 Way Profile",
+        };
+        const partData = {
+            part1: {
+                title: "90° Profile",
+                imageUrl: backendURL + "/image1"
+            },
+            part2: {
+                title: "30° Knife Edge",
+                imageUrl: backendURL + "/image2"
+            },
+            part3: {
+                title: "45° Knife Edge",
+                imageUrl: backendURL + "/image3"
+            },
+            part4: {
+                title: "90° 3 Way Profile",
+                imageUrl: backendURL + "/image4"
+            },
+            part5: {
+                title: "135° Bulkhead Profile",
+                imageUrl: backendURL + "/image5"
+            },
+            part6: {
+                title: "135° Profile",
+                imageUrl: backendURL + "/image6"
+            },
+            part7: {
+                title: "C-Cap Profile",
+                imageUrl: backendURL + "/image7"
+            },
+            part8: {
+                title: "Column Profile",
+                imageUrl: backendURL + "/image8"
+            },
+            part9: {
+                title: "Fire Rated Enclosure Double",
+                imageUrl: backendURL + "/image9"
+            },
+            part10: {
+                title: "Fire Rated Enclosure",
+                imageUrl: backendURL + "/image10"
+            },
+            part11: {
+                title: "Hat Profile",
+                imageUrl: backendURL + "/image11"
+            },
+            part12: {
+                title: "Multi-Step profile",
+                imageUrl: backendURL + "/image12"
+            },
+            part13: {
+                title: "Radius Bulkhead",
+                imageUrl: backendURL + "/image13"
+            },
+            part14: {
+                title: "Radius Profile",
+                imageUrl: backendURL + "/image14"
+            },
+            part15: {
+                title: "90° 4 Way Profile",
+                imageUrl: backendURL + "/image15"
+            }
+        };
+        var AllCD = false
+        let dict = [];
+        let dict2 = {};
+        var nbr = 0;
+        let savedData = [];
+        var workCh = false;
+        let intervalId;
+        let unitSort = true;
+        var delay = 600;
+        var partSort = "";
+        var firstL = 1;
+//____________________________________________________________________________________________________________________________________________________
+//Top right info logic
+
+        const getUser = async () => {
+            try {
+                const response = await fetch(backendURL + '/getCurUser');
+                const data = await response.json();
+                Cinfo.user = data.user
+                document.getElementById('curUser').textContent = ('User: ' + Cinfo.user);
+            } catch (error) {
+                console.error('Error getting user info:', error);
+            }
+        };
+
+        function UpdateTime() {
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = currentDate.getMinutes();
+            const currentSecond = currentDate.getSeconds();
+            const currentDay = currentDate.getDate();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            const formattedDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`;
+            const formattedTime = `${currentHour}:${currentMinute}`;
+            const combinedText = `${formattedTime} / ${formattedDate}`;
+            document.getElementById('HourHour').textContent = combinedText;
+            tmpT = (60 - currentSecond) * 1000;
+            return currentMinute
+        }
+
+        document.getElementById('Discon').addEventListener('click', function() {
+            window.location.href = backendURL;
+        });
+
+        getUser();
+        UpdateTime();
+        setInterval(UpdateTime, tmpT);
+
+//____________________________________________________________________________________________________________________________________________________
+//Location logic
+
+        const listContainer = document.getElementById('listContainer');
+
+        const toggleActive = (element) => {
+            // Clear 'active' class from siblings
+            const siblings = element.parentNode.children;
+            for (let i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove('active');
+            }
+            // Set 'active' class for clicked element
+            element.classList.add('active');
+            if (element.classList.contains('active')) {
+                workCh = true;
+            } else {
+                workCh = false;
+            }
+        };
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(backendURL + '/getWorksites');
+                const data = await response.json();
+
+                data.worksites.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-item';
+                    listItem.textContent = item.worksite;
+                    listItem.addEventListener('click', () => {
+                        toggleActive(listItem);
+                        if (!document.getElementById('unitB').classList.contains('active') && !document.getElementById('sizeB').classList.contains('active')) {
+                            document.getElementById('unitB').classList.toggle('active');
+                        }
+                        intervalId = setInterval(fetchAndDisplayData, 10000);
+                        Cinfo.worksite = item.worksite;
+                        document.getElementById('apB').click(); 
+                    });
+                    listContainer.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching worksites:', error);
+            }
+        };
+
+        // Initialize by fetching worksites when the page loads.
+        fetchData();
+        document.getElementById('unitB').addEventListener('click', function() {
+            if (workCh) {
+                this.classList.toggle('active');
+                if (document.getElementById('sizeB').classList.contains('active')) {
+                    document.getElementById('sizeB').classList.toggle('active');
+                }
+                if (this.classList.contains('active')) {
+                    grayOut();
+                }
+            } else {
+                alert("Please choose a worksite");
+            }
+        });
+        document.getElementById('sizeB').addEventListener('click', function() {
+            if (workCh) {
+                this.classList.toggle('active');
+                if (document.getElementById('unitB').classList.contains('active')) {
+                    document.getElementById('unitB').classList.toggle('active');
+                }
+                if (this.classList.contains('active')) {
+                    grayIn();
+                }
+            } else {
+                    alert("Please choose a worksite");
+            }
+        });
+
+        function grayOut() {
+            document.getElementById('actii').style.display = 'none';
+
+        }
+
+        function grayIn() {
+            document.getElementById('actii').style.display = 'flex';
+        }
+
+        document.getElementById('dropdown').addEventListener('change', function(event) {
+            partSort = event.target.value;
+        });
+
+        // Initializing the state when the page loads
+        grayOut();
+        document.getElementById('apB').addEventListener('click', async function() {
+            if (workCh) {
+                if (document.getElementById('unitB').classList.contains('active')) {
+                    unitSort = true;
+                    partListContainer.innerHTML = ""
+                    savedData = [];
+                    firstL = 1;
+                    fetchAndDisplayData();
+                } else {
+                    unitSort = false;
+                    nbr = document.getElementById('partnbr').value;
+                    let nbr2 = JSON.stringify({ nbr: nbr });
+                    try {
+                        const response = await fetch(backendURL + '/sortSize', {
+                            method: 'POST',
+                            body: nbr2,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (response.ok) {
+                            // The POST request was successful
+                            fetch(backendURL + "/sortSize2")
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    data = data.filter(item => item.worksite === Cinfo.worksite);
+                                    if (!data) {
+                                        document.getElementById('MidLay1').style.display = 'none';
+                                        document.getElementById('MidLay2').style.display = 'flex';
+                                        return
+                                    } else {
+                                        document.getElementById('MidLay1').style.display = 'flex';
+                                        document.getElementById('MidLay2').style.display = 'none';
+                                    }
+                                    clearInterval(intervalId);
+                                    if (partSort === "") {
+                                        savedData = data;
+                                        displayPartList(data);
+                                    } else {
+                                        const filteredData = data.filter(item => item.part === partSort);
+                                        savedData = filteredData;
+                                        console.log(savedData)
+                                        displayPartList(filteredData);
+                                    }
+                                })
+                                .catch((error) => console.error(error));
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                }
+            }
+        });
+//____________________________________________________________________________________________________________________________________________________
+// Parts logic
+// Function to generate a unique ID for each part
+function generatePartId(part) {
+            return part.part; // Use part.part as the unique identifier
+        }
+
+        function isEmptyPart(part) {
+            // Function to check if a part is empty (all dimensions are empty)
+            return (
+                part.dA === "" &&
+                part.dB === "" &&
+                part.dC === "" &&
+                part.dD === "" &&
+                part.dE === "" &&
+                part.dH === "" &&
+                part.dR === "" &&
+                part.dR_P === "" &&
+                part.dW === ""
+            );
+        }
+
+        function addDetail(ul, label, value) {
+            const excludedKeys = ["User", "Worksite", "Price", "Rand", "UniqueID", "UniqueID2"];
+            if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
+                const detailItem = document.createElement("li");
+                detailItem.textContent = `${label}: ${value}`;
+                ul.appendChild(detailItem);
+            }
+        }
+
+        function createPartItem(part) {
+            const partItem = document.createElement("div");
+            partItem.setAttribute('data-part-data', JSON.stringify(part));
+            partItem.setAttribute('data-uniqueID2', part.uniqueID2);
+            partItem.classList.add("part-item");
+
+            const title = partTitles[part.part] || part.part;
+            const title2 = part.unit;
+
+            const h2 = document.createElement("h2");
+            const h22 = document.createElement("h2");
+            h2.textContent = title;
+            h22.textContent = title2;
+            h2.setAttribute('data-part-name', title);
+            partItem.appendChild(h2);
+            partItem.appendChild(h22);
+
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'contentWrapper';
+
+            const ul = document.createElement("ul");
+            ul.classList.add("part-description");
+
+            for (const key in part) {
+                if (key !== "part" && key !== "delch") {
+                    addDetail(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key]);
+                }
+            }
+            contentWrapper.appendChild(ul);
+
+            const partInfo = partData[part.part];
+            if (partInfo && partInfo.imageUrl) {
+                const img = document.createElement("img");
+                img.src = partInfo.imageUrl;
+                img.alt = partInfo.title || 'Part Image';
+                img.style.width = "55%";
+                img.style.height = "25vw";
+                img.style.marginLeft = "10px";
+                contentWrapper.appendChild(img);
+            }
+
+            partItem.appendChild(contentWrapper);
+
+            h2.addEventListener("click", function() {
+            if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
+                contentWrapper.style.display = 'flex';
+                // Explicitly set the display property of the part description
+                contentWrapper.querySelector('.part-description').style.display = 'block';
+            } else {
+                contentWrapper.style.display = 'none';
+                contentWrapper.querySelector('.part-description').style.display = 'none';
+            }
+        });
+            const checkButton = document.createElement('button');
+            checkButton.textContent = "✓";
+            checkButton.addEventListener('click', function() {
+                const isCurrentlyChecked = this.style.backgroundColor === 'green';
+                this.style.backgroundColor = isCurrentlyChecked ? '' : 'green';
+                if (this.style.backgroundColor === 'green') {
+                    const parentPartItem = this.closest('.part-item');
+                    if (parentPartItem) {
+                        parentPartItem.style.border = '2px solid green';
+                    }
+                } else {
+                    const parentPartItem = this.closest('.part-item');
+                    if (parentPartItem) {
+                        parentPartItem.style.border = '2px solid white';
+                    }
+                }
+                const worksite = part.worksite;
+                const floor = part.floor;
+                const unit = part.unit;
+                const partName = part.part; // Renamed to avoid shadowing
+                const side = part.side;
+                const thickness = part.thickness;
+                const length = part.length;
+                const dA = part.dA;
+                const dB = part.dB;
+                const dC = part.dC;
+                const dD = part.dD;
+                const dE = part.dE;
+                const d1A = part.d1A;
+                const d2A = part.d2A;
+                const d1B = part.d1B;
+                const d2B = part.d2B;
+                const dR = part.dR;
+                const dR_P = part.dR_P;
+                const dH = part.dH;
+                const dW = part.dW;
+                const edge1 = part.edge1;
+                const edge2 = part.edge2;
+                const unitList = document.querySelector(`.unit-list[data-unit="${unit}"]`);
+                var check = ""
+                var Uid2 = part.uniqueID2
+                if (this.style.backgroundColor === 'green') {
+                    check = "1"
+                }
+                if (this.style.backgroundColor === 'green') {
+                    delCheck(part);
+                } else {
+                    delCheck2(part);
+                }
+                if  (!AllCD) {
+                    calculateAndSendUnitProgress(Uid2, check);
+                }
+                AllCD = false
+            });
+            partItem.appendChild(checkButton);
+            if (part.check === "1") {
+                checkButton.style.backgroundColor = 'green';
+                const parentPartItem = checkButton.closest('.part-item');
+                setTimeout(() => {
+                    delCheck(part);
+                }, delay);
+                delay += 600;
+                if (parentPartItem) {
+                    parentPartItem.style.border = '2px solid green';
+                }
+            }
+            return partItem;
+        }
+
+        function calculateAndSendUnitProgress(Uid2, check) {
+            console.log("sending")
+            fetch(backendURL + "/unitProgress1", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                uid2: Uid2,
+                check: check
+            })
+            })
+            .then(response => response.json())
+            .then(data => {
+            })
+            .catch(error => {
+            });
+        }
+
+        function delCheck(part) {
+            console.log("Called delCheck with:", part);
+            for (let i = 0; i < dict.length; i++) {
+                let item = dict[i];
+                let key = Object.keys(item)[0];
+                if (part.uniqueID === key) {
+                    item[key] -= 1;                  
+                    if (item[key] === 0) {
+                        checkForAllChecked(part);
+                    }
+                }
+            }
+        }
+
+        function delCheck2(part) {
+            for (let i = 0; i < dict.length; i++) {
+                let item = dict[i];
+                let key = Object.keys(item)[0]; // Get the first key of the object
+                if (part.uniqueID === key) {
+                    item[key] += 1;
+                }
+            }
+            console.log(dict)
+        }
+
+        function checkForAllChecked(part) {
+            const unitList = document.querySelector(`.unit-list[data-UniqueID2="${part.uniqueID}"]`);
+            AllCD = true
+            const matchingUniqueID2 = [];
+            for (const item of savedData) {
+                if (item.uniqueID === part.uniqueID) {
+                    matchingUniqueID2.push(item.uniqueID2);
+                }
+            }
+            const jsonArray = matchingUniqueID2.map(value => ({ uniqueID2: value }));
+            console.log(jsonArray)
+            // Now send this data with the POST request:
+            fetch(backendURL + "/delReceive", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonArray)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                // Check if there's content in the response
+                if (text && text.trim() !== "") {
+                    return JSON.parse(text);
+                } else {
+                    // If there's no content, return a default object indicating success
+                    return { success: true };
+                }
+            })
+            .then(data => {
+                if(data.success) {
+                    if (unitList) {
+                        unitList.remove();
+                    }
+                } else {
+                    // Handle any errors or unsuccessful deletions here
+                    console.error("Error deleting parts:", data.errorMessage);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+            }
+    function extractUserInfo(data) {
+    if (data.length > 0) {
+        userValue = data[0].user || "";   // Set default value if 'user' is not present
+        worksiteValue = data[0].worksite || "";   // Set default value if 'worksite' is not present
+        floorValue = data[0].floor || "";   // Set default value if 'floor' is not present
+        unitValue = data[0].unit || "";   // Set default value if 'unit' is not present
+    }
+}
+
+function createNewUnitList(part, uniqueID) {
+    const unitList = document.createElement('div');
+    unitList.className = 'unit-list';
+    unitList.setAttribute('data-unit', part.unit);
+    unitList.setAttribute('data-UniqueID2', uniqueID);
+
+    // Insert the new unitList at the top of the partListContainer
+    partListContainer.insertBefore(unitList, partListContainer.firstChild);
+    return unitList;
+}
+function createNewUnitList2(part, uniqueID) {
+    const unitList = document.createElement('div');
+    unitList.className = 'unit-list';
+    unitList.setAttribute('data-unit', part.unit);
+    unitList.setAttribute('data-UniqueID2', uniqueID);
+
+    // Insert the new unitList at the bottom of the partListContainer
+    partListContainer.appendChild(unitList);
+    return unitList;
+}
+function generateUniqueID() {
+    return Math.random().toString(36).substr(2, 9);
+}
+function displayPartList(parts) {
+    parts.forEach(parts => {
+        parts.sum = "";
+    });
+    // Extract user, worksite, floor, and unit values from the received data
+    extractUserInfo(parts);
+
+    const filteredData = parts.filter(part => !isEmptyPart(part) && !isBlackPart(part));
+
+    if (filteredData.length === 0) {
+        partListContainer.innerHTML = "No matching parts found.";
+        return;
+    }
+    let lastRand;
+    let currentUnitList = null;
+    let uniqueID;
+    var boxLen = 0;
+    var tmp = {};
+    let oldun = "";
+    let restrict;
+    var bnbr = 1000;
+    dict = [];
+    if (unitSort) {
+        filteredData.reverse().forEach(part => {
+        if (lastRand !== part.rand) {
+            uniqueID = generateUniqueID();
+            if (firstL === 1) {
+                currentUnitList = createNewUnitList2(part, uniqueID);
+            } else {
+                currentUnitList = createNewUnitList2(part, uniqueID);
+            }
+            lastRand = part.rand;
+            boxLen = 0;
+        }
+        oldbox = boxLen;
+        boxLen += 1;
+        if (oldun === "") {
+            oldun = uniqueID
+        }
+        if (uniqueID == oldun) {
+        } else {
+            dict.push(tmp);
+        }
+        tmp = {[uniqueID]: boxLen};
+        oldun = uniqueID
+        part.uniqueID = uniqueID;
+        const partItem = createPartItem(part);
+        currentUnitList.appendChild(partItem);
+    });
+    firstL = 0;
+    } else {
+        partListContainer.innerHTML = ""
+        filteredData.reverse().forEach(part => {
+        if (bnbr >= nbr) {
+            uniqueID = generateUniqueID();
+            currentUnitList = createNewUnitList2(part, uniqueID);
+            bnbr = 0;
+            boxLen = 0;
+        }
+        bnbr += 1;
+        oldbox = boxLen;
+        boxLen += 1;
+        if (oldun === "") {
+            oldun = uniqueID
+        }
+        if (uniqueID == oldun) {
+        } else {
+            dict.push(tmp);
+        }
+        tmp = {[uniqueID]: boxLen};
+        oldun = uniqueID
+        part.uniqueID = uniqueID;
+        const partItem = createPartItem(part);
+        currentUnitList.appendChild(partItem);
+    });
+    }
+    dict.push(tmp);
+    dict2 = dict.reduce((acc, curr) => {
+        return {...acc, ...curr};
+    }, {});
+}
+
+        function isBlackPart(part) {
+            for (const key in part) {
+                if (part[key].trim() === "black") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function handleDelete(part, partItem) {
+        const url = backendURL + "/delCart";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(part),
+        };
+
+        fetch(url, requestOptions)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                // We expect an empty response, so no need to parse JSON
+                return;
+            })
+            .then(() => {
+                removeDeletedPart(partItem); // Pass the partItem
+            })
+            .catch((error) => console.error("Error deleting part:", error));
+    }
+
+    function removeDeletedPart(partItem) {
+        partListContainer.removeChild(partItem);
+    }
+    var uniqueNewData = [];
+function fetchAndDisplayData() {
+  fetch(backendURL + "/getOrders")
+    .then((response) => response.json())
+    .then((data) => {
+        data = data.filter(item => item.worksite === Cinfo.worksite);
+        if (!data) {
+            document.getElementById('MidLay1').style.display = 'none';
+            document.getElementById('MidLay2').style.display = 'flex';
+            return
+        } else {
+            document.getElementById('MidLay1').style.display = 'flex';
+            document.getElementById('MidLay2').style.display = 'none';
+        }
+         if (data.length > savedData.length) {
+            if (partSort === "") {
+                console.log(data)
+                const difference = data.length - savedData.length;
+                const newElements = data.slice(-difference);
+                console.log(newElements)
+                savedData = data;
+                displayPartList(newElements);
+            } else {
+                const filteredData = data.filter(item => item.part === partSort);
+                const newElements = filteredData.slice(savedData.length);
+                savedData = data;
+                displayPartList(newElements);
+            }
+        }
+    })
+    .catch((error) => console.error(error));
+}
+
+//_____________________________________________________________________________________________________________________
+//Right Logic
+    document.getElementById('changeUrlBtn').addEventListener('click', function() {
+            window.location.href = backendURL + "/viewHis1"
+    });
+        </script>
+</body>
+</html>

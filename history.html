@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Part List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw; /* 95% of the viewport's width */
+            height: auto;
+            margin: 0;
+            font-size: 20px;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #partListContainer {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 60vw;
+            height: auto; /* Set a fixed height for the container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .part-item {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #585858;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+        .part-item > div.contentWrapper {
+            display: none;
+        }
+
+        .part-item h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            cursor: pointer; /* Making the title clickable */
+        }
+
+        .part-item ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .part-item li {
+            margin-bottom: 5px;
+        }
+
+        .part-item button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #1E90FF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Scrollbar styles */
+        #partListContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #partListContainer::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        #partListContainer::-webkit-scrollbar-thumb {
+            background-color: #585858;
+            border-radius: 20px;
+        }
+
+        #partListContainer::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+        .part-description { /* This will hide the description initially */
+            display: none;
+        }
+        .unit-list {
+            flex: 0 0 auto;
+            min-width: 450px;
+            max-height: 700px; /* or any height you'd like */
+            overflow-y: scroll;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            margin-right: 10px; /* spacing between unit lists */
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .unit-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .unit-list::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            outline: 1px solid slategrey;
+        }
+
+        /* Ensuring compatibility for touch devices */
+        .unit-list {
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-title {
+            color: white; /* Change color to white */
+            text-align: center; /* Center align the title */
+            margin-bottom: 20px; /* Add some spacing below the title */
+        }
+        .unit-list h3 {
+            color: white; /* Change color to white for unit titles */
+            margin-top: 0; /* Remove any default top margin */
+        }
+        .part-item img {
+            max-width: 100%; /* Ensures the image doesn't overflow its container */
+            border-radius: 10px; /* Optional rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for a bit of depth */
+        }
+        .navigation-button {
+            position: fixed;
+            bottom: 1px;
+            left: 10px;
+            margin: 15px 0;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="previousButton" class="navigation-button">Previous</div>
+    <div id="partListContainer">
+        <ul id="partList"></ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const backendURL = "https://192.168.2.32:443"
+        const partListContainer = document.getElementById("partListContainer");
+        const partTitles = {
+        part1: "90° Profile",
+        part2: "30° Knife Edge",
+        part3: "45° Knife Edge",
+        part4: "90° 3 Way Profile",
+        part5: "135° Bulkhead Profile",
+        part6: "135° Profile",
+        part7: "C-Cap Profile",
+        part8: "Column Profile",
+        part9: "Fire Rated Enclosure Double",
+        part10: "Fire Rated Enclosure",
+        part11: "Hat Profile",
+        part12: "Multi-Step profile",
+        part13: "Radius Bulkhead",
+        part14: "Radius Profile",
+        part15: "90° 4 Way Profile",
+        };
+        const partData = {
+            part1: {
+                title: "90° Profile",
+                imageUrl: backendURL + "/image1"
+            },
+            part2: {
+                title: "30° Knife Edge",
+                imageUrl: backendURL + "/image2"
+            },
+            part3: {
+                title: "45° Knife Edge",
+                imageUrl: backendURL + "/image3"
+            },
+            part4: {
+                title: "90° 3 Way Profile",
+                imageUrl: backendURL + "/image4"
+            },
+            part5: {
+                title: "135° Bulkhead Profile",
+                imageUrl: backendURL + "/image5"
+            },
+            part6: {
+                title: "135° Profile",
+                imageUrl: backendURL + "/image6"
+            },
+            part7: {
+                title: "C-Cap Profile",
+                imageUrl: backendURL + "/image7"
+            },
+            part8: {
+                title: "Column Profile",
+                imageUrl: backendURL + "/image8"
+            },
+            part9: {
+                title: "Fire Rated Enclosure Double",
+                imageUrl: backendURL + "/image9"
+            },
+            part10: {
+                title: "Fire Rated Enclosure",
+                imageUrl: backendURL + "/image10"
+            },
+            part11: {
+                title: "Hat Profile",
+                imageUrl: backendURL + "/image11"
+            },
+            part12: {
+                title: "Multi-Step profile",
+                imageUrl: backendURL + "/image12"
+            },
+            part13: {
+                title: "Radius Bulkhead",
+                imageUrl: backendURL + "/image13"
+            },
+            part14: {
+                title: "Radius Profile",
+                imageUrl: backendURL + "/image14"
+            },
+            part15: {
+                title: "90° 4 Way Profile",
+                imageUrl: backendURL + "/image15"
+            }
+        };
+        $(document).ready(function() {
+            // Attach click event listener to the "Previous" button
+            $("#previousButton").on("click", function() {
+                // Change the URL when the button is clicked
+                window.location.href = backendURL + "/loginReceiver";
+            });
+        });
+        // Function to generate a unique ID for each part
+        function generatePartId(part) {
+            return part.part; // Use part.part as the unique identifier
+        }
+
+        function isEmptyPart(part) {
+            // Function to check if a part is empty (all dimensions are empty)
+            return (
+                part.dA === "" &&
+                part.dB === "" &&
+                part.dC === "" &&
+                part.dD === "" &&
+                part.dE === "" &&
+                part.dH === "" &&
+                part.dR === "" &&
+                part.dR_P === "" &&
+                part.dW === ""
+            );
+        }
+
+        function createPartItem(part) {
+            if (!document.querySelector('.main-title')) {
+                const title = document.createElement('h2');
+                title.textContent = 'History';
+                title.className = 'main-title';
+                document.body.insertBefore(title, partListContainer); // <-- Change this line
+            }
+            const partItem = document.createElement("div");
+            partItem.setAttribute('data-part-data', JSON.stringify(part));
+            partItem.classList.add("part-item");
+
+            const title = partTitles[part.part] || part.part;
+
+            const h2 = document.createElement("h2");
+            h2.textContent = title;
+            h2.setAttribute('data-part-name', title);
+            partItem.appendChild(h2);
+
+            const contentWrapper = document.createElement('div'); 
+            contentWrapper.className = 'contentWrapper';
+            
+            const ul = document.createElement("ul");
+            ul.classList.add("part-description");
+
+            // Display part's properties
+            const propertiesToDisplay = [
+                'time',
+                'user',
+                'worksite',
+                'floor',
+                'unit',
+                'part',
+                'side',
+                'thickness',
+                'length',
+                'dA',
+                'dB',
+                'dC',
+                'dD',
+                'dE',
+                'd1A',
+                'd2A',
+                'd1B',
+                'd2B',
+                'dR',
+                'dR_P',
+                'dH',
+                'dW',
+                'edge1',
+                'edge2',
+            ];
+            propertiesToDisplay.forEach(propKey => {
+                if (part[propKey] && part[propKey].trim() !== "") {
+                    const li = document.createElement("li");
+                    li.textContent = `${propKey}: ${part[propKey]}`;
+                    ul.appendChild(li);
+                }
+            });
+
+            contentWrapper.appendChild(ul);
+
+            const partInfo = partData[part.part];
+            if (partInfo && partInfo.imageUrl) {
+                const img = document.createElement("img");
+                img.src = partInfo.imageUrl;
+                img.alt = partInfo.title || 'Part Image';
+                img.style.width = "400px";
+                img.style.height = "auto";
+                img.style.marginLeft = "10px";
+                contentWrapper.appendChild(img);
+            }
+
+            partItem.appendChild(contentWrapper);
+
+            h2.addEventListener("click", function() {
+                if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
+                contentWrapper.style.display = 'flex';
+                contentWrapper.querySelector('.part-description').style.display = 'block'; 
+            } else {
+                contentWrapper.style.display = 'none';
+                contentWrapper.querySelector('.part-description').style.display = 'none';
+            }
+        });
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Retrieve Part";
+            deleteButton.addEventListener("click", () => {
+                const userConfirmed = window.confirm("Are you sure you want to retrieve that part?");  
+                if (userConfirmed) {
+                    handleRetreive(part, partItem);
+                } else {
+                    console.log('User declined');
+                }
+            });
+            partItem.appendChild(deleteButton);
+
+            partItem.setAttribute("data-part-id", generatePartId(part)); // Set data-part-id attribute
+            return partItem;
+    }
+
+    let userValue = "";       // Variable to store user value
+    let worksiteValue = "";   // Variable to store worksite value
+    let floorValue = "";      // Variable to store floor value
+    let unitValue = "";       // Variable to store unit value
+
+    function extractUserInfo(data) {
+    if (data.length > 0) {
+        userValue = data[0].user || "";   // Set default value if 'user' is not present
+        worksiteValue = data[0].worksite || "";   // Set default value if 'worksite' is not present
+        floorValue = data[0].floor || "";   // Set default value if 'floor' is not present
+        unitValue = data[0].unit || "";   // Set default value if 'unit' is not present
+    }
+}
+
+    function displayPartList(parts) {
+        partListContainer.innerHTML = "";
+
+        // Extract user, worksite, floor, and unit values from the received data
+        extractUserInfo(parts);
+
+        const filteredData = parts.filter(part => !isEmptyPart(part) && !isBlackPart(part));
+
+        if (filteredData.length === 0) {
+            partListContainer.innerHTML = "No matching parts found.";
+            return;
+        }
+
+        // Reverse the order of the filteredData array
+        filteredData.reverse().forEach(part => {
+            const partItem = createPartItem(part);
+            partListContainer.appendChild(partItem);
+        });
+    }
+
+        function isBlackPart(part) {
+            for (const key in part) {
+                if (part[key].trim() === "black") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function handleRetreive(part, partItem) {
+        const url = backendURL + "/retreiveHis";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(part),
+        };
+
+        fetch(url, requestOptions)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                // We expect an empty response, so no need to parse JSON
+                return;
+            })
+            .then(() => {
+                alert('Part Retrieved');
+            })
+            .catch((error) => console.error("Error deleting part:", error));
+    }
+
+
+// Fetch JSON data from the Go server
+fetch(backendURL + "/viewHis2")
+  .then((response) => response.json())
+  .then((data) => displayPartList(data))
+  .catch((error) => console.error(error));
+
+    </script>
+</body>
+</html>

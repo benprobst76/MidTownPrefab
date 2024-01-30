@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+
+    <style>
+        /* Container for the entire page */
+        .container {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-content {
+            margin-right: 32px;  /* adjust this value to your preference */
+        }
+        .right-content {
+            margin-left: 32px;  /* adjust this value to your preference */
+        }
+        .middle-content {
+            margin-bottom: 40px;
+        }
+
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .round-box {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 600px;
+            height: 750px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .round-box2 {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 320px;
+            height: 760px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-top: 30px;
+            font-size: 48px;
+        }
+
+        hr {
+            width: 90%;
+            border: 2px solid #1E90FF;
+            margin: 30px 0;
+        }
+
+        #hr2 {
+            width: 90%;
+            border: 2px solid white;
+            margin: 30px 0;
+        }
+
+        h2 {
+            color: white;
+            font-size: 30px;
+        }
+
+        label {
+            color: white;
+            font-size: 20px;
+        }
+
+        .input32 {
+            width: 18px;
+            height: 8px;
+            margin: 15px 0;
+            padding: 5px;
+            font-size: 20px;
+        }
+
+        select {
+            width: 150px;
+            height: 25px;
+            font-size: 20px;
+        }
+
+        #passwords, #codes {
+            padding: 0;
+        }
+
+        .list-item {
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        #buttonn, button {
+        margin: 15px 0;
+        padding: 10px 20px;
+        background-color: #1E90FF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+
+        
+        /* For Chrome, Safari, and Opera */
+        .round-box::-webkit-scrollbar {
+            width: 8px;  /* Adjust width of scrollbar */
+        }
+
+        .round-box::-webkit-scrollbar-track {
+            background-color: transparent;  /* Background color of the scrollbar "track" */
+        }
+
+        .round-box::-webkit-scrollbar-thumb {
+            background-color: #585858;  /* Color of the scroll thumb */
+            border-radius: 20px;  /* Roundness of the scroll thumb */
+        }
+
+        .round-box::-webkit-scrollbar-thumb:hover {
+            background-color: #555;  /* Color of the scroll thumb when hovering */
+        }
+
+        /* For Firefox */
+        .round-box {
+            scrollbar-width: thin;  /* Make scrollbar thinner */
+            scrollbar-color: #888 transparent;  /* Color of the scrollbar */
+        }
+        /* For Chrome, Safari, and Opera */
+        .round-box2::-webkit-scrollbar {
+            width: 8px;  /* Adjust width of scrollbar */
+        }
+
+        .round-box2::-webkit-scrollbar-track {
+            background-color: transparent;  /* Background color of the scrollbar "track" */
+        }
+
+        .round-box2::-webkit-scrollbar-thumb {
+            background-color: #585858;  /* Color of the scroll thumb */
+            border-radius: 20px;  /* Roundness of the scroll thumb */
+        }
+
+        .round-box2::-webkit-scrollbar-thumb:hover {
+            background-color: #555;  /* Color of the scroll thumb when hovering */
+        }
+
+        /* For Firefox */
+        .round-box2 {
+            scrollbar-width: thin;  /* Make scrollbar thinner */
+            scrollbar-color: #888 transparent;  /* Color of the scrollbar */
+        }
+        .navigation-button {
+            position: fixed;
+            bottom: 1px;
+            left: 10px;
+            margin: 15px 0;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .Tmonth {
+            width: 35px;
+            height: 30px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .label-container {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            margin: 0 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .month-label {
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="previousButton" class="navigation-button">Previous</div>
+    <div class="container">
+    <!-- Right Content (Second HTML) -->
+    <div class="right-content">
+        <div class="round-box">
+            <h1>Worksites Manager</h1>
+            <hr />
+            <ul id="worksites"></ul>
+            <hr id="hr2" />
+            <h2>New</h2>
+            <form id="worksiteForm">
+                <div class="form-group">
+                    <label for="worksite">Worksite:</label>
+                    <input type="text" id="worksite" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="buttonn">Add Worksite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var backendURL = "https://192.168.2.32:443";
+            var Cinfo = {
+                "user": "",
+                "worksite": "",
+                "floor": "",
+                "unit": "",
+                "part": "",
+                "side": "",
+                "thickness": "",
+                "length": "",
+                "dA": "",
+                "dB": "",
+                "dC": "",
+                "dD": "",
+                "dE": "",
+                "d1A": "",
+                "d2A": "",
+                "d1B": "",
+                "d2B": "",
+                "dR": "",
+                "dR_P": "",
+                "dH": "",
+                "dW": "",
+                "edge1": "",
+                "edge2": "",
+                "price": "",
+                "check": ""
+           }
+
+           $("#previousButton").on("click", function() {
+                // Change the URL when the button is clicked
+                window.location.href = backendURL + "/loginAdmin";
+            });
+
+            // Handle form submission
+$("#worksiteForm").submit(function(event) {
+    event.preventDefault(); // Prevent page reload
+
+    var worksite = $("#worksite").val();
+
+    // Send an API request to save the worksite
+    $.ajax({
+        url: backendURL + "/addWorksite",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ worksite: worksite }),
+        success: function(response) {
+            // Clear input field
+            $("#worksite").val("");
+
+            // Append the new worksite to the list
+            var listItem = $("<li>").addClass("list-item");
+
+            var contentDiv = $("<div>").addClass("contentDiv");
+
+            var infoDiv = $("<div>")
+                .addClass("infoDiv")
+                .append(
+                    $("<span>").addClass("worksite").text(worksite),
+                );
+
+            var deleteButton = $("<button>")
+                .attr("id", "buttonn")
+                .text("Delete")
+                .addClass("deleteWorksite")
+                .data("worksite", worksite);
+
+            var editButton = $("<button>")
+                .attr("id", "buttonn")
+                .text("Edit")
+                .addClass("editWorksite");
+
+            var saveButton = $("<button>")
+                .attr("id", "buttonn")
+                .text("Save")
+                .addClass("saveWorksite")
+                .hide();
+
+            var buttonsDiv = $("<div>").addClass("buttonsDiv");
+            buttonsDiv.append(editButton);
+            buttonsDiv.append(" ");
+            buttonsDiv.append(saveButton);
+            buttonsDiv.append(" ");
+            buttonsDiv.append(deleteButton);
+
+            contentDiv.append(infoDiv);
+            contentDiv.append(buttonsDiv);
+
+            listItem.append(contentDiv);
+
+            $("#worksites").append(listItem);
+        },
+        error: function() {
+            alert("Failed to save the worksite.");
+        }
+    });
+});
+
+// Handle delete worksite button click
+$(document).on("click", ".deleteWorksite", function() { 
+    var worksite = $(this).data("worksite");
+    var button = $(this); // Store a reference to the delete button
+
+    // Send an API request to delete the worksite
+    $.ajax({
+        url: backendURL + "/delWorksite",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ worksite: worksite }),
+        success: function(response) {
+            // Remove the worksite from the list
+            button.closest("li").remove();
+        },
+        error: function() {
+            alert("Failed to delete the worksite.");
+        }
+    });
+});
+
+// Handle edit worksite button click
+$(document).on("click", ".editWorksite", function() {
+    var worksiteItem = $(this).closest(".contentDiv");
+    var worksite = worksiteItem.find(".worksite").text();
+
+    // Create input fields
+    var worksiteInput = $("<input type='text'>").addClass("worksiteInput").val(worksite);
+
+    // Hide info div and replace with input fields
+    worksiteItem.find(".infoDiv").hide();
+    worksiteItem.append(worksiteInput);
+
+    // Hide edit button and show save button
+    $(this).hide();
+    worksiteItem.find(".saveWorksite").show();
+});
+
+// Handle save worksite button click
+$(document).on("click", ".saveWorksite", function() {
+    var worksiteItem = $(this).closest(".contentDiv");
+    var oldWorksite = worksiteItem.find(".worksite").text();
+    var worksite = worksiteItem.find(".worksiteInput").val();
+
+    // Update the "worksite" data attribute of the delete button
+    var deleteButton = worksiteItem.find(".deleteWorksite");
+    deleteButton.data("worksite", worksite);
+
+    // Send an API request to edit the worksite
+    $.ajax({
+        url: backendURL + "/editWorksite",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ oldWorksite: oldWorksite, worksite: worksite }),
+        success: function(response) {
+            // Update list item
+            worksiteItem.find(".worksite").text(worksite);
+            worksiteItem.find(".infoDiv").show();
+            worksiteItem.find(".worksiteInput").remove();
+
+            // Hide save button and show edit button
+            worksiteItem.find(".saveWorksite").hide();
+            worksiteItem.find(".editWorksite").show();
+        },
+        error: function() {
+            alert("Failed to edit the worksite.");
+        }
+    });
+});
+
+// Load stored worksites on page load
+$.ajax({
+    url: backendURL + "/getWorksites",
+    method: "GET",
+    success: function(response) {
+        var worksites = response.worksites;
+        worksites.forEach(function(item) {
+            var worksite = item.worksite
+            var listItem = $("<li>").addClass("list-item");
+
+            var contentDiv = $("<div>").addClass("contentDiv");
+
+            var infoDiv = $("<div>")
+                .addClass("infoDiv")
+                .append(
+                    $("<span>").addClass("worksite").text(worksite),
+                );
+
+            var deleteButton = $("<button>")
+                .attr("id", "buttonn")
+                .text("Delete")
+                .addClass("deleteWorksite")
+                .data("worksite", worksite);
+
+            var editButton = $("<button>")
+                .attr("id", "buttonn")
+                .text("Edit")
+                .addClass("editWorksite");
+
+            var saveButton = $("<button>")
+                .attr("id", "buttonn")
+                .text("Save")
+                .addClass("saveWorksite")
+                .hide();
+
+            var buttonsDiv = $("<div>").addClass("buttonsDiv");
+            buttonsDiv.append(editButton);
+            buttonsDiv.append(" ");
+            buttonsDiv.append(saveButton);
+            buttonsDiv.append(" ");
+            buttonsDiv.append(deleteButton);
+
+            contentDiv.append(infoDiv);
+            contentDiv.append(buttonsDiv);
+
+            listItem.append(contentDiv);
+
+            $("#worksites").append(listItem);
+        })
+    },
+    error: function() {
+        alert("Failed to load the worksites.");
+    }
+});
+
+});
+
+    </script>    
+</body>
+
+</html>

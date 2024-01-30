@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            background: #303030;
+            padding: 50px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            width: 35%;
+        }
+        input[type=text], input[type=password] {
+            width: 80%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type=submit] {
+            width: 85%;
+            background-color: #1E90FF;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        h2 {
+            color: #ffffff;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <form id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="username" name="username" placeholder="Username" required><br><br>
+        <input type="password" id="password" name="password" placeholder="Password" required><br><br>
+        <input type="submit" value="Log in">
+    </form>
+
+    <script>
+        $(document).ready(function(){
+            var backendURL = "https://192.168.2.32:443";
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var user = $('#username').val();
+                var password = $('#password').val();
+
+                $.ajax({
+                    url: backendURL + "/login99",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ user: user, password: password }),
+                    success: function (data) {
+                        console.log("Success:", data);
+                        window.location.href = backendURL + data;
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                    }
+                });          
+            });
+        });
+    </script>
+</body>
+</html>

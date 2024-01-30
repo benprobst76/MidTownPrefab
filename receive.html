@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Part List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw; /* 95% of the viewport's width */
+            height: 100vh;
+            margin: 0;
+            font-size: 20px;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+
+        #partListContainer {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 80vw; /* 95% of the viewport's width */
+            height: 80vh;
+            display: flex;
+            overflow-x: scroll;
+            white-space: nowrap;
+            flex-direction: row-reverse;
+        }
+
+        .part-item {
+            width: 96%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #585858;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+        .part-item > div.contentWrapper {
+            display: none;
+        }
+
+        .part-item h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            cursor: pointer; /* Making the title clickable */
+        }
+
+        .part-item ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .part-item li {
+            margin-bottom: 5px;
+        }
+
+        .part-item button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #1E90FF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Scrollbar styles */
+        #partListContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #partListContainer::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        #partListContainer::-webkit-scrollbar-thumb {
+            background-color: #585858;
+            border-radius: 20px;
+        }
+
+        #partListContainer::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+        .part-description { /* This will hide the description initially */
+            display: none;
+        }
+        .unit-list {
+            flex: 0 0 auto;
+            min-width: 450px;
+            max-height: 700px; /* or any height you'd like */
+            overflow-y: scroll;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            margin-right: 10px; /* spacing between unit lists */
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .unit-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .unit-list::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            outline: 1px solid slategrey;
+        }
+
+        /* Ensuring compatibility for touch devices */
+        .unit-list {
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-title {
+            color: white; /* Change color to white */
+            text-align: center; /* Center align the title */
+            margin-bottom: 20px; /* Add some spacing below the title */
+        }
+        .unit-list h3 {
+            color: white; /* Change color to white for unit titles */
+            margin-top: 0; /* Remove any default top margin */
+        }
+        .part-item img {
+            max-width: 100%; /* Ensures the image doesn't overflow its container */
+            border-radius: 10px; /* Optional rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for a bit of depth */
+        }
+        #changeUrlBtn {
+            position: fixed;
+            bottom: 37px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #navigation-button {
+            position: fixed;
+            bottom: 37px;
+            left: 13%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="partListContainer">
+        <ul id="partList"></ul>
+    </div>
+    <button id="navigation-button">Previous</button>
+    <button id="changeUrlBtn">View History</button>
+    <script>
+        var backendURL = "https://192.168.2.32:443";
+        const partListContainer = document.getElementById("partListContainer");
+        const partTitles = {
+        part1: "90° Profile",
+        part2: "30° Knife Edge",
+        part3: "45° Knife Edge",
+        part4: "90° 3 Way Profile",
+        part5: "135° Bulkhead Profile",
+        part6: "135° Profile",
+        part7: "C-Cap Profile",
+        part8: "Column Profile",
+        part9: "Fire Rated Enclosure Double",
+        part10: "Fire Rated Enclosure",
+        part11: "Hat Profile",
+        part12: "Multi-Step profile",
+        part13: "Radius Bulkhead",
+        part14: "Radius Profile",
+        };
+        const partData = {
+            part1: {
+                title: "90° Profile",
+                imageUrl: backendURL + "/image1"
+            },
+            part2: {
+                title: "30° Knife Edge",
+                imageUrl: backendURL + "/image2"
+            },
+            part3: {
+                title: "45° Knife Edge",
+                imageUrl: backendURL + "/image3"
+            },
+            part4: {
+                title: "90° 3 Way Profile",
+                imageUrl: backendURL + "/image4"
+            },
+            part5: {
+                title: "135° Bulkhead Profile",
+                imageUrl: backendURL + "/image5"
+            },
+            part6: {
+                title: "135° Profile",
+                imageUrl: backendURL + "/image6"
+            },
+            part7: {
+                title: "C-Cap Profile",
+                imageUrl: backendURL + "/image7"
+            },
+            part8: {
+                title: "Column Profile",
+                imageUrl: backendURL + "/image8"
+            },
+            part9: {
+                title: "Fire Rated Enclosure Double",
+                imageUrl: backendURL + "/image9"
+            },
+            part10: {
+                title: "Fire Rated Enclosure",
+                imageUrl: backendURL + "/image10"
+            },
+            part11: {
+                title: "Hat Profile",
+                imageUrl: backendURL + "/image11"
+            },
+            part12: {
+                title: "Multi-Step profile",
+                imageUrl: backendURL + "/image12"
+            },
+            part13: {
+                title: "Radius Bulkhead",
+                imageUrl: backendURL + "/image13"
+            },
+            part14: {
+                title: "Radius Profile",
+                imageUrl: backendURL + "/image14"
+            }
+        };
+        var AllCD = false
+        // Function to generate a unique ID for each part
+        function generatePartId(part) {
+            return part.part; // Use part.part as the unique identifier
+        }
+
+        function isEmptyPart(part) {
+            // Function to check if a part is empty (all dimensions are empty)
+            return (
+                part.dA === "" &&
+                part.dB === "" &&
+                part.dC === "" &&
+                part.dD === "" &&
+                part.dE === "" &&
+                part.dH === "" &&
+                part.dR === "" &&
+                part.dR_P === "" &&
+                part.dW === ""
+            );
+        }
+
+        function addDetail(ul, label, value) {
+            const excludedKeys = ["User", "Worksite", "Unit", "Price", "Rand"];
+            if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
+                const detailItem = document.createElement("li");
+                detailItem.textContent = `${label}: ${value}`;
+                ul.appendChild(detailItem);
+            }
+        }
+
+        function createPartItem(part) {
+            const partItem = document.createElement("div");
+            partItem.setAttribute('data-part-data', JSON.stringify(part));
+            partItem.classList.add("part-item");
+
+            const title = partTitles[part.part] || part.part;
+
+            const h2 = document.createElement("h2");
+            h2.textContent = title;
+            h2.setAttribute('data-part-name', title);
+            partItem.appendChild(h2);
+
+            const contentWrapper = document.createElement('div'); 
+            contentWrapper.className = 'contentWrapper';
+
+            const ul = document.createElement("ul");
+            ul.classList.add("part-description");
+
+            for (const key in part) {
+                if (key !== "part") {
+                    addDetail(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key]);
+                }
+            }
+            contentWrapper.appendChild(ul);
+
+            const partInfo = partData[part.part];
+            if (partInfo && partInfo.imageUrl) {
+                const img = document.createElement("img");
+                img.src = partInfo.imageUrl;
+                img.alt = partInfo.title || 'Part Image';
+                img.style.width = "200px";
+                img.style.height = "auto";
+                img.style.marginLeft = "10px";
+                contentWrapper.appendChild(img);
+            }
+
+            partItem.appendChild(contentWrapper);
+
+            h2.addEventListener("click", function() {
+            if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
+                contentWrapper.style.display = 'flex';
+                // Explicitly set the display property of the part description
+                contentWrapper.querySelector('.part-description').style.display = 'block';
+            } else {
+                contentWrapper.style.display = 'none';
+                contentWrapper.querySelector('.part-description').style.display = 'none';
+            }
+        });
+            const checkButton = document.createElement('button');
+            checkButton.textContent = "✓";
+            checkButton.addEventListener('click', function() {
+                const isCurrentlyChecked = this.style.backgroundColor === 'green';
+                this.style.backgroundColor = isCurrentlyChecked ? '' : 'green';
+                if (this.style.backgroundColor === 'green') {
+                    const parentPartItem = this.closest('.part-item');
+                    if (parentPartItem) {
+                        parentPartItem.style.border = '2px solid green';
+                    }
+                } else {
+                    const parentPartItem = this.closest('.part-item');
+                    if (parentPartItem) {
+                        parentPartItem.style.border = '2px solid #585858';
+                    }
+                }
+                const worksite = part.worksite;
+                const floor = part.floor;
+                const unit = part.unit;
+                const partName = part.part; // Renamed to avoid shadowing
+                const side = part.side;
+                const thickness = part.thickness;
+                const length = part.length;
+                const dA = part.dA;
+                const dB = part.dB;
+                const dC = part.dC;
+                const dD = part.dD;
+                const dE = part.dE;
+                const d1A = part.d1A;
+                const d2A = part.d2A;
+                const d1B = part.d1B;
+                const d2B = part.d2B;
+                const dR = part.dR;
+                const dR_P = part.dR_P;
+                const dH = part.dH;
+                const dW = part.dW;
+                const edge1 = part.edge1;
+                const edge2 = part.edge2;
+                const unitList = document.querySelector(`.unit-list[data-unit="${unit}"]`);
+                const allCheckButtons = unitList.querySelectorAll('button');
+
+                const checkedCount = Array.from(allCheckButtons).reduce((count, button) => {
+                    return count + (button.style.backgroundColor === 'green' ? 1 : 0);
+                }, 0);
+
+                const totalCount = allCheckButtons.length;
+                const unitProgress = (checkedCount / totalCount) * 100;
+                var check = ""
+                if (this.style.backgroundColor === 'green') {
+                    check = "1"
+                }
+                checkForAllChecked(part.unit);
+                if  (!AllCD) {
+                    calculateAndSendUnitProgress(floor, unit, partName, side, thickness, length, dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, edge1, edge2, worksite, check);
+                }
+                AllCD = false
+            });
+            partItem.appendChild(checkButton);
+            if (part.check === "1") {
+                checkButton.style.backgroundColor = 'green';
+                const parentPartItem = checkButton.closest('.part-item');
+                if (parentPartItem) {
+                    parentPartItem.style.border = '2px solid green';
+                }
+            }
+            return partItem;
+        }
+
+        function calculateAndSendUnitProgress(floor, unit, partName, side, thickness, length, dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, edge1, edge2, worksite, check) {
+            // Send the overall progress data to the server
+            fetch(backendURL + "/unitProgress1", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                worksite: worksite,
+                floor: floor,
+                unit: unit,
+                part: partName,
+                side: side,
+                thickness: thickness,
+                length: length,
+                dA: dA,
+                dB: dB,
+                dC: dC,
+                dD: dD,
+                dE: dE,
+                d1A: d1A,
+                d2A: d2A,
+                d1B: d1B,
+                d2B: d2B,
+                dR: dR,
+                dR_P: dR_P,
+                dH: dH,
+                dW: dW,
+                edge1: edge1,
+                edge2: edge2,
+                check: check
+            })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Server Response:", data);
+                // You can handle the server's response here if needed
+            })
+            .catch(error => {
+            });
+        }
+
+        function checkForAllChecked(unit) {
+            const unitList = document.querySelector(`.unit-list[data-unit="${unit}"]`);
+            const allCheckButtons = unitList.querySelectorAll('button');
+            const allChecked = Array.from(allCheckButtons).every(button => button.style.backgroundColor === 'green');
+
+            if (allChecked) {
+                // Gather data for this unit
+                AllCD = true
+                const partsData = [];
+                const partItems = unitList.querySelectorAll('.part-item');
+                partItems.forEach(item => {
+                    const partData = JSON.parse(item.getAttribute('data-part-data'));  // Extract the part data from the attribute
+                    partsData.push(partData);  // Store the full part data instead of just the name
+                });
+                // Now send this data with the POST request:
+                fetch(backendURL + "/delReceive", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(partsData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    // Check if there's content in the response
+                    if (text && text.trim() !== "") {
+                        return JSON.parse(text);
+                    } else {
+                        // If there's no content, return a default object indicating success
+                        return { success: true }; 
+                    }
+                })
+                .then(data => {
+                    console.log("Server Response:", data);
+                    if(data.success) { 
+                        // Remove the checked items from the list
+                        unitList.querySelectorAll('button[style*="background-color: green"]').forEach(checkedButton => {
+                            checkedButton.closest('.part-item').remove();
+                        });
+
+                        // Optionally, you can also check if there are no items left in the unit list and remove the unit list itself:
+                        if (!unitList.querySelector('.part-item')) {
+                            unitList.remove();
+                        }
+                    } else {
+                        // Handle any errors or unsuccessful deletions here
+                        console.error("Error deleting parts:", data.errorMessage);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            }
+    }
+    function extractUserInfo(data) {
+    if (data.length > 0) {
+        userValue = data[0].user || "";   // Set default value if 'user' is not present
+        worksiteValue = data[0].worksite || "";   // Set default value if 'worksite' is not present
+        floorValue = data[0].floor || "";   // Set default value if 'floor' is not present
+        unitValue = data[0].unit || "";   // Set default value if 'unit' is not present
+    }
+}
+
+function createNewUnitList(unit) {
+    const unitList = document.createElement('div');
+    unitList.className = 'unit-list';
+    unitList.setAttribute('data-unit', unit);
+    const unitTitle = document.createElement('h3');
+    unitTitle.textContent = `${unit}`;
+    unitList.appendChild(unitTitle);
+
+    // Insert the new unitList at the top of the partListContainer
+    partListContainer.insertBefore(unitList, partListContainer.firstChild);
+    return unitList;
+}
+
+function displayPartList(parts) {
+
+    // Extract user, worksite, floor, and unit values from the received data
+    extractUserInfo(parts);
+
+    const filteredData = parts.filter(part => !isEmptyPart(part) && !isBlackPart(part));
+
+    if (filteredData.length === 0) {
+        partListContainer.innerHTML = "No matching parts found.";
+        return;
+    }
+
+    let lastRand;
+    let currentUnitList = null;
+    filteredData.forEach(part => {
+        if (lastRand !== part.rand) {
+            currentUnitList = createNewUnitList(part.unit);
+            lastRand = part.rand;
+        }
+        const partItem = createPartItem(part);
+        currentUnitList.appendChild(partItem);
+    });
+}
+
+
+        function isBlackPart(part) {
+            for (const key in part) {
+                if (part[key].trim() === "black") {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function handleDelete(part, partItem) {
+        const url = backendURL + "/delCart";
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(part),
+        };
+
+        fetch(url, requestOptions)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                // We expect an empty response, so no need to parse JSON
+                return;
+            })
+            .then(() => {
+                console.log("Part deleted:", part);
+                removeDeletedPart(partItem); // Pass the partItem
+            })
+            .catch((error) => console.error("Error deleting part:", error));
+    }
+
+    function removeDeletedPart(partItem) {
+        console.log("Attempting to remove Part:", partItem.dataset.partId);
+        partListContainer.removeChild(partItem);
+    }
+
+    document.getElementById('changeUrlBtn').addEventListener('click', function() {
+        window.location.href = backendURL + "/viewHis1"
+    });
+    document.getElementById('navigation-button').addEventListener('click', function() {
+        window.location.href = backendURL + "/loginReceiver"
+    });
+
+    let savedData = [];
+    var uniqueNewData = [];
+function fetchAndDisplayData() {
+  fetch(backendURL + "/getOrders")
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.length > savedData.length) {
+            uniqueNewData = []; // Clear out any previous unique data
+            for(let item1 of data) {
+                let isUnique = true;
+
+                for(let item2 of savedData) {
+                    if (JSON.stringify(item1) === JSON.stringify(item2)) {
+                        isUnique = false;
+                        break;
+                    }
+                }
+
+                if(isUnique) {
+                    uniqueNewData.push(item1);
+                }
+            }
+            displayPartList(uniqueNewData);
+            savedData = data;
+        }
+    })
+    .catch((error) => console.error(error));
+}
+
+// Call the function on page load
+fetchAndDisplayData();
+
+// Set an interval to call the function every 10 seconds
+setInterval(fetchAndDisplayData, 10000); // 10000 milliseconds = 10 seconds
+
+
+    </script>
+</body>
+</html>
