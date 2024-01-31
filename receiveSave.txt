@@ -1,39 +1,192 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Part List</title>
+    <title>Receive Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="icon" href="favicon" type="image/x-icon">
     <style>
-        body {
-            background-color: #141414;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100vw; /* 95% of the viewport's width */
-            height: 100vh;
+        html, body {
+            height: 100%;
             margin: 0;
-            font-size: 20px;
-            font-family: Arial, sans-serif;
-            flex-direction: column;
+            padding: 0;
         }
 
-        #partListContainer {
+        body {
+            background-color: #535353;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
+        }
+        @media only screen and (max-width: 1000px) {
+            body {
+                overflow: auto;
+            }
+        }
+        body.blur::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(3px);
+            transition: backdrop-filter 2s ease;
+            z-index: 1;
+        }
+        .TopLay {
             background-color: #303030;
+            width: 100%;
+            height: 10vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        .TopMid1 {
+            width: 15%;
+            height: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: solid black;
+        }
+        .TopMid2 {
+            width: 70%;
+            height: 10vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .TopMid3 {
+            width: 15%;
+            height: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: solid black;
+        }
+        .TopMid3 h2 {
+            color: white;
+            font-size: 1.5vw;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .Mid {
+            display: flex;
+            flex-direction: row;
+        }
+/*____________________________________________________________________________________________________________*/
+        .LeftLay {
+            background-color: #303030;
+            width: 15%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-top: solid black;
+        }
+        .LeftLay ul {
+            margin: 0;
+            padding: 0;
+        }
+        .list-item {
+            box-sizing: border-box;
+            list-style: none;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid #303030;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .list-item:last-child {
+            border-bottom: 0.3vw solid black;;
+        }
+        .list-item.active {
+            border-color: #1E90FF;
+        }
+        .list-item2 {
+            box-sizing: border-box;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid #303030;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .list-item22 {
+            box-sizing: border-box;
+            border-top: 0.3vw solid black;
+            border-bottom: 0.3vw solid black;
+            border-left: 0.3vw solid #303030;
+            border-right: 0.3vw solid #303030;
+            padding: 0.8vh;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .list-item2:last-child {
+            border-bottom: 0.3vw solid black;;
+        }
+        .list-item2.active {
+            border-color: #1E90FF;
+        }
+        #floorContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+        #unitContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+/*____________________________________________________________________________________________________________*/
+        .MidLay {
+            background-color: #1f1f1f;
+            width: 70%;
+            height: 90vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: solid black;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        #partListContainer {
+            background-color: #1f1f1f;
             border-radius: 20px;
             padding: 40px;
             width: 80vw; /* 95% of the viewport's width */
-            height: 80vh;
+            height: 95%;
             display: flex;
-            overflow-x: scroll;
+            overflow-x: auto;
             white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
         }
 
         .part-item {
-            width: 100%;
+            width: 96%;
             padding: 10px;
             margin-bottom: 10px;
-            border: 2px solid #585858;
+            border: 2px solid white;
             border-radius: 10px;
             color: #ffffff;
         }
@@ -58,9 +211,9 @@
         }
 
         .part-item button {
-            margin-top: 10px;
-            padding: 5px 10px;
-            font-size: 16px;
+            height: 4vw;
+            padding: 1vw 1.5vw;
+            font-size: 1.2vw;
             background-color: #1E90FF;
             color: #ffffff;
             border: none;
@@ -85,83 +238,458 @@
         #partListContainer::-webkit-scrollbar-thumb:hover {
             background-color: #555;
         }
+        .unit-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .unit-list::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .unit-list::-webkit-scrollbar-thumb {
+            background-color: #585858;
+            border-radius: 20px;
+        }
+
+        .unit-list::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
         .part-description { /* This will hide the description initially */
             display: none;
         }
         .unit-list {
             flex: 0 0 auto;
+            width: 45vw;
+            overflow-x: hidden;
+            max-height: 85vw;
+            overflow-y: auto;          
+            border: 0.6vw solid #4b4b4b;
+            padding: 10px;
+            font-size: 2vw;
+            color: white;
+            margin-top: -2vw;
+            box-shadow: rgba(0, 0, 0, 1.4) 0 8px 15px;
+            margin-left: 10px;
+        }
+        .unit-list h2 {
+            font-size: 2.2vw;
+        }
+/*____________________________________________________________________________________________________________*/
+#MidLay3 {
+            background-color: #1f1f1f;
+            width: 70%;
+            height: 90vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            border: solid black;
+        }
+        .modpart-item {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-left: 2vw;
+            border: 2px solid #585858;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+        .modpart-item > div.contentWrapper {
+            display: none;
+        }
+        .modpart-item h2 {
+            font-size: 2vw;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .modpart-item ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .modpart-item li {
+            margin-bottom: 5px;
+            font-size: 1.8vw;
+        }
+        .modpart-item button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #1E90FF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }     
+        .modunit-list {
+            flex: 0 0 auto;
             min-width: 450px;
-            max-height: 700px; /* or any height you'd like */
-            overflow-y: scroll;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            margin-right: 10px; /* spacing between unit lists */
+            max-height: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+            margin-right: 10px;
             border: 1px solid #ccc;
             padding: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .unit-list::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .unit-list::-webkit-scrollbar-thumb {
-            background-color: darkgrey;
-            outline: 1px solid slategrey;
-        }
-
-        /* Ensuring compatibility for touch devices */
-        .unit-list {
-            -webkit-overflow-scrolling: touch;
-        }
-        .main-title {
+        .modmain-title {
             color: white; /* Change color to white */
             text-align: center; /* Center align the title */
             margin-bottom: 20px; /* Add some spacing below the title */
         }
-        .unit-list h3 {
+        .modunit-list h3 {
             color: white; /* Change color to white for unit titles */
             margin-top: 0; /* Remove any default top margin */
         }
-        .part-item img {
+        .modpart-item img {
             max-width: 100%; /* Ensures the image doesn't overflow its container */
             border-radius: 10px; /* Optional rounded corners */
+            margin-right: 2vw;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for a bit of depth */
         }
+/*____________________________________________________________________________________________________________*/
+        .RightLay {
+            background-color: #303030;
+            width: 15%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-top: solid black;
+        }
+        .RightLay ul {
+            width: 200%;
+            margin-left: -1.6vw;
+        }
         #changeUrlBtn {
-            position: fixed;
-            bottom: 37px;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .Numb {
+            width: 100%;
+            list-style: none;
+            box-sizing: border-box;
+            padding: 0.8vh;
+            color: white;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+        }
+        .Numb:first-child {
+            border-top: 0.3vw solid black;;
+        }
+        .Numb:last-child {
+            border-bottom: 0.3vw solid black;;
+        }
+        .stlHis {
+            width: 100%;
+            height: 2.3vw;
+            list-style: none;
+            box-sizing: border-box;
+            color: white;
+            border: 1px solid #000000;
+            text-align: center;
+            background-color: #4b4b4b;
+            background-clip: border-box;
+            font-size: 1vw;
+            margin-bottom: 1vw;
+            cursor: pointer;
+        }
+        .expandable1 {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.15s ease-in-out, border-color 0.1s ease;
+            display: flex;
+            border: solid rgba(75, 75, 75, 0) 5px; /* Initially transparent border */
+        }
+
+        .expandable1.visible {
+            max-height: 500px;
+            border-color: rgba(75, 75, 75, 1); /* Transition to opaque border */
+        }
+        .carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            margin-left: 1vw;
+            border-left: solid #4b4b4b 5px;
+            }
+
+            .carousel-images {
+            display: flex;
+            width: 100%;
+            transition: transform 0.5s ease;
+            }
+
+            .carousel-images img {
+            width: 100%;
+            height: 25vw;
+            }
+
+            .carousel-pagination {
+            position: absolute;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            display: flex;
+            }
+
+            .carousel-pagination-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #888;
+            margin: 0 5px;
             cursor: pointer;
-        }
-        #navigation-button {
-            position: fixed;
-            bottom: 37px;
-            left: 13%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            }
+
+            .carousel-pagination-dot.active {
+            background-color: #bbb;
+            }
+            .bigScreenB {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 3vw;
+            height: 3vw;
+            border-radius: 20%;
             cursor: pointer;
-        }
+            }
+            input[type=checkbox]{
+                height: 0;
+                width: 0;
+                visibility: hidden;
+            }
+
+            .swB {
+                cursor: pointer;
+                text-indent: -9999px;
+                width: 4.4vw;
+                height: 2vw;
+                background: #1E90FF; /* Default color */
+                display: block;
+                border-radius: 100px;
+                position: relative;
+            }
+
+            .swB:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 5px; /* Position on the right by default */
+                width: 2vw;
+                height: 2vw;
+                background: #fff;
+                border-radius: 90px;
+                transition: 0.2s;
+            }
+
+            input:checked + .swB {
+                background: #5c5c5c; /* Grey background when not checked */
+            }
+
+            input:checked + .swB:after {
+                left: 5px; 
+                transform: none;
+            }
+
+            .swB:active:after {
+                width: 3vw;
+            }
+            .button-28 {
+            background-color: #5c5c5c;
+            border: 2px solid #1A1A1A;
+            border-radius: 15px;
+            box-sizing: border-box;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 1vw;
+            font-weight: bold;
+            height: 4.6%;
+            width: 55%;
+            outline: none;
+            text-align: center;
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            }
+
+            .button-28:disabled {
+            pointer-events: none;
+            }
+            .button-28:active {
+            background-color: #1E90FF;
+            transform: translateY(-2px);
+            } 
+            .button-28.active {
+            background-color: #1E90FF;
+            transform: translateY(-2px);
+            }  
+            .quiz {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            background-color: #252525;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80%;
+            border-radius: 15px;
+            align-items: center;
+            color: white;
+            opacity: 0;
+            transition: all 0.2s ease;
+            }
+            .Qwrapper0 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #252525;
+            width: 40%;
+            height: 80vh;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            border: 0.4vw solid black;
+            opacity: 0;
+            transition: all 0.2s ease;
+            }
+            .shrinkB {
+            width: 7vw;
+            height: 4vh;
+            border-radius: 1vw;
+            border: none;
+            background-color: rgb(35, 150, 0);
+            color: white;
+            transition: all 0.1s ease; /* Transition for smooth effect */
+            }
+
+            .shrinkB:active {
+            transform: scale(0.90); /* Shrinks the button */
+            background-color: rgb(8, 102, 0); /* Changes color when pressed */
+            }
+            .circular-checkbox {
+            position: relative;
+            cursor: pointer;
+            width: 2vw;
+            height: 2vw;
+            border: solid 0.3vw gray;
+            border-radius: 50%;
+            }
+            .circular-check {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            width: 1.2vw;
+            height: 1.2vw;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            background-color: #1E90FF;
+            opacity: 0;
+            }
+            .circular-checkbox.toggle .circular-check {
+            opacity: 1;
+            }
+
     </style>
 </head>
 <body>
-    <div id="partListContainer">
-        <h2 class="main-title">Orders</h2>
-        <ul id="partList"></ul>
+    <div class="TopLay">
+        <div class="TopMid1">
+            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 75%;">
+        </div>
+        <div class="TopMid2">
+            <h1 style="color: white; font-size: 3vw;">Receive Page</h1>
+        </div>
+        <div class="TopMid3">
+            <h2 style="color: white;" id="curUser">User:&nbsp</h2>
+            <h2 style="color: white;" id="HourHour"></h2>
+            <button style="width: fit-content; height: 2vw; font-size: 1.5vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer;" id="Discon">Disconnect</button>
+        </div>
     </div>
-    <button id="navigation-button">Previous</button>
-    <button id="changeUrlBtn">View History</button>
+    <div class="Mid">
+        <div class="LeftLay">
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Worksite:</h2>
+            <ul id="listContainer"></ul>
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Sorting:</h2>
+            <button class="button-28" role="button" id="groupB" style="justify-content: center; align-self: center;">All Orders</button>
+            <button class="button-28" role="button" id="fltB" style="justify-content: center; align-self: center; margin-top: 1vw;">Filter</button>
+            <br>
+            <div style="align-self: center;">
+                <input type="checkbox" id="shB" />
+                <label for="shB" class="swB" style="margin-left: 1vw;"></label>
+                <h1 style="font-size: 1vw; font-weight: bold; color: white; margin-top: 0.4vw;">Group By Sheet</h1>
+            </div>
+        </div>
+        <div class="MidLay" id="MidLay1" style="display: none;">
+            <div id="partListContainer">
+                <ul id="partList"></ul>
+            </div>
+        </div>
+        <div class="MidLay" id="MidLay2" style="display: flex;"></div>
+        <div id="MidLay3">
+        </div>
+        <div class="RightLay">
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Part Ordered:</h2>
+          <ul>
+            <li class="Numb" id="Norder">- Quantity:</li>
+            <li class="Numb" id="Nsheet">- Drywall Sheet:</li>
+          </ul>
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">History:</h2>
+          <ul id="listHis"></ul>
+          <button id="changeUrlBtn">View Full History</button>
+          <br>
+          <br>
+        </div>
+        </div>
+    </div>
     <script>
         var backendURL = "https://192.168.2.32:443";
+        var Cinfo = {
+            "time": "",
+            "user": "",
+            "worksite": "",
+            "floor": "",
+            "unit": "",
+            "type": "",
+            "part": "",
+            "side": "",
+            "thickness": "",
+            "width": "",
+            "length": "",
+            "dA": "",
+            "dB": "",
+            "dC": "",
+            "dD": "",
+            "dE": "",
+            "d1A": "",
+            "d2A": "",
+            "d1B": "",
+            "d2B": "",
+            "dR": "",
+            "dR_P": "",
+            "dH": "",
+            "dW": "",
+            "edge1": "",
+            "edge2": "",
+            "price": "",
+            "check": "",
+            "rand": ""
+        }
         const partListContainer = document.getElementById("partListContainer");
+        const partListContainer2 = document.getElementById("partListContainer2");
         const partTitles = {
         part1: "90° Profile",
         part2: "30° Knife Edge",
@@ -177,6 +705,7 @@
         part12: "Multi-Step profile",
         part13: "Radius Bulkhead",
         part14: "Radius Profile",
+        part15: "90° 4 Way Profile",
         };
         const partData = {
             part1: {
@@ -234,11 +763,527 @@
             part14: {
                 title: "Radius Profile",
                 imageUrl: backendURL + "/image14"
+            },
+            part15: {
+                title: "90° 4 Way Profile",
+                imageUrl: backendURL + "/image15"
             }
         };
         var AllCD = false
-        // Function to generate a unique ID for each part
-        function generatePartId(part) {
+        let dict = [];
+        let dict2 = {};
+        var nbr = 0;
+        let savedData = [];
+        var workCh = false;
+        var floorCh = false;
+        let intervalId;
+        let groupSort = true;
+        let unitSort = false;
+        var delay = 600;
+        var partSort = "";
+        var firstL = 1;
+        var alternate = false;
+        var oldSheet = '';
+        var edP = "/sortSize1";
+        var nSheet = 0;
+        var Exlen = "";
+        var LocalHis = document.getElementById("listHis");
+        const imgdiv1 = document.createElement('div');
+        const imgdiv2 = document.createElement('div');
+        const imgdivimg = document.createElement('img');
+        const img2divimg = document.createElement('img');
+//____________________________________________________________________________________________________________________________________________________
+//Top right info logic
+
+        const getUser = async () => {
+            try {
+                const response = await fetch(backendURL + '/getCurUser');
+                const data = await response.json();
+                Cinfo.user = data.user
+                document.getElementById('curUser').textContent = ('User: ' + Cinfo.user);
+            } catch (error) {
+                console.error('Error getting user info:', error);
+            }
+        };
+
+        function UpdateTime() {
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = currentDate.getMinutes();
+            const currentSecond = currentDate.getSeconds();
+            const currentDay = currentDate.getDate();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            const formattedDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`;
+            const formattedTime = `${currentHour}:${currentMinute.toString().padStart(2, '0')}`;
+            const combinedText = `${formattedTime} / ${formattedDate}`;
+            document.getElementById('HourHour').textContent = combinedText;
+            tmpT = (60 - currentSecond) * 1000;
+            return currentMinute
+        }
+
+        document.getElementById('Discon').addEventListener('click', function() {
+            window.location.href = backendURL;
+        });
+
+        getUser();
+        UpdateTime();
+        setInterval(UpdateTime, tmpT);
+
+//____________________________________________________________________________________________________________________________________________________
+//Location logic
+
+        const listContainer = document.getElementById('listContainer');
+
+        const toggleActive = (element) => {
+            // Clear 'active' class from siblings
+            const siblings = element.parentNode.children;
+            for (let i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove('active');
+            }
+            // Set 'active' class for clicked element
+            element.classList.add('active');
+            if (element.classList.contains('active')) {
+                workCh = true;
+            } else {
+                workCh = false;
+            }
+        };
+
+        const toggleActive2 = (element) => {
+            // Clear 'active' class from siblings
+            const siblings = element.parentNode.children;
+            if (element.classList.contains('active')) {
+                floorCh = false;
+                for (let i = 0; i < siblings.length; i++) {
+                    siblings[i].classList.remove('active');
+                }
+                return
+            }
+            for (let i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove('active');
+            }
+            // Set 'active' class for clicked element
+            element.classList.add('active');
+            if (element.classList.contains('active')) {
+                floorCh = true;
+            } else {
+                floorCh = false;
+            }
+        };
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(backendURL + '/getWorksites');
+                const data = await response.json();
+
+                data.worksites.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-item';
+                    listItem.textContent = item.worksite;
+                    listItem.addEventListener('click', () => {
+                        toggleActive(listItem);
+                        floorCh = false;
+                        if (document.getElementById('MidLay3').style.display === 'flex') {
+                            fetch(backendURL + "/viewHis2")
+                            .then((response) => response.json())
+                            .then((data) => displayModPartList(data))
+                            .catch((error) => console.error(error));
+                        }
+                        Cinfo.worksite = item.worksite;
+                        Cinfo.floor = "";
+                        document.getElementById('groupB').click()
+                        if (!intervalId) {
+                            intervalId = setInterval(fetchAndDisplayData, 10000);
+                        }
+                        fetchAndDisplayData();
+                        fetch(backendURL + "/selectWorksite", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(Cinfo)
+                        })
+                    });
+                    listContainer.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching worksites:', error);
+            }
+        };
+
+        const fetchData2 = async () => {
+            try {
+                const listContainer2 = document.createElement('ul');
+                const response = await fetch(backendURL + '/getFloors2');
+                const data = await response.json();
+                listContainer2.innerHTML = "";
+                data.floors.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-item';
+                    listItem.textContent = item.floor;
+                    listItem.addEventListener('click', () => {
+                        toggleActive2(listItem);
+                        if (document.getElementById('MidLay3').style.display === 'flex') {
+                            fetch(backendURL + "/viewHis2")
+                            .then((response) => response.json())
+                            .then((data) => displayModPartList(data))
+                            .catch((error) => console.error(error));
+                        }
+                        Cinfo.floor = item.floor;
+                    });
+                    listContainer2.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching worksites:', error);
+            }
+        };
+
+        // Initialize by fetching worksites when the page loads.
+        fetchData();
+        document.getElementById('groupB').addEventListener('click', function() {
+            if (workCh) {
+                this.classList.add('active');
+                groupSort = true;
+                partListContainer.innerHTML = "";
+                savedData = [];
+                firstL = 1;
+                if (!intervalId) {
+                    intervalId = setInterval(fetchAndDisplayData, 10000);
+                }
+                fetchAndDisplayData();
+            } else {
+                alert("Please choose a worksite");
+            }
+        });
+        function toggleCheckbox(thiss, x) {
+            if (x) {
+                document.querySelectorAll('.circular-checkbox').forEach(function(element) {
+                    element.classList.remove('toggle');
+                });
+            }
+            thiss.classList.toggle('toggle');
+        }
+        document.getElementById('fltB').addEventListener('click', function() {
+            //if (workCh) {
+                document.getElementById('groupB').classList.remove('active');
+                const wrpr0 = document.createElement('div');
+                const quiz = document.createElement('div');
+                const quiz2 = document.createElement('div');
+                const quiz3 = document.createElement('div');
+                const dict = {
+                    1: quiz,
+                    2: quiz2,
+                    3: quiz3
+                };
+                const body = document.body;
+                const addNew = document.createElement('button');
+                const prev= document.createElement('button');
+                const close = document.createElement('button');
+                const pres = document.createElement('h2');
+                var lastQZ = 1;
+                quiz.className = 'quiz';
+                wrpr0.className = 'Qwrapper0';
+                pres.innerText = 'Saved Preset:'
+                quiz.appendChild(pres);
+                addNew.innerText = 'Add New';
+                prev.innerText = 'Previous';
+                close.innerText = 'Close';
+                addNew.className = 'shrinkB';
+                prev.className = 'shrinkB'
+                prev.style.backgroundColor = '#1E90FF';
+                prev.style.marginBottom = '2vw';
+                prev.style.display = 'none';
+                prev.style.justifyContent = 'center';
+                prev.style.alignItems = 'center';
+                close.className = 'shrinkB'
+                close.style.backgroundColor = '#202020';
+                close.style.marginBottom = '2vw';
+                close.style.border = 'solid 0.2px black';
+                addNew.style.width = '10vw'
+                addNew.addEventListener('click', function() {
+                    const ques1 = document.createElement('h2');
+                    const ch1 = document.createElement('h2');
+                    const ch2 = document.createElement('h2');
+                    const ch3 = document.createElement('h2');
+                    const wrP = document.createElement('div');
+                    const wrQ1 = document.createElement('div')
+                    const wrQ2 = document.createElement('div')
+                    const circB1 = document.createElement('button');
+                    const inCirc1 = document.createElement('div');
+                    const exCirc1 = document.createElement('div');
+                    const exCirc2 = document.createElement('div');
+                    const exCirc3 = document.createElement('div');
+                    const exCh1 = document.createElement('div');
+                    const exCh2 = document.createElement('div');
+                    const exCh3 = document.createElement('div');
+                    exCirc1.style.height = '5vh';
+                    exCirc2.style.height = '5vh';
+                    exCirc3.style.height = '5vh';
+                    exCirc1.style.display = 'flex';
+                    exCirc2.style.display = 'flex';
+                    exCirc3.style.display = 'flex';
+                    exCirc1.style.alignItems = 'center';
+                    exCirc2.style.alignItems = 'center';
+                    exCirc3.style.alignItems = 'center';
+                    exCh1.style.height = '5vh';
+                    exCh2.style.height = '5vh';
+                    exCh3.style.height = '5vh';
+                    exCh1.style.display = 'flex';
+                    exCh2.style.display = 'flex';
+                    exCh3.style.display = 'flex';
+                    exCh1.style.alignItems = 'center';
+                    exCh2.style.alignItems = 'center';
+                    exCh3.style.alignItems = 'center';
+                    wrQ1.style.display = 'flex';
+                    wrQ1.style.flexDirection = 'column';
+                    wrQ1.style.justifyContent = 'space-between';
+                    wrQ1.style.height = '25vh';
+                    wrQ2.style.display = 'flex';
+                    wrQ2.style.flexDirection = 'column';
+                    wrQ2.style.justifyContent = 'space-between';
+                    wrQ2.style.height = '25vh';
+                    wrQ2.style.marginLeft = '2vw';
+                    inCirc1.className = 'circular-check';
+                    circB1.className = 'circular-checkbox';
+                    circB1.appendChild(inCirc1);
+                    const circB2 = document.createElement('button');
+                    const inCirc2 = document.createElement('div');
+                    inCirc2.className = 'circular-check';
+                    circB2.className = 'circular-checkbox';
+                    circB2.appendChild(inCirc2);
+                    const circB3 = document.createElement('button');
+                    const inCirc3 = document.createElement('div');
+                    inCirc3.className = 'circular-check';
+                    circB3.className = 'circular-checkbox';
+                    circB3.appendChild(inCirc3);
+                    wrP.style.display = 'flex';
+                    wrP.style.flexDirection = 'row';
+                    wrP.style.marginTop = '9vh';
+                    wrP.style.fontSize = '0.9vw';
+                    ques1.innerText = 'Filter parts by:'
+                    ques1.style.fontWeight = 'bold';
+                    ques1.style.fontSize = '2vw';
+                    ques1.style.boxShadow = '0 5px 0 0 #1E90FF';
+                    ques1.style.borderRadius = '0 0 8px 8px';
+                    ch1.innerText = 'Specific group order or multiple group orders';
+                    ch2.innerText = 'Specific floor or multiple floors';
+                    ch3.innerText = 'Specific unit or multiple units';
+                    lastQZ = 2;
+                    quiz2.className = 'quiz';
+                    circB1.addEventListener('click', function() {
+                        toggleCheckbox(this, true);
+                        const aQues1 = document.createElement('h2');
+                        const aCh1 = document.createElement('h2');
+                        const aCh2 = document.createElement('h2');
+                        const aCh3 = document.createElement('h2');
+                        const aWrP = document.createElement('div');
+                        const aWrQ1 = document.createElement('div');
+                        const aWrQ2 = document.createElement('div');
+                        const aCircB1 = document.createElement('button');
+                        const aInCirc1 = document.createElement('div');
+                        const aExCirc1 = document.createElement('div');
+                        const aExCirc2 = document.createElement('div');
+                        const aExCirc3 = document.createElement('div');
+                        const aExCh1 = document.createElement('div');
+                        const aExCh2 = document.createElement('div');
+                        const aExCh3 = document.createElement('div');
+
+                        aExCirc1.style.height = '5vh';
+                        aExCirc2.style.height = '5vh';
+                        aExCirc3.style.height = '5vh';
+                        aExCirc1.style.display = 'flex';
+                        aExCirc2.style.display = 'flex';
+                        aExCirc3.style.display = 'flex';
+                        aExCirc1.style.alignItems = 'center';
+                        aExCirc2.style.alignItems = 'center';
+                        aExCirc3.style.alignItems = 'center';
+
+                        aExCh1.style.height = '5vh';
+                        aExCh2.style.height = '5vh';
+                        aExCh3.style.height = '5vh';
+                        aExCh1.style.display = 'flex';
+                        aExCh2.style.display = 'flex';
+                        aExCh3.style.display = 'flex';
+                        aExCh1.style.alignItems = 'center';
+                        aExCh2.style.alignItems = 'center';
+                        aExCh3.style.alignItems = 'center';
+
+                        aWrQ1.style.display = 'flex';
+                        aWrQ1.style.flexDirection = 'column';
+                        aWrQ1.style.justifyContent = 'space-between';
+                        aWrQ1.style.height = '25vh';
+
+                        aWrQ2.style.display = 'flex';
+                        aWrQ2.style.flexDirection = 'column';
+                        aWrQ2.style.justifyContent = 'space-between';
+                        aWrQ2.style.height = '25vh';
+                        aWrQ2.style.marginLeft = '2vw';
+
+                        aInCirc1.className = 'circular-check';
+                        aCircB1.className = 'circular-checkbox';
+                        aCircB1.appendChild(aInCirc1);
+
+                        const aCircB2 = document.createElement('button');
+                        const aInCirc2 = document.createElement('div');
+                        aInCirc2.className = 'circular-check';
+                        aCircB2.className = 'circular-checkbox';
+                        aCircB2.appendChild(aInCirc2);
+
+                        const aCircB3 = document.createElement('button');
+                        const aInCirc3 = document.createElement('div');
+                        aInCirc3.className = 'circular-check';
+                        aCircB3.className = 'circular-checkbox';
+                        aCircB3.appendChild(aInCirc3);
+
+                        aWrP.style.display = 'flex';
+                        aWrP.style.flexDirection = 'row';
+                        aWrP.style.marginTop = '9vh';
+                        aWrP.style.fontSize = '0.9vw';
+
+                        aQues1.innerText = 'Filter parts by:';
+                        aQues1.style.fontWeight = 'bold';
+                        aQues1.style.fontSize = '2vw';
+                        aQues1.style.boxShadow = '0 5px 0 0 #1E90FF';
+                        aQues1.style.borderRadius = '0 0 8px 8px';
+
+                        aCh1.innerText = 'Test';
+                        aCh2.innerText = 'HOHOH';
+                        aCh3.innerText = 'SHIHIH';
+
+                        lastQZ = 3;
+                        quiz3.className = 'quiz';  // Assuming quiz2 is already declared elsewhere
+
+                        aCircB1.addEventListener('click', function() {
+                            toggleCheckbox(this, true);                          
+                        });
+
+                        aCircB2.addEventListener('click', function() {
+                            toggleCheckbox(this, true);
+                        });
+
+                        aCircB3.addEventListener('click', function() {
+                            toggleCheckbox(this, true);
+                        });
+
+                        aExCh1.appendChild(aCh1);
+                        aExCh2.appendChild(aCh2);
+                        aExCh3.appendChild(aCh3);
+
+                        aWrQ1.appendChild(aExCh1);
+                        aWrQ1.appendChild(aExCh2);
+                        aWrQ1.appendChild(aExCh3);
+
+                        aExCirc1.appendChild(aCircB1);
+                        aExCirc2.appendChild(aCircB2);
+                        aExCirc3.appendChild(aCircB3);
+
+                        aWrQ2.appendChild(aExCirc1);
+                        aWrQ2.appendChild(aExCirc2);
+                        aWrQ2.appendChild(aExCirc3);
+
+                        quiz3.appendChild(aQues1);
+                        aWrP.appendChild(aWrQ1);
+                        aWrP.appendChild(aWrQ2);
+                        quiz3.appendChild(aWrP);                  
+                        wrpr0.appendChild(quiz3);
+
+                        setTimeout(function() {
+                            quiz3.style.opacity = 1;
+                            prev.style.display = 'flex';
+                        }, 0);
+
+                        setTimeout(function() {
+                            quiz2.style.opacity = 0;
+                            wrpr0.removeChild(quiz2);
+                        }, 300);
+                    });
+                    circB2.addEventListener('click', function() {
+                        toggleCheckbox(this, true);
+                    });
+                    circB3.addEventListener('click', function() {
+                        toggleCheckbox(this, true);
+                    });
+                    exCh1.appendChild(ch1);
+                    exCh2.appendChild(ch2);
+                    exCh3.appendChild(ch3);
+                    wrQ1.appendChild(exCh1);
+                    wrQ1.appendChild(exCh2);
+                    wrQ1.appendChild(exCh3);
+                    exCirc1.appendChild(circB1);
+                    exCirc2.appendChild(circB2);
+                    exCirc3.appendChild(circB3);
+                    wrQ2.appendChild(exCirc1);
+                    wrQ2.appendChild(exCirc2);
+                    wrQ2.appendChild(exCirc3);
+                    quiz2.appendChild(ques1);
+                    wrP.appendChild(wrQ1);
+                    wrP.appendChild(wrQ2);
+                    quiz2.appendChild(wrP);                  
+                    wrpr0.appendChild(quiz2);
+                    setTimeout(function() {
+                        quiz2.style.opacity = 1;
+                        prev.style.display = 'flex';
+                    }, 0);
+                    setTimeout(function() {
+                        quiz.style.opacity = 0;
+                        wrpr0.removeChild(quiz);
+                    }, 300);
+                });
+                prev.addEventListener('click', function() {
+                    wrpr0.appendChild(dict[lastQZ-1]);
+                    setTimeout(function() {
+                        if (lastQZ - 1 === 1) {
+                            prev.style.display = 'none';
+                        }
+                        dict[lastQZ-1].style.opacity = 1;
+                        dict[lastQZ].style.opacity = 0;
+                        wrpr0.removeChild(dict[lastQZ]);
+                        dict[lastQZ].innerHTML = '';
+                        lastQZ -= 1;
+                    }, 0);
+                });
+                close.addEventListener('click', function() {
+                    toggleBlur(wrpr0)
+                    dict[lastQZ].style.opacity = 0;
+                    wrpr0.style.opacity = 0;
+                    setTimeout(function() {
+                        body.removeChild(wrpr0);
+                        dict[lastQZ].innerHTML = '';
+                        wrpr0.removeChild(dict[lastQZ]);
+                        lastQZ = 1;
+                    }, 400);
+                });
+                quiz.appendChild(addNew);
+                wrpr0.appendChild(quiz);
+                wrpr0.appendChild(prev);
+                wrpr0.appendChild(close);
+                body.appendChild(wrpr0);
+                setTimeout(function() {
+                    wrpr0.style.opacity = 1;
+                }, 0);
+                setTimeout(function() {
+                    quiz.style.opacity = 1;
+                }, 0);
+                toggleBlur(wrpr0)
+            /*} else {
+                alert("Please choose a worksite");
+            }*/
+        });
+
+        document.getElementById('shB').addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (this.classList.contains('active')) {
+                edP = "/sortSize2";
+            } else {
+                edP = "/sortSize1";
+            }
+        });
+
+//____________________________________________________________________________________________________________________________________________________
+// Parts logic
+// Function to generate a unique ID for each part
+function generatePartId(part) {
             return part.part; // Use part.part as the unique identifier
         }
 
@@ -258,7 +1303,7 @@
         }
 
         function addDetail(ul, label, value) {
-            const excludedKeys = ["User", "Worksite", "Unit", "Price"];
+            const excludedKeys = ["User", "Worksite", "Price", "Rand", "UniqueID", "UniqueID2", "Side", "Unit", "Order", "Floor", "Time", "Checktime", "Sheet", "Order2", "Length2", "Sum", "Img", Exlen];
             if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
                 const detailItem = document.createElement("li");
                 detailItem.textContent = `${label}: ${value}`;
@@ -266,59 +1311,289 @@
             }
         }
 
+        function toggleBlur(focusDivId) {
+            const body = document.body;
+            body.classList.toggle('blur');
+            if (body.classList.contains('blur')) {
+                focusDivId.style.zIndex = '2';
+            } else {
+                focusDivId.style.zIndex = '';
+            }
+        }
+
         function createPartItem(part) {
             const partItem = document.createElement("div");
             partItem.setAttribute('data-part-data', JSON.stringify(part));
+            partItem.setAttribute('data-uniqueID2', part.uniqueID2);
             partItem.classList.add("part-item");
 
+            const container = document.createElement("div");
+            container.style.display = 'flex';
             const title = partTitles[part.part] || part.part;
-
+            const title2 = part.unit;
             const h2 = document.createElement("h2");
+            const h22 = document.createElement("h2");
+            const h222 = document.createElement("h2");
+            const h2222 = document.createElement("h2");
+            const separ1 = document.createElement("h2");
+            const separ2 = document.createElement("h2");
+            const separ3 = document.createElement("h2");
             h2.textContent = title;
+            h22.textContent = title2;
+            h222.textContent = part.order;
+            h2222.textContent = part.floor;
+            separ1.textContent = '|';
+            separ2.textContent = '|';
+            separ3.textContent = '|';
             h2.setAttribute('data-part-name', title);
-            partItem.appendChild(h2);
+            h2.style.marginRight = '0.4vw';
+            h2222.style.marginRight = '0.4vw';
+            h22.style.marginRight = '0.4vw';
+            h222.style.marginLeft = 'auto';
+            separ1.style.marginRight = '0.4vw';
+            separ2.style.marginRight = '0.4vw';
+            separ3.style.marginRight = '0.4vw';
+            separ1.style.color = '#1E90FF';
+            separ2.style.color = '#1E90FF';
+            separ3.style.color = '#1E90FF';
+            container.appendChild(h2);
+            container.appendChild(separ1);
+            container.appendChild(h2222);
+            container.appendChild(separ2);
+            container.appendChild(h22);
+            container.appendChild(separ3);
+            container.appendChild(h222);
+            partItem.appendChild(container);
+            if (part.type === "Mold Tuff") {
+                partItem.style.boxShadow = '0 0 0 0.4vw blue';
+            } else if (part.type === "DensGlass") {
+                partItem.style.boxShadow = '0 0 0 0.4vw green';
+            } else if (part.type === "Type C") {
+                partItem.style.boxShadow = '0 0 0 0.4vw yellow';
+            } else if (part.type === "Type X") {
+                partItem.style.boxShadow = '0 0 0 0.4vw red';
+            }
 
-            const contentWrapper = document.createElement('div'); 
-            contentWrapper.className = 'contentWrapper';
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'expandable1';
+            contentWrapper.style.marginBottom = '1vw';
 
             const ul = document.createElement("ul");
-            ul.classList.add("part-description");
+            ul.style.marginTop = '1vw';
+            ul.style.marginLeft = '1vw';
 
+            if (part.length === part.length2) {
+                Exlen = "Length";
+            } else {
+                Exlen = "";
+                part.length = part.length + " inches"
+            }
             for (const key in part) {
-                if (key !== "part") {
+                if (key !== "part" && key !== "delch") {
                     addDetail(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key]);
                 }
             }
+            const detailItem = document.createElement("li");
+            detailItem.textContent = `Time: ${part.time}`;
+            detailItem.style.marginTop = '3vw';
+            ul.appendChild(detailItem);
             contentWrapper.appendChild(ul);
 
             const partInfo = partData[part.part];
             if (partInfo && partInfo.imageUrl) {
-                const img = document.createElement("img");
+                const carousel = document.createElement('div');
+                carousel.className = 'carousel';
+
+                const carouselImages = document.createElement('div');
+                carouselImages.className = 'carousel-images';
+                const bigScreenB = document.createElement('img');
+                bigScreenB.className = 'bigScreenB';
+                bigScreenB.src = "https://192.168.2.32:443/fscreen";
+                const img = document.createElement('img');
                 img.src = partInfo.imageUrl;
-                img.alt = partInfo.title || 'Part Image';
-                img.style.width = "200px";
-                img.style.height = "auto";
-                img.style.marginLeft = "10px";
-                contentWrapper.appendChild(img);
+                img.style.width = "100%";
+                img.style.height = "25vw";
+                carouselImages.appendChild(img);
+                if (part.img === "") {
+                    carouselImages.style.width = '100%';
+                }
+                var imageUrl = "";
+                let img2;
+                if (part.img !== "") {
+                    img2 = document.createElement('img');
+                    img2.style.width = "auto";
+                    img2.style.maxHeight = "25vw";
+                    
+                    fetch(backendURL + "/upIMG", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ image: part.img })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        imageUrl = URL.createObjectURL(blob);
+                        img2.src = imageUrl;
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
+                    carouselImages.appendChild(img2);
+                }
+                carousel.appendChild(carouselImages);
+                carousel.appendChild(bigScreenB);
+                contentWrapper.appendChild(carousel);
+
+                var swImg = 1;
+                if (img2) {
+                    const carouselPagination = document.createElement('div');
+                    carouselPagination.className = 'carousel-pagination';
+
+                    const dot1 = document.createElement('div');
+                    dot1.className = 'carousel-pagination-dot active';
+                    dot1.addEventListener('click', () => switchImage(0));
+                    carouselPagination.appendChild(dot1);
+
+                    const dot2 = document.createElement('div');
+                    dot2.className = 'carousel-pagination-dot';
+                    dot2.addEventListener('click', () => switchImage(1));
+                    carouselPagination.appendChild(dot2);
+                    carousel.appendChild(carouselPagination);
+                    function switchImage(index) {
+                        const width = carousel.offsetWidth;
+                        carouselImages.style.transform = `translateX(${-width * index}px)`;
+                        dot1.classList.toggle('active', index === 0);
+                        dot2.classList.toggle('active', index === 1);
+                        if (swImg === 1) {
+                            swImg = 2;
+                        } else {
+                            swImg = 1;
+                        }
+                    }
+                    let currentIndex = 0;
+                    function toggleImage() {
+                        currentIndex = currentIndex === 0 ? 1 : 0;
+                        switchImage(currentIndex);
+                    }
+                    img.addEventListener('click', toggleImage);
+                    if (img2) {
+                        img2.addEventListener('click', toggleImage);
+                    }
+                }
+               const midDiv = document.getElementsByClassName('Mid');
+                bigScreenB.addEventListener('click', function() {
+                    imgdiv1.style.position = 'fixed';
+                    imgdiv1.style.top = '50%';
+                    imgdiv1.style.left = '50%';
+                    imgdiv1.style.transform = 'translate(-50%, -50%)';
+                    imgdiv1.style.width = '50vw';
+                    imgdiv1.style.maxHeight = '90vh';
+                    imgdiv1.style.border = 'solid 1vw black';
+                    imgdiv1.style.borderRadius = '1vw';
+                    imgdiv1.style.transition = 'opacity 0.2s ease-in-out';
+                    imgdiv1.style.opacity = '0';
+                    imgdivimg.src = partInfo.imageUrl;
+                    imgdivimg.style.width = '50vw';
+                    imgdivimg.style.maxHeight = '90vh';
+                    imgdiv1.appendChild(imgdivimg);
+                    imgdiv1.appendChild(bigScreenB);
+                    imgdiv2.style.position = 'fixed';
+                    imgdiv2.style.top = '50%';
+                    imgdiv2.style.left = '50%';
+                    imgdiv2.style.transform = 'translate(-50%, -50%)';
+                    imgdiv2.style.width = '50vw';
+                    imgdiv2.style.maxHeight = '90vh';
+                    imgdiv2.style.border = 'solid 1vw black';
+                    imgdiv2.style.borderRadius = '1vw';
+                    imgdiv2.style.transition = 'opacity 0.2s ease-in-out';
+                    imgdiv2.style.opacity = '0';
+                    img2divimg.src = imageUrl;
+                    img2divimg.style.width = '50vw';
+                    img2divimg.style.maxHeight = '90vh';
+                    imgdiv2.appendChild(img2divimg);
+                    imgdiv2.appendChild(bigScreenB);
+                    if (swImg === 1) {
+                        if (!midDiv[0].contains(imgdiv1)) {
+                            imgdiv1.appendChild(bigScreenB);
+                            midDiv[0].appendChild(imgdiv1);
+                            setTimeout(function() {
+                                imgdiv1.style.opacity = '1';
+                            }, 0);
+                            toggleBlur(imgdiv1);
+                        } else {
+                            imgdiv1.style.opacity = '0';
+                            carousel.appendChild(bigScreenB);
+                            setTimeout(function() {
+                                midDiv[0].removeChild(imgdiv1);
+                                toggleBlur(imgdiv1);
+                            }, 200);
+                        }
+                    } else {
+                        if (!midDiv[0].contains(imgdiv2)) {
+                            imgdiv2.appendChild(bigScreenB);
+                            midDiv[0].appendChild(imgdiv2);
+                            setTimeout(function() {
+                                imgdiv2.style.opacity = '1';
+                            }, 0);
+                            toggleBlur(imgdiv2);
+                        } else {
+                            imgdiv2.style.opacity = '0';
+                            carousel.appendChild(bigScreenB);
+                            setTimeout(function() {
+                                midDiv[0].removeChild(imgdiv2);
+                                toggleBlur(imgdiv2);
+                            }, 200);
+                        }
+                    }
+                });
             }
 
             partItem.appendChild(contentWrapper);
-
-            h2.addEventListener("click", function() {
-            if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
-                contentWrapper.style.display = 'flex';
-                // Explicitly set the display property of the part description
-                contentWrapper.querySelector('.part-description').style.display = 'block';
-            } else {
-                contentWrapper.style.display = 'none';
-                contentWrapper.querySelector('.part-description').style.display = 'none';
+            if (part.sheet && oldSheet != part.sheet) {
+                nSheet += 1;
+                if (alternate) {
+                    alternate = false;
+                } else {
+                    alternate = true;
+                }
             }
-        });
+            if (part.sheet && !alternate) {
+                partItem.style.backgroundColor = 'rgb(95, 59, 27)';
+            } else if (part.sheet && alternate) {
+                partItem.style.backgroundColor = 'rgb(39, 18, 0)';
+            }
+            oldSheet = part.sheet;
+            container.addEventListener("click", function() {
+            if (contentWrapper.classList.contains('visible')) {
+                contentWrapper.classList.remove('visible');
+                contentWrapper.style.maxHeight = '0';
+            } else {
+                contentWrapper.classList.add('visible');
+                contentWrapper.style.maxHeight = '500px'; // This should be greater than the actual height of the content
+            }
+            });
             const checkButton = document.createElement('button');
             checkButton.textContent = "✓";
             checkButton.addEventListener('click', function() {
                 const isCurrentlyChecked = this.style.backgroundColor === 'green';
                 this.style.backgroundColor = isCurrentlyChecked ? '' : 'green';
+                if (this.style.backgroundColor === 'green') {
+                    const parentPartItem = this.closest('.part-item');
+                    if (parentPartItem) {
+                        parentPartItem.style.border = '2px solid green';
+                    }
+                } else {
+                    const parentPartItem = this.closest('.part-item');
+                    if (parentPartItem) {
+                        parentPartItem.style.border = '2px solid white';
+                    }
+                }
                 const worksite = part.worksite;
                 const floor = part.floor;
                 const unit = part.unit;
@@ -342,132 +1617,141 @@
                 const edge1 = part.edge1;
                 const edge2 = part.edge2;
                 const unitList = document.querySelector(`.unit-list[data-unit="${unit}"]`);
-                const allCheckButtons = unitList.querySelectorAll('button');
-
-                const checkedCount = Array.from(allCheckButtons).reduce((count, button) => {
-                    return count + (button.style.backgroundColor === 'green' ? 1 : 0);
-                }, 0);
-
-                const totalCount = allCheckButtons.length;
-                const unitProgress = (checkedCount / totalCount) * 100;
                 var check = ""
+                var Uid2 = part.uniqueID2
                 if (this.style.backgroundColor === 'green') {
                     check = "1"
                 }
-                checkForAllChecked(part.unit);
+                if (this.style.backgroundColor === 'green') {
+                    delCheck(part);
+                } else {
+                    delCheck2(part);
+                }
                 if  (!AllCD) {
-                    calculateAndSendUnitProgress(floor, unit, partName, side, thickness, length, dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, edge1, edge2, worksite, check);
+                    calculateAndSendUnitProgress(Uid2, check);
                 }
                 AllCD = false
             });
+            const container2 = document.createElement("div");
+            container2.style.display = 'flex';
+            const len22 = document.createElement("h2");
+            if (part.length2) {
+                len22.textContent = "Length: " + part.length2 + " ";
+            } else {
+                len22.textContent = "Length: " + part.length;
+            }
+            len22.style.marginLeft = "2vw";
+            len22.style.marginTop = "0.7vw";
+            container2.appendChild(checkButton);
+            container2.appendChild(len22);
+            partItem.appendChild(container2);
             if (part.check === "1") {
                 checkButton.style.backgroundColor = 'green';
+                const parentPartItem = checkButton.closest('.part-item');
+                setTimeout(() => {
+                    delCheck(part);
+                }, delay);
+                delay += 100;
+                if (parentPartItem) {
+                    parentPartItem.style.border = '2px solid green';
+                }
             }
-            partItem.appendChild(checkButton);
             return partItem;
         }
 
-        function calculateAndSendUnitProgress(floor, unit, partName, side, thickness, length, dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, edge1, edge2, worksite, check) {
-            // Send the overall progress data to the server
+        function calculateAndSendUnitProgress(Uid2, check) {
             fetch(backendURL + "/unitProgress1", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                worksite: worksite,
-                floor: floor,
-                unit: unit,
-                part: partName,
-                side: side,
-                thickness: thickness,
-                length: length,
-                dA: dA,
-                dB: dB,
-                dC: dC,
-                dD: dD,
-                dE: dE,
-                d1A: d1A,
-                d2A: d2A,
-                d1B: d1B,
-                d2B: d2B,
-                dR: dR,
-                dR_P: dR_P,
-                dH: dH,
-                dW: dW,
-                edge1: edge1,
-                edge2: edge2,
+                uid2: Uid2,
                 check: check
             })
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Server Response:", data);
-                // You can handle the server's response here if needed
             })
             .catch(error => {
             });
         }
 
-        function checkForAllChecked(unit) {
-            const unitList = document.querySelector(`.unit-list[data-unit="${unit}"]`);
-            const allCheckButtons = unitList.querySelectorAll('button');
-            const allChecked = Array.from(allCheckButtons).every(button => button.style.backgroundColor === 'green');
-
-            if (allChecked) {
-                // Gather data for this unit
-                AllCD = true
-                const partsData = [];
-                const partItems = unitList.querySelectorAll('.part-item');
-                partItems.forEach(item => {
-                    const partData = JSON.parse(item.getAttribute('data-part-data'));  // Extract the part data from the attribute
-                    partsData.push(partData);  // Store the full part data instead of just the name
-                });
-                // Now send this data with the POST request:
-                fetch(backendURL + "/delReceive", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(partsData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Server responded with status: ${response.status}`);
+        function delCheck(part) {
+            console.log("Called delCheck with:", part);
+            for (let i = 0; i < dict.length; i++) {
+                let item = dict[i];
+                let key = Object.keys(item)[0];
+                if (part.uniqueID === key) {
+                    item[key] -= 1;                  
+                    if (item[key] === 0) {
+                        checkForAllChecked(part);
                     }
-                    return response.text();
-                })
-                .then(text => {
-                    // Check if there's content in the response
-                    if (text && text.trim() !== "") {
-                        return JSON.parse(text);
-                    } else {
-                        // If there's no content, return a default object indicating success
-                        return { success: true }; 
-                    }
-                })
-                .then(data => {
-                    console.log("Server Response:", data);
-                    if(data.success) { 
-                        // Remove the checked items from the list
-                        unitList.querySelectorAll('button[style*="background-color: green"]').forEach(checkedButton => {
-                            checkedButton.closest('.part-item').remove();
-                        });
-
-                        // Optionally, you can also check if there are no items left in the unit list and remove the unit list itself:
-                        if (!unitList.querySelector('.part-item')) {
-                            unitList.remove();
-                        }
-                    } else {
-                        // Handle any errors or unsuccessful deletions here
-                        console.error("Error deleting parts:", data.errorMessage);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
+                }
             }
-    }
+        }
+
+        function delCheck2(part) {
+            for (let i = 0; i < dict.length; i++) {
+                let item = dict[i];
+                let key = Object.keys(item)[0]; // Get the first key of the object
+                if (part.uniqueID === key) {
+                    item[key] += 1;
+                }
+            }
+            console.log(dict)
+        }
+
+        function checkForAllChecked(part) {
+            const unitList = document.querySelector(`.unit-list[data-UniqueID2="${part.uniqueID}"]`);
+            AllCD = true
+            const matchingUniqueID2 = [];
+            for (const item of savedData) {
+                if (item.uniqueID === part.uniqueID) {
+                    matchingUniqueID2.push(item.uniqueID2);
+                }
+            }
+            savedData = savedData.filter(item => item.uniqueID !== part.uniqueID);
+            const jsonArray = matchingUniqueID2.map(value => ({ uniqueID2: value }));
+            console.log(jsonArray)
+            // Now send this data with the POST request:
+            fetch(backendURL + "/delReceive", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonArray)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                // Check if there's content in the response
+                if (text && text.trim() !== "") {
+                    return JSON.parse(text);
+                } else {
+                    // If there's no content, return a default object indicating success
+                    return { success: true };
+                }
+            })
+            .then(data => {
+                if(data.success) {
+                    if (unitList) {
+                        unitList.remove();
+                    }
+                    callrHis();
+                } else {
+                    // Handle any errors or unsuccessful deletions here
+                    console.error("Error deleting parts:", data.errorMessage);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+            }
     function extractUserInfo(data) {
     if (data.length > 0) {
         userValue = data[0].user || "";   // Set default value if 'user' is not present
@@ -477,31 +1761,145 @@
     }
 }
 
-function createOrGetUnitList(unit) {
-    if (!document.querySelector('.main-title')) {
-        const title = document.createElement('h2');
-        title.textContent = 'Orders';
-        title.className = 'main-title';
-        document.body.insertBefore(title, partListContainer); // <-- Change this line
-    }
-    let unitList = document.querySelector(`.unit-list[data-unit="${unit}"]`);
-    
-    if (!unitList) {
-        unitList = document.createElement('div');
-        unitList.className = 'unit-list';
-        unitList.setAttribute('data-unit', unit);
-        const unitTitle = document.createElement('h3');
-        unitTitle.textContent = `${unit}`;
-        unitList.appendChild(unitTitle);
-        partListContainer.appendChild(unitList); // <-- Corrected line here
-    }
+function createNewUnitList(part, uniqueID) {
+    const unitList = document.createElement('div');
+    unitList.className = 'unit-list';
+    unitList.setAttribute('data-unit', part.unit);
+    unitList.setAttribute('data-UniqueID2', uniqueID);
 
+    // Insert the new unitList at the top of the partListContainer
+    partListContainer.insertBefore(unitList, partListContainer.firstChild);
     return unitList;
 }
+function createNewUnitList2(part, uniqueID) {
+    const unitList = document.createElement('div');
+    unitList.className = 'unit-list';
+    unitList.setAttribute('data-unit', part.unit);
+    unitList.setAttribute('data-UniqueID2', uniqueID);
+
+    // Insert the new unitList at the bottom of the partListContainer
+    partListContainer.appendChild(unitList);
+    return unitList;
+}
+function generateUniqueID() {
+    return Math.random().toString(36).substr(2, 9);
+}
+function fractionToDecimal(frac = "") {
+    // Ensure frac is a string and not an empty string.
+    if (typeof frac !== "string" || !frac.trim()) {
+        return 0;
+    }
+
+    if (frac.includes('.')) {
+        let [whole, fraction] = frac.split('.');
+        return parseFloat(whole) + fractionToDecimal(fraction);
+    }
+    
+    const [num, denom] = frac.split('/').map(Number);
+    return denom ? num / denom : num;
+}
+function decimalToFraction(decimal) {
+    const tolerance = 0.0001;
+    let wholeNumberPart = Math.floor(decimal);
+    let fractionalPart = decimal - wholeNumberPart;
+    let numerator = fractionalPart;
+    let denominator = 1;
+
+    while (Math.abs(fractionalPart * denominator - Math.round(fractionalPart * denominator)) > tolerance) {
+        denominator++;
+        numerator = Math.round(fractionalPart * denominator);
+    }
+
+    if (wholeNumberPart && numerator) {
+        return `${wholeNumberPart}.${numerator}/${denominator}`;
+    } else if (!wholeNumberPart && numerator) {
+        return `${numerator}/${denominator}`;
+    } else {
+        return `${wholeNumberPart}`;
+    }
+}
+// Helper function to add two fractions/decimals in string form and return as string
+function addFractions(frac1, frac2) {
+    const result = fractionToDecimal(frac1) + fractionToDecimal(frac2);
+    return decimalToFraction(result);
+}
+
+function smallHis(parts) {
+    parts.sort((a, b) => {
+        const timeA = b.checktime.split(' / ')[0];
+        const timeB = a.checktime.split(' / ')[0];
+        const [hourA, minuteA] = timeA.split(':').map(Number);
+        const [hourB, minuteB] = timeB.split(':').map(Number);
+        if (hourA !== hourB) {
+            return hourA - hourB;
+        } else {
+            return minuteA - minuteB;
+        }
+    });
+    const partsArray = Array.isArray(parts) ? parts : [parts];
+    partsArray.forEach(part => {
+        if (part.checktime !== "") {
+            const extractedDate = part.checktime.split(" / ")[1];
+            const [year, month, day] = extractedDate.split("-").map(Number);
+            const parsedDate = new Date(year, month - 1, day);
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth();  // 0-indexed
+            const currentDay = currentDate.getDate();
+            const today = new Date(currentYear, currentMonth, currentDay);
+            if (part.user === Cinfo.user && parsedDate.getTime() === today.getTime()) {
+                const ul = document.createElement("li");
+                ul.classList.add("part-description");
+                ul.style.marginTop = '0.5vw';
+                for (const key in part) {
+                    if (key !== "part" && key !== "delch") {
+                        addDetail(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key]);
+                    }
+                }
+                const detailItem = document.createElement("li");
+                detailItem.textContent = `Time: ${part.checktime}`;
+                detailItem.style.marginTop = '1vw';
+                ul.appendChild(detailItem);
+                var titleElement = document.createElement("span");
+                titleElement.innerText = partData[part.part].title;
+                titleElement.style.lineHeight = '2.3vw';
+                var lst = document.createElement("li");
+                lst.className = "stlHis";
+                lst.appendChild(titleElement);
+                lst.appendChild(ul);
+                var tgl = false; 
+                lst.addEventListener('click', function() {
+                    if (!tgl) {
+                        lst.style.height = 'auto'
+                        ul.style.display = 'block';
+                        tgl = true;
+                    } else {
+                        ul.style.display = 'none';
+                        lst.style.height = '2.3vw'
+                        tgl = false;
+                    }
+                });
+                LocalHis.appendChild(lst);
+            }
+        }
+    });
+}
+
+function callrHis() {
+    LocalHis.innerHTML = "";
+    fetch(backendURL + "/viewHis2")
+        .then((response) => response.json())
+        .then((data) => smallHis(data))
+        .catch((error) => console.error(error));
+}
+
+callrHis();
 
 function displayPartList(parts) {
-    partListContainer.innerHTML = "";
-
+    document.getElementById("Norder").textContent = "- Quantity: " + parts.length;
+    parts.forEach(parts => {
+        parts.sum = "";
+    });
     // Extract user, worksite, floor, and unit values from the received data
     extractUserInfo(parts);
 
@@ -512,26 +1910,97 @@ function displayPartList(parts) {
         return;
     }
 
-    // Sort parts by unit
-    const unitSortedParts = {};
-
-    filteredData.forEach(part => {
-        if (!unitSortedParts[part.unit]) {
-            unitSortedParts[part.unit] = [];
+    let lastRand;
+    let currentUnitList = null;
+    let uniqueID;
+    var boxLen = 0;
+    var tmp = {};
+    let oldun = "";
+    let restrict;
+    var bnbr = 1000;
+    dict = [];
+    nSheet = 0;
+    if (groupSort) {
+        filteredData.reverse().forEach(part => {
+        if (lastRand !== part.rand) {
+            uniqueID = generateUniqueID();
+            if (firstL === 1) {
+                currentUnitList = createNewUnitList2(part, uniqueID);
+            } else {
+                currentUnitList = createNewUnitList2(part, uniqueID);
+            }
+            lastRand = part.rand;
+            boxLen = 0;
         }
-        unitSortedParts[part.unit].push(part);
+        boxLen += 1;
+        if (oldun === "") {
+            oldun = uniqueID
+        }
+        if (uniqueID == oldun) {
+        } else {
+            dict.push(tmp);
+        }
+        tmp = {[uniqueID]: boxLen};
+        oldun = uniqueID
+        part.uniqueID = uniqueID;
+        const partItem = createPartItem(part);
+        currentUnitList.appendChild(partItem);
     });
-
-    for (const unit in unitSortedParts) {
-        const unitList = createOrGetUnitList(unit);
-
-        unitSortedParts[unit].forEach(part => {
-            const partItem = createPartItem(part);
-            unitList.appendChild(partItem);
-        });
+    firstL = 0;
+    } else if (unitSort) {
+        filteredData.reverse().forEach(part => {
+        if (lastRand !== part.unit) {
+            uniqueID = generateUniqueID();
+            currentUnitList = createNewUnitList2(part, uniqueID);
+            lastRand = part.unit;
+            boxLen = 0;
+        }
+        boxLen += 1;
+        if (oldun === "") {
+            oldun = uniqueID
+        }
+        if (uniqueID == oldun) {
+        } else {
+            dict.push(tmp);
+        }
+        tmp = {[uniqueID]: boxLen};
+        oldun = uniqueID
+        part.uniqueID = uniqueID;
+        const partItem = createPartItem(part);
+        currentUnitList.appendChild(partItem);
+    });
+    } else {
+        partListContainer.innerHTML = ""
+        filteredData.forEach(part => {
+        if (bnbr >= nbr) {
+            uniqueID = generateUniqueID();
+            currentUnitList = createNewUnitList2(part, uniqueID);
+            bnbr = 0;
+            boxLen = 0;
+        }
+        bnbr += 1;
+        oldbox = boxLen;
+        boxLen += 1;
+        if (oldun === "") {
+            oldun = uniqueID
+        }
+        if (uniqueID == oldun) {
+        } else {
+            dict.push(tmp);
+        }
+        tmp = {[uniqueID]: boxLen};
+        oldun = uniqueID
+        part.uniqueID = uniqueID;
+        const partItem = createPartItem(part);
+        currentUnitList.appendChild(partItem);
+    });
     }
+    document.getElementById("Nsheet").textContent = "- Drywall Sheet: " + nSheet
+    dict.push(tmp);
+    dict2 = dict.reduce((acc, curr) => {
+        return {...acc, ...curr};
+    }, {});
 }
-
 
         function isBlackPart(part) {
             for (const key in part) {
@@ -561,39 +2030,266 @@ function displayPartList(parts) {
                 return;
             })
             .then(() => {
-                console.log("Part deleted:", part);
                 removeDeletedPart(partItem); // Pass the partItem
             })
             .catch((error) => console.error("Error deleting part:", error));
     }
 
     function removeDeletedPart(partItem) {
-        console.log("Attempting to remove Part:", partItem.dataset.partId);
         partListContainer.removeChild(partItem);
     }
-
-    document.getElementById('changeUrlBtn').addEventListener('click', function() {
-        window.location.href = backendURL + "/viewHis1"
-    });
-    document.getElementById('navigation-button').addEventListener('click', function() {
-        window.location.href = backendURL + "/loginReceiver"
-    });
-
-// Function to fetch and display JSON data
+    var uniqueNewData = [];
 function fetchAndDisplayData() {
-  fetch(backendURL + "/getOrders")
-    .then((response) => response.json())
-    .then((data) => displayPartList(data))
-    .catch((error) => console.error(error));
+    if (document.getElementById('MidLay3').style.display === '') {
+        fetch(backendURL + "/getOrders")
+        .then((response) => response.json())
+        .then((data) => {
+            data = data.filter(item => item.worksite === Cinfo.worksite);
+            if (floorCh) {
+                data = data.filter(item => item.floor === Cinfo.floor);
+            }
+            if (!data) {
+                document.getElementById('MidLay1').style.display = 'none';
+                document.getElementById('MidLay2').style.display = 'flex';
+                return
+            } else {
+                document.getElementById('MidLay1').style.display = 'flex';
+                document.getElementById('MidLay2').style.display = 'none';
+            }
+            if (data.length > savedData.length) {
+                if (partSort === "") {
+                    const difference = data.length - savedData.length;
+                    const newElements = data.slice(0, difference);
+                    savedData = data;
+                    displayPartList(newElements);
+                } else {
+                    const filteredData = data.filter(item => item.part === partSort);
+                    const newElements = filteredData.slice(savedData.length);
+                    savedData = data;
+                    displayPartList(newElements);
+                }
+            }
+        })
+        .catch((error) => console.error(error));
+    }
 }
 
-// Call the function on page load
-fetchAndDisplayData();
+//_____________________________________________________________________________________________________________________
+//Right Logic
+    const MidLay3 = document.getElementById("MidLay3");
+    document.getElementById('changeUrlBtn').addEventListener('click', function() {
+        let lastS;
+        if (document.getElementById('MidLay1').style.display === 'flex') {
+            lastS = 'MidLay1';
+        } else if (document.getElementById('MidLay2').style.display === 'flex') {
+            lastS = 'MidLay2';
+        }
+        if (document.getElementById('MidLay3').style.display === '') {
+            fetch(backendURL + "/viewHis2")
+            .then((response) => response.json())
+            .then((data) => displayModPartList(data))
+            .catch((error) => console.error(error));
+            document.getElementById('changeUrlBtn').style.border = '0.25vw solid green';
+            document.getElementById(lastS).style.display = 'none';
+            document.getElementById('MidLay3').style.display = 'flex';
+        } else if (document.getElementById('MidLay3').style.display === 'flex') {
+            document.getElementById('changeUrlBtn').style.border = 'none';
+            document.getElementById('MidLay3').style.display = '';
+            document.getElementById('MidLay1').style.display = 'flex';
+            apB.click();
+        }
+    });
+    function generateModPartId(part) {
+            return part.modPart;
+        }
+        function isEmptyModPart(part) {
+            return (
+                part.dA === "" &&
+                part.dB === "" &&
+                part.dC === "" &&
+                part.dD === "" &&
+                part.dE === "" &&
+                part.dH === "" &&
+                part.dR === "" &&
+                part.dR_P === "" &&
+                part.dW === ""
+            );
+        }
+        function createModPartItem(part) {           
+            const partItem = document.createElement("div");
+            partItem.setAttribute('data-part-data', JSON.stringify(part));
+            partItem.classList.add("modpart-item");
+            const container = document.createElement("div");
+            container.style.display = 'flex';
+            const title = partTitles[part.part] || part.part;
+            const title2 = part.unit;
+            const h2 = document.createElement("h2");
+            const h22 = document.createElement("h2");
+            const h2222 = document.createElement("h2");
+            const separ1 = document.createElement("h2");
+            const separ2 = document.createElement("h2");
+            const separ3 = document.createElement("h2");
+            h2.textContent = title;
+            h22.textContent = title2;
+            h2222.textContent = part.floor;
+            separ1.textContent = '|';
+            separ2.textContent = '|';
+            separ3.textContent = '|';
+            h2.setAttribute('data-part-name', title);
+            h2.style.marginRight = '0.4vw';
+            h2222.style.marginRight = '0.4vw';
+            h22.style.marginRight = '0.4vw';
+            separ1.style.marginRight = '0.4vw';
+            separ2.style.marginRight = '0.4vw';
+            separ3.style.marginRight = '0.4vw';
+            separ1.style.color = '#1E90FF';
+            separ2.style.color = '#1E90FF';
+            separ3.style.color = '#1E90FF';
+            container.appendChild(h2);
+            container.appendChild(separ1);
+            container.appendChild(h2222);
+            container.appendChild(separ2);
+            container.appendChild(h22);
+            container.appendChild(separ3);
+            partItem.appendChild(container);
+            const contentWrapper = document.createElement('div'); 
+            contentWrapper.className = 'contentWrapper';          
+            const ul = document.createElement("ul");
+            ul.classList.add("modpart-item");
+            ul.style.border = 'none'
+            // Display part's properties
+            const propertiesToDisplay = [
+                'checktime',
+                'time',
+                'user',
+                'worksite',
+                'side',
+                'thickness',
+                'length',
+                'dA',
+                'dB',
+                'dC',
+                'dD',
+                'dE',
+                'd1A',
+                'd2A',
+                'd1B',
+                'd2B',
+                'dR',
+                'dR_P',
+                'dH',
+                'dW',
+                'edge1',
+                'edge2',
+            ];
+            let isFirstItem = true;
+            propertiesToDisplay.forEach(propKey => {
+                if (part[propKey] && part[propKey].trim() !== "") {
+                    const li = document.createElement("li");
+                    li.textContent = `${propKey}: ${part[propKey]}`;
+                    if (isFirstItem) {
+                        li.style.marginTop = "2vw";
+                        isFirstItem = false;
+                    }
+                    li.style.marginLeft = "2vw";
+                    ul.appendChild(li);
+                }
+            });
+            contentWrapper.appendChild(ul);
+            const partInfo = partData[part.part];
+            if (partInfo && partInfo.imageUrl) {
+                const img = document.createElement("img");
+                img.src = partInfo.imageUrl;
+                img.alt = partInfo.title || 'Part Image';
+                img.style.width = "40%";
+                img.style.height = "40%";
+                contentWrapper.appendChild(img);
+            }
+            partItem.appendChild(contentWrapper);
+            container.addEventListener("click", function() {
+                if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
+                contentWrapper.style.display = 'flex';
+                contentWrapper.querySelector('.modpart-item').style.display = 'block'; 
+            } else {
+                contentWrapper.style.display = 'none';
+                contentWrapper.querySelector('.modpart-item').style.display = 'none';
+            }
+        });
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Retrieve Part";
+            deleteButton.addEventListener("click", () => {
+                const userConfirmed = window.confirm("Are you sure you want to retrieve that part?");  
+                if (userConfirmed) {
+                    handleModRetrieve(part, partItem);
+                } else {
+                    console.log('User declined');
+                }
+            });
+            partItem.appendChild(deleteButton);
 
-// Set an interval to call the function every 10 seconds
-setInterval(fetchAndDisplayData, 10000); // 10000 milliseconds = 10 seconds
+            partItem.setAttribute("data-part-id", generateModPartId(part)); // Set data-part-id attribute
+            return partItem;
+    }
+    let modUserValue = "";
+        let modWorksiteValue = "";
+        let modFloorValue = "";
+        let modUnitValue = "";
+    function extractModUserInfo(data) {
+    if (data.length > 0) {
+        userValue = data[0].user || "";   // Set default value if 'user' is not present
+        worksiteValue = data[0].worksite || "";   // Set default value if 'worksite' is not present
+        floorValue = data[0].floor || "";   // Set default value if 'floor' is not present
+        unitValue = data[0].unit || "";   // Set default value if 'unit' is not present
+    }
+}
+    function displayModPartList(parts) {
+        parts = parts.filter(item => item.worksite === Cinfo.worksite);
+        if (floorCh) {
+            parts = parts.filter(item => item.floor === Cinfo.floor);
+        }
+        MidLay3.innerHTML = "";
+        extractModUserInfo(parts);
+        const filteredData = parts.filter(part => !isEmptyModPart(part) && !isBlackModPart(part));
+        if (filteredData.length === 0) {
+            MidLay3.innerHTML = "No matching parts found.";
+            return;
+        }
+        filteredData.reverse().forEach(part => {
+            const partItem = createModPartItem(part);
+            MidLay3.appendChild(partItem);
+        });
+    }
+        function isBlackModPart(part) {
+            for (const key in part) {
+                if (part[key].trim() === "black") {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function handleModRetrieve(part, partItem) {
+            const url = backendURL + "/retreiveHis";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(part),
+            };
 
-
-    </script>
+            fetch(url, requestOptions)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return;
+                })
+                .then(() => {
+                    partItem.remove();
+                    alert('Part Retrieved');
+                })
+                .catch((error) => console.error("Error deleting part:", error));
+    }
+        </script>
 </body>
 </html>

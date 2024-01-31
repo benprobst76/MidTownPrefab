@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle List Items</title>
+    <style>
+li {
+    list-style-type: none;
+    border: 1px solid blue;
+    position: relative;
+    margin: 5px;
+    padding: 5px;
+}
+
+.grouped::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: 30px;  /* Adjust based on the height of your list item */
+    border: 2px solid rgb(255, 152, 152);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.groupable {
+    background-color: white;  /* To ensure the grouped items are on top of the pseudo element */
+}
+    </style>
+</head>
+<body>
+    <ul id="myList">
+        <li>Item 1</li>
+        <li class="groupable">Item 2</li>
+        <li class="groupable">Item 3</li>
+        <li>Item 4</li>
+    </ul>
+
+    <button onclick="groupItems()">Group/Ungroup Items 2 & 3</button>
+
+    <script>
+function groupItems() {
+    let items = document.querySelectorAll('.groupable');
+    items[0].classList.toggle('grouped');
+    items[1].classList.toggle('grouped');
+}
+    </script>
+</body>
+</html>

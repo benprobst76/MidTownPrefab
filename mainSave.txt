@@ -7,7 +7,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -41,9 +40,7 @@ type Cfo struct {
 	Part      string `json:"part"`
 	Side      string `json:"side"`
 	Thickness string `json:"thickness"`
-	Width     string `json:"Width"`
 	Length    string `json:"length"`
-	Length2   string `json:"length2"`
 	DA        string `json:"dA"`
 	DB        string `json:"dB"`
 	DC        string `json:"dC"`
@@ -57,21 +54,16 @@ type Cfo struct {
 	DR_P      string `json:"dR_P"`
 	DH        string `json:"dH"`
 	DW        string `json:"dW"`
-	Edge1     string `json:"edgeA"`
-	Edge2     string `json:"edgeB"`
+	Edge1     string `json:"edge1"`
+	Edge2     string `json:"edge2"`
 	Price     string `json:"price"`
 	Check     string `json:"check"`
 	Rand      string `json:"rand"`
 	Sum       string `json:"sum"`
 	Order     string `json:"order"`
-	Order2    string `json:"order2"`
 	UniqueID  string `json:"uniqueID"`
 	UniqueID2 string `json:"uniqueID2"`
 	Sheet     string `json:"sheet"`
-	Img       string `json:"img"`
-	GroupO    string `json:"groupO"`
-	Priority  string `json:"priority"`
-	Note      string `json:"note"`
 }
 type Work struct {
 	Worksite string `json:"worksite"`
@@ -98,18 +90,6 @@ type Pgrs2 struct {
 	Unit     string `json:"unit"`
 	Progress string `json:"progress"`
 	Rand     string `json:"rand"`
-	Parts    string `json:"parts"`
-}
-type Prst struct {
-	Work   string   `json:"work"`
-	Sort   string   `json:"sort"`
-	Constr []string `json:"constr"`
-	Nbr    string   `json:"nbr"`
-	Name   string   `json:"name"`
-}
-type DB struct {
-	User string `json:"user"`
-	Prst []Prst
 }
 
 var order_login []Cred
@@ -806,37 +786,6 @@ func saveO() {
 }
 
 // ______________________________________________________________________________________________________________
-func setGroupO() {
-	type orderIndex struct {
-		index      int
-		parsedTime time.Time
-	}
-	orderIndices := make([]orderIndex, len(orders))
-	for i, order := range orders {
-		pt, err := time.Parse("15:04 / 2006-01-02", order.Time)
-		if err != nil {
-			continue
-		}
-		orderIndices[i] = orderIndex{i, pt}
-	}
-	sort.Slice(orderIndices, func(i, j int) bool {
-		return orderIndices[i].parsedTime.Before(orderIndices[j].parsedTime)
-	})
-	groupMap := make(map[string]int)
-	groupCounter := 1
-	for _, oi := range orderIndices {
-		order := &orders[oi.index]
-		if i, found := groupMap[order.Rand]; found {
-			order.GroupO = orders[i].GroupO
-		} else {
-			order.GroupO = order.Worksite + " / Order # " + strconv.Itoa(groupCounter)
-			groupMap[order.Rand] = oi.index
-			groupCounter++
-		}
-	}
-}
-
-// ______________________________________________________________________________________________________________
 func order(c *gin.Context) {
 	var recO []Cfo
 	if err := c.BindJSON(&recO); err != nil {
@@ -845,6 +794,7 @@ func order(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 	openO()
+	openHis()
 	location, err := time.LoadLocation("America/New_York")
 	if err != nil {
 		panic(err)
@@ -854,9 +804,10 @@ func order(c *gin.Context) {
 		item.Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
 		item.UniqueID2 = uuid.New().String()
 		orders = append(orders, item)
+		histories = append(histories, item)
 	}
-	setGroupO()
 	saveO()
+	saveHis()
 	Cinfo.Side = ""
 	Cinfo.Thickness = ""
 	Cinfo.Length = ""
@@ -875,6 +826,46 @@ func order(c *gin.Context) {
 	Cinfo.DW = ""
 	Cinfo.Edge1 = ""
 	Cinfo.Edge2 = ""
+}
+
+// ______________________________________________________________________________________________________________
+func addTorder(c *gin.Context) {
+	if err := c.BindJSON(&Cinfo); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	c.Status(http.StatusOK)
+	groupOrders = append(groupOrders, Cinfo)
+	Cinfo.Side = ""
+	Cinfo.Thickness = ""
+	Cinfo.Length = ""
+	Cinfo.DA = ""
+	Cinfo.DB = ""
+	Cinfo.DC = ""
+	Cinfo.DD = ""
+	Cinfo.DE = ""
+	Cinfo.D1A = ""
+	Cinfo.D2A = ""
+	Cinfo.D1B = ""
+	Cinfo.D2B = ""
+	Cinfo.DR = ""
+	Cinfo.DR_P = ""
+	Cinfo.DH = ""
+	Cinfo.DW = ""
+	Cinfo.Edge1 = ""
+	Cinfo.Edge2 = ""
+	Cinfo.Price = ""
+}
+
+// ______________________________________________________________________________________________________________
+func viewCart2(c *gin.Context) {
+	var matchingParts []Cfo
+	for _, item := range groupOrders {
+		if item.User == Cusername {
+			matchingParts = append(matchingParts, item)
+		}
+	}
+	c.JSON(http.StatusOK, matchingParts)
 }
 
 // ______________________________________________________________________________________________________________
@@ -904,7 +895,6 @@ func delCart(c *gin.Context) {
 	}
 }
 
-// ______________________________________________________________________________________________________________
 func sendGroup(c *gin.Context) {
 	var group []Cfo
 	if err := c.BindJSON(&group); err != nil {
@@ -918,15 +908,18 @@ func sendGroup(c *gin.Context) {
 		panic(err)
 	}
 	currentTime := time.Now().In(location)
+	openHis()
 	for i := range group {
 		group[i].Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
 		group[i].UniqueID2 = uuid.New().String()
 	}
 	for _, item := range group {
 		orders = append(orders, item)
+		histories = append(histories, item)
 	}
-	setGroupO()
 	saveO()
+	saveHis()
+	histories = append(histories, orders...)
 	var indicesToRemove []int
 
 	for _, del := range groupOrders {
@@ -999,36 +992,15 @@ func delReceive(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 	openO()
-	openHis()
-	location, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		panic(err)
-	}
-	currentTime := time.Now().In(location)
 	for _, del := range delInfo {
 		for i, item := range orders {
-			cnt := 0
 			if item.UniqueID2 == del.UniqueID2 {
-				for _, item2 := range orders {
-					if item2.Img == item.Img {
-						cnt += 1
-					}
-				}
-				if cnt == 1 {
-					err := os.Remove(item.Img)
-					if err != nil {
-						fmt.Println("Error removing file:", err)
-					}
-				}
-				item.CheckTime = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
-				histories = append(histories, item)
 				orders = append(orders[:i], orders[i+1:]...)
 				break
 			}
 		}
 	}
 	saveO()
-	saveHis()
 }
 
 // ______________________________________________________________________________________________________________
@@ -1102,21 +1074,10 @@ func retreiveHis(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	retInfo.Check = ""
-	retInfo.CheckTime = ""
-	retInfo.Img = ""
+	c.Status(http.StatusOK)
 	openO()
 	orders = append(orders, retInfo)
 	saveO()
-	openHis()
-	for i, item := range histories {
-		if item.UniqueID2 == retInfo.UniqueID2 {
-			histories = append(histories[:i], histories[i+1:]...)
-			break
-		}
-	}
-	saveHis()
-	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
@@ -1164,100 +1125,15 @@ func dimensionToFloat(dim string) (float64, error) {
 }
 
 // ______________________________________________________________________________________________________________
-func sortSize1(c *gin.Context) {
-	type Nbrr struct {
-		Nbr    string   `json:"nbr"`
-		Work   string   `json:"work"`
-		Sort   string   `json:"sort"`
-		Constr []string `json:"constr"`
-	}
-	var nbr Nbrr
-	if err := c.BindJSON(&nbr); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	groupSize, err := strconv.Atoi(nbr.Nbr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid group size"})
-		return
-	}
-	if nbr.Constr[0] == "All orders" {
-		nbr.Constr = []string{}
-	}
-	openO()
-	sort.Slice(orders, func(i, j int) bool {
-		// Split on space to separate time and date
-		iParts := strings.Split(orders[i].Time, " / ")
-		jParts := strings.Split(orders[j].Time, " / ")
-		// Compare dates
-		if iParts[1] != jParts[1] {
-			return iParts[1] < jParts[1]
-		}
-		// If dates are the same, compare times
-		return iParts[0] < jParts[0]
-	})
-
-	// Filter based on Worksite and Part
-	var filtered []Cfo
-	for _, order := range orders {
-		if order.Worksite == nbr.Work {
-			if nbr.Sort == "" && len(nbr.Constr) == 0 {
-				filtered = append(filtered, order)
-			} else if len(nbr.Constr) == 0 {
-				if order.Part == nbr.Sort {
-					filtered = append(filtered, order)
-				}
-			} else if nbr.Sort == "" {
-				for _, item := range nbr.Constr {
-					if item == order.Floor || item == order.Unit || item == order.GroupO {
-						filtered = append(filtered, order)
-					}
-				}
-			} else {
-				for _, item := range nbr.Constr {
-					if (item == order.Floor || item == order.Unit || item == order.GroupO) && order.Part == nbr.Sort {
-						filtered = append(filtered, order)
-					}
-				}
-			}
-		}
-	}
-
-	// Sort the filtered slice into groups and then by dimensions
-	var result []Cfo
-	for len(filtered) > 0 {
-		end := groupSize
-		if end > len(filtered) {
-			end = len(filtered)
-		}
-		group := filtered[:end]
-		filtered = filtered[end:]
-
-		// Sort the group by the sum of dimensions
-		sort.Slice(group, func(i, j int) bool {
-			sumI, _ := strconv.ParseFloat(group[i].Sum, 64)
-			sumJ, _ := strconv.ParseFloat(group[j].Sum, 64)
-			return sumI > sumJ
-		})
-		result = append(result, group...)
-	}
-	c.JSON(http.StatusOK, result)
-}
-
-// ______________________________________________________________________________________________________________
 func groupByAttributes(cfoss []Cfo) map[string][]Cfo {
 	grouped := make(map[string][]Cfo)
 	for _, cfo := range cfoss {
-		if cfo.Length2 == "" {
-			cfo.Length2 = cfo.Length
-		}
-		key := cfo.Type + cfo.Length2 + cfo.Thickness
+		key := cfo.Type + cfo.Length + cfo.Thickness
 		grouped[key] = append(grouped[key], cfo)
 	}
 	return grouped
 }
 
-// ______________________________________________________________________________________________________________
 func assignToSheets(attributeGroup []Cfo) []Cfo {
 	var result []Cfo
 	var tempSum float64
@@ -1284,6 +1160,7 @@ func assignToSheets(attributeGroup []Cfo) []Cfo {
 			tempSum = partSum
 		}
 	}
+
 	// Process remaining sheetParts
 	if len(sheetParts) > 1 {
 		sheetID := strconv.Itoa(rand.Intn(1000))
@@ -1298,8 +1175,6 @@ func assignToSheets(attributeGroup []Cfo) []Cfo {
 
 	return result
 }
-
-// ______________________________________________________________________________________________________________
 func assignOrderWithinBundles(partsWithSheets *[]Cfo, groupSize int) {
 	for i := 0; i < len(*partsWithSheets); i += groupSize {
 		end := i + groupSize
@@ -1329,52 +1204,17 @@ func assignOrderWithinBundles(partsWithSheets *[]Cfo, groupSize int) {
 }
 
 // ______________________________________________________________________________________________________________
-func isOtherBundle(n string, j int, slic []Cfo) bool {
-	if j+2 <= len(slic) {
-		for _, item := range slic[j+1 : j+2] {
-			if item.Sheet == n {
-				for idx2 := j + 1; idx2 < len(slic); idx2++ {
-					item2 := &slic[idx2]
-					if item2.Sheet == n {
-						item2.Order2 = "1"
-					}
-				}
-				return true
-			} else {
-				return false
-			}
-		}
-		return false
-	}
-	return false
-}
-
-// ______________________________________________________________________________________________________________
-func sortSize2(c *gin.Context) {
+func sortSize(c *gin.Context) {
 	type Nbrr struct {
-		Nbr    string   `json:"nbr"`
-		Work   string   `json:"work"`
-		Sort   string   `json:"sort"`
-		Constr []string `json:"constr"`
-	}
-	type SheetKey struct {
-		Type      string
-		Thickness string
-		Length    string
-		Sheet     string
-	}
-	type SheetSummary struct {
-		Type      string `json:"type"`
-		Thickness string `json:"thickness"`
-		Length    string `json:"length"`
-		Count     int    `json:"count"`
+		Nbr  string `json:"nbr"`
+		Work string `json:"work"`
+		Sort string `json:"sort"`
 	}
 	var nbr Nbrr
 	if err := c.BindJSON(&nbr); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	//console.log()
 	groupSize, err := strconv.Atoi(nbr.Nbr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid group size"})
@@ -1393,32 +1233,16 @@ func sortSize2(c *gin.Context) {
 		return iParts[0] < jParts[0]
 	})
 
-	if nbr.Constr[0] == "All orders" {
-		nbr.Constr = []string{}
-	}
-
 	// Filter based on Worksite and Part
 	var filtered []Cfo
 	for _, order := range orders {
-		if order.Worksite == nbr.Work {
-			if nbr.Sort == "" && len(nbr.Constr) == 0 {
+		if nbr.Sort == "" {
+			if order.Worksite == nbr.Work {
 				filtered = append(filtered, order)
-			} else if len(nbr.Constr) == 0 {
-				if order.Part == nbr.Sort {
-					filtered = append(filtered, order)
-				}
-			} else if nbr.Sort == "" {
-				for _, item := range nbr.Constr {
-					if item == order.Floor || item == order.Unit || item == order.GroupO {
-						filtered = append(filtered, order)
-					}
-				}
-			} else {
-				for _, item := range nbr.Constr {
-					if (item == order.Floor || item == order.Unit || item == order.GroupO) && order.Part == nbr.Sort {
-						filtered = append(filtered, order)
-					}
-				}
+			}
+		} else {
+			if order.Worksite == nbr.Work && order.Part == nbr.Sort {
+				filtered = append(filtered, order)
 			}
 		}
 	}
@@ -1445,243 +1269,7 @@ func sortSize2(c *gin.Context) {
 
 	assignOrderWithinBundles(&partsWithSheets, groupSize)
 
-	var tmp2 string
-	var tmp3 string
-	tmp4 := 921737
-	var firstL = true
-	for idx := range partsWithSheets {
-		item := &partsWithSheets[idx]
-
-		if item.Sheet == "" {
-			item.Order2 = item.Order
-			if item.Order == "10" {
-				tmp4 = idx
-			}
-		} else if item.Sheet != "" && item.Order2 == "" {
-			if firstL {
-				tmp2 = item.Sheet
-				tmp3 = item.Order
-				item.Order2 = item.Order
-				firstL = false
-			}
-			if (idx+1)%groupSize == 0 && isOtherBundle(item.Sheet, idx, partsWithSheets) {
-				item.Order2 = "10"
-				for i := 0; i < idx; i++ {
-					if partsWithSheets[i].Sheet == item.Sheet {
-						partsWithSheets[i].Order2 = "10"
-					}
-				}
-				if tmp4 != 921737 {
-					partsWithSheets[tmp4].Order2 = "9"
-				}
-				continue
-			} else if (idx+1)%groupSize == 0 {
-				if tmp4 != 921737 {
-					partsWithSheets[tmp4].Order2 = "10"
-				}
-			}
-			if item.Sheet == tmp2 {
-				item.Order2 = tmp3
-			} else if item.Sheet != tmp2 {
-				tmp2 = item.Sheet
-				tmp3 = item.Order
-				item.Order2 = item.Order
-			}
-		}
-	}
-
-	for start := 0; start < len(partsWithSheets); start += groupSize {
-		end := start + groupSize
-		if end > len(partsWithSheets) {
-			end = len(partsWithSheets)
-		}
-
-		sort.Slice(partsWithSheets[start:end], func(i, j int) bool {
-			sumI, _ := strconv.ParseFloat(partsWithSheets[start+i].Order2, 64)
-			sumJ, _ := strconv.ParseFloat(partsWithSheets[start+j].Order2, 64)
-			if sumI == sumJ {
-				return i < j
-			}
-			return sumI < sumJ
-		})
-	}
-	countMap := make(map[SheetKey]int)
-	m := make(map[string]int)
-	for _, cfo := range partsWithSheets {
-		key := SheetKey{
-			Type:      cfo.Type,
-			Thickness: cfo.Thickness,
-			Length:    cfo.Length2,
-		}
-		value, exists := m[cfo.Sheet]
-		if (exists && value < 0) || !exists || cfo.Sheet == "" {
-			countMap[key]++
-		}
-		m[cfo.Sheet]++
-	}
-	var summaries []SheetSummary
-	for key, count := range countMap {
-		summaries = append(summaries, SheetSummary{
-			Type:      key.Type,
-			Thickness: key.Thickness,
-			Length:    key.Length,
-			Count:     count,
-		})
-	}
-	type ResponseData struct {
-		PartsWithSheets []Cfo
-		Summaries       []SheetSummary
-	}
-	responseData := ResponseData{
-		PartsWithSheets: partsWithSheets,
-		Summaries:       summaries,
-	}
-	c.JSON(http.StatusOK, responseData)
-}
-
-// ______________________________________________________________________________________________________________
-func savePrst(c *gin.Context) {
-	type Prst2 struct {
-		User   string   `json:"user"`
-		Work   string   `json:"work"`
-		Sort   string   `json:"sort"`
-		Constr []string `json:"constr"`
-		Nbr    string   `json:"nbr"`
-		Name   string   `json:"name"`
-	}
-	var prst Prst2
-	var db []DB
-	if err := c.BindJSON(&prst); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	file, err := os.Open("userDB.json")
-	if err != nil {
-		panic(err)
-	}
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&db); err != nil {
-		file.Close()
-		panic(err)
-	}
-	file.Close()
-	preDB := Prst{
-		Work:   prst.Work,
-		Sort:   prst.Sort,
-		Constr: prst.Constr,
-		Nbr:    prst.Nbr,
-		Name:   prst.Name,
-	}
-	DOexist := false
-	for i, item := range db {
-		if item.User == prst.User {
-			db[i].Prst = append(db[i].Prst, preDB)
-			DOexist = true
-			break
-		}
-	}
-	if !DOexist {
-		var newDB DB
-		newDB.User = prst.User
-		newDB.Prst = append(newDB.Prst, preDB)
-		db = append(db, newDB)
-	}
-	file, err = os.Create("userDB.json")
-	if err != nil {
-		panic(err)
-	}
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(&db); err != nil {
-		panic(err)
-	}
-	file.Close()
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func getPrst(c *gin.Context) {
-	type Prst2 struct {
-		User string `json:"user"`
-		Work string `json:"work"`
-	}
-	type Prst3 struct {
-		Sort   string   `json:"sort"`
-		Constr []string `json:"constr"`
-		Nbr    string   `json:"nbr"`
-		Name   string   `json:"name"`
-	}
-	var prst Prst2
-	var db []DB
-	if err := c.BindJSON(&prst); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	file, err := os.Open("userDB.json")
-	if err != nil {
-		panic(err)
-	}
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&db); err != nil {
-		file.Close()
-		panic(err)
-	}
-	file.Close()
-	for _, item := range db {
-		if item.User == prst.User {
-			fmt.Println(item.Prst)
-			c.JSON(http.StatusOK, item.Prst)
-			return
-		}
-	}
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func rmPrst(c *gin.Context) {
-	type Prst2 struct {
-		User string `json:"user"`
-		Work string `json:"work"`
-		Name string `json:"name"`
-	}
-	var prst Prst2
-	var db []DB
-	if err := c.BindJSON(&prst); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	file, err := os.Open("userDB.json")
-	if err != nil {
-		panic(err)
-	}
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&db); err != nil {
-		file.Close()
-		panic(err)
-	}
-	file.Close()
-	fmt.Println(prst)
-	for i, item := range db {
-		if item.User == prst.User {
-			var updatedPrst []Prst
-			for _, item2 := range item.Prst {
-				if !(item2.Work == prst.Work && item2.Name == prst.Name) {
-					updatedPrst = append(updatedPrst, item2)
-				}
-			}
-			db[i].Prst = updatedPrst
-		}
-	}
-	file, err = os.Create("userDB.json")
-	if err != nil {
-		panic(err)
-	}
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(&db); err != nil {
-		file.Close()
-		panic(err)
-	}
-	file.Close()
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, partsWithSheets)
 }
 
 // ______________________________________________________________________________________________________________
@@ -1857,6 +1445,7 @@ func mHis2(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func mHis3(c *gin.Context) {
+	fmt.Println(hisM)
 	c.JSON(http.StatusOK, hisM)
 	hisM = []Cfo{}
 }
@@ -1870,6 +1459,11 @@ func unitProgress1(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 	openO()
+	location, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		panic(err)
+	}
+	currentTime := time.Now().In(location)
 	for i, item := range orders {
 		if item.UniqueID2 == PgrsData.Uid2 && PgrsData.Check == "1" && item.Check == "" {
 			orders[i].Check = "1"
@@ -1880,6 +1474,17 @@ func unitProgress1(c *gin.Context) {
 		}
 	}
 	saveO()
+	openHis()
+	for i, item := range histories {
+		if item.UniqueID2 == PgrsData.Uid2 && PgrsData.Check == "1" && item.Check == "" {
+			histories[i].CheckTime = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
+			break
+		} else if item.UniqueID2 == PgrsData.Uid2 && PgrsData.Check == "" && item.Check == "1" {
+			histories[i].CheckTime = ""
+			break
+		}
+	}
+	saveHis()
 }
 
 // ______________________________________________________________________________________________________________
@@ -1892,8 +1497,7 @@ func unitProgress2(c *gin.Context) {
 		Unit  string `json:"unit"`
 		Check string `json:"check"`
 		Rand  string `json:"rand"`
-		Time  string `json:"time"`
-		Parts string `json:"parts"`
+		Time  string `json:"time"` // Assuming you have a time field in the data
 	}
 
 	var PgrsData Pgrs3
@@ -1911,8 +1515,7 @@ func unitProgress2(c *gin.Context) {
 				Unit:  item.Unit,
 				Check: item.Check,
 				Rand:  item.Rand,
-				Time:  item.Time,
-				Parts: item.Part,
+				Time:  item.Time, // Also store the time
 			}
 			progresses0 = append(progresses0, tmp)
 
@@ -1949,7 +1552,6 @@ func unitProgress2(c *gin.Context) {
 		return entries[i].Time.Before(entries[j].Time)
 	})
 
-	var parts []string
 	// Now, loop through sorted RandTimeEntry to append final progress values to progressItems
 	for _, entry := range entries {
 		rand := entry.Rand
@@ -1960,14 +1562,14 @@ func unitProgress2(c *gin.Context) {
 		for _, item := range progresses0 {
 			if item.Rand == rand {
 				unitForRand = item.Unit
-				parts = append(parts, item.Parts+"."+item.Check)
+				break
 			}
 		}
 
-		progressItems = append(progressItems, Pgrs2{Rand: rand, Progress: progress, Unit: unitForRand, Parts: strings.Join(parts, " ")})
-		parts = []string{}
+		progressItems = append(progressItems, Pgrs2{Rand: rand, Progress: progress, Unit: unitForRand})
 	}
 
+	fmt.Println(progressItems)
 	c.Status(http.StatusOK)
 }
 
@@ -2020,7 +1622,7 @@ func adminWorksite(c *gin.Context) {
 // ______________________________________________________________________________________________________________
 func main() {
 	loadCred()
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(cors.Default())
 	store := cookie.NewStore([]byte("secret"))
@@ -2112,6 +1714,8 @@ func main() {
 	router.POST("/selectPart", authMiddleware, selectPart)
 	router.GET("/getPart", authMiddleware, getPart)
 	router.POST("/order", authMiddleware, order)
+	router.POST("/addTorder", authMiddleware, addTorder)
+	router.GET("/viewCart2", authMiddleware, viewCart2)
 	router.POST("/delCart", authMiddleware, delCart)
 	router.POST("/sendGroup", authMiddleware, sendGroup)
 	router.GET("/getOrders", authMiddleware2, getOrders)
@@ -2119,11 +1723,7 @@ func main() {
 	router.GET("/viewHis1", authMiddleware2, viewHis1)
 	router.GET("/viewHis2", authMiddleware2, viewHis2)
 	router.POST("/retreiveHis", authMiddleware2, retreiveHis)
-	router.POST("/sortSize1", authMiddleware2, sortSize1)
-	router.POST("/sortSize2", authMiddleware2, sortSize2)
-	router.POST("/savePrst", authMiddleware2, savePrst)
-	router.POST("/getPrst", authMiddleware2, getPrst)
-	router.POST("/rmPrst", authMiddleware2, rmPrst)
+	router.POST("/sortSize", authMiddleware2, sortSize)
 	router.POST("/unitProgress1", authMiddleware2, unitProgress1)
 	router.POST("/unitProgress2", authMiddleware, unitProgress2)
 	router.GET("/unitProgress3", authMiddleware, unitProgress3)
@@ -2171,77 +1771,6 @@ func main() {
 	})
 	router.GET("/image15", func(c *gin.Context) {
 		c.File("./image15.jpg")
-	})
-	router.GET("/dwnl", func(c *gin.Context) {
-		c.File("./dwnl.PNG")
-	})
-	router.GET("/favicon", func(c *gin.Context) {
-		c.File("./midTlogo.png")
-	})
-	router.GET("/fscreen", func(c *gin.Context) {
-		c.File("./Fscreen.PNG")
-	})
-	router.GET("/padlockUN", func(c *gin.Context) {
-		c.File("./padlock2.PNG")
-	})
-	router.GET("/padlockLO", func(c *gin.Context) {
-		c.File("./padlock1.PNG")
-	})
-	router.GET("/bell1", func(c *gin.Context) {
-		c.File("./bell1.PNG")
-	})
-	router.GET("/bell2", func(c *gin.Context) {
-		c.File("./bell2.PNG")
-	})
-	router.POST("/uploadIMG", func(c *gin.Context) {
-		file, _ := c.FormFile("image")
-		if file == nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "No file is received",
-			})
-			return
-		}
-		if err := c.SaveUploadedFile(file, file.Filename); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"message": "Unable to save the file",
-			})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{
-			"message": "File successfully uploaded",
-		})
-	})
-	router.POST("/upIMG", func(c *gin.Context) {
-		type Simg struct {
-			Image string `json:"image"`
-		}
-		var imageFilePath Simg
-		if err := c.BindJSON(&imageFilePath); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-			return
-		}
-		imageData, err := os.ReadFile(imageFilePath.Image)
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Internal Server Error")
-			return
-		}
-		ext := strings.ToLower(filepath.Ext(imageFilePath.Image))
-		var contentType string
-		switch ext {
-		case ".jpg", ".jpeg":
-			contentType = "image/jpeg"
-		case ".png":
-			contentType = "image/png"
-		default:
-			contentType = "application/octet-stream"
-		}
-		fmt.Println(imageFilePath.Image+":", contentType)
-		c.Data(http.StatusOK, contentType, imageData)
-	})
-	router.POST("/rmCook", func(c *gin.Context) {
-		c.SetCookie("username4221", "", -1, "/", "", false, true)
-		c.SetCookie("username7834", "", -1, "/", "", false, true)
-		c.JSON(http.StatusOK, gin.H{"message": "Cookie removed"})
 	})
 	numImages := 14
 	for i := 1; i <= numImages; i++ {
