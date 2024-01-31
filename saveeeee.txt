@@ -1,0 +1,115 @@
+func groupBundle(cfoss []Cfo) []Cfo {
+	var groupedCfoss []Cfo
+	var tempGroup []Cfo
+	var tempSum float64
+
+	for _, cfo := range cfoss {
+		cfoSum, _ := strconv.ParseFloat(cfo.Sum, 64)
+		if tempSum+cfoSum <= 48 {
+			tempSum += cfoSum
+			tempGroup = append(tempGroup, cfo)
+		} else {
+			if len(tempGroup) > 0 {
+				randomSheetValue := strconv.Itoa(rand.Intn(1000))
+				for i := range tempGroup {
+					tempGroup[i].Sheet = randomSheetValue
+				}
+				groupedCfoss = append(groupedCfoss, tempGroup...)
+			}
+			tempGroup = []Cfo{cfo}
+			tempSum = cfoSum
+		}
+	}
+
+	if len(tempGroup) > 0 {
+		randomSheetValue := strconv.Itoa(rand.Intn(1000))
+		for i := range tempGroup {
+			tempGroup[i].Sheet = randomSheetValue
+		}
+		groupedCfoss = append(groupedCfoss, tempGroup...)
+	}
+
+	return groupedCfoss
+}
+
+// ______________________________________________________________________________________________________________
+func sortCfoss(cfoss []Cfo) []Cfo {
+	sort.Slice(cfoss, func(i, j int) bool {
+		iSum, _ := strconv.ParseFloat(cfoss[i].Sum, 64)
+		jSum, _ := strconv.ParseFloat(cfoss[j].Sum, 64)
+		return iSum > jSum
+	})
+	return cfoss
+}
+
+// ______________________________________________________________________________________________________________
+func sortSize(c *gin.Context) {
+	type Nbrr struct {
+		Nbr  string `json:"nbr"`
+		Work string `json:"work"`
+		Sort string `json:"sort"`
+	}
+	var nbr Nbrr
+	if err := c.BindJSON(&nbr); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	groupSize, err := strconv.Atoi(nbr.Nbr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid group size"})
+		return
+	}
+	openO()
+	sort.Slice(orders, func(i, j int) bool {
+		// Split on space to separate time and date
+		iParts := strings.Split(orders[i].Time, " / ")
+		jParts := strings.Split(orders[j].Time, " / ")
+		// Compare dates
+		if iParts[1] != jParts[1] {
+			return iParts[1] < jParts[1]
+		}
+		// If dates are the same, compare times
+		return iParts[0] < jParts[0]
+	})
+
+	// Filter based on Worksite and Part
+	var filtered []Cfo
+	for _, order := range orders {
+		if nbr.Sort == "" {
+			if order.Worksite == nbr.Work {
+				filtered = append(filtered, order)
+			}
+		} else {
+			if order.Worksite == nbr.Work && order.Part == nbr.Sort {
+				filtered = append(filtered, order)
+			}
+		}
+	}
+
+	sortedCfoss := sortCfoss(filtered)
+	groupedCfoss := groupBundle(sortedCfoss)
+
+	orderCount := 1
+	for i := 0; i < len(groupedCfoss); {
+		end := i + groupSize
+
+		if end > len(groupedCfoss) {
+			end = len(groupedCfoss)
+		}
+
+		bundle := groupedCfoss[i:end]
+
+		// Assign order to each item in bundle
+		for j := range bundle {
+			bundle[j].Order = strconv.Itoa(orderCount)
+			orderCount++
+		}
+
+		// Update the main array
+		copy(groupedCfoss[i:end], bundle)
+
+		i = end
+	}
+	fmt.Println("Final array:", groupedCfoss)
+	c.JSON(http.StatusOK, groupedCfoss)
+}

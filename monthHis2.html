@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <style>
         body {
-            background-color: #141414;
+            background-color: #bb1212;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -146,23 +146,10 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .hiStats {
-            position: fixed;
-            top: 8%;
-            right: 2%;
-            display: flex;
-            flex-direction: column;
-            background-color: #303030;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.85vw;
-        }
     </style>
 </head>
 <body>
     <div id="previousButton" class="navigation-button">Previous</div>
-    <div id="hiStat" class="hiStats">Previous</div>
     <div id="partListContainer">
         <ul id="partList"></ul>
     </div>
@@ -254,21 +241,6 @@ $(document).ready(function() {
                 imageUrl: backendURL + "/image15"
             }
         };
-        const hourlyCounts = {};
-        const dailyCounts = {};
-        const weeklyCounts = {};
-        const monthlyCounts = {};
-        const yearlyCounts = {};
-        let totalHourlyParts = 0;
-        let totalDailyParts = 0;
-        let totalWeeklyParts = 0;
-        let totalMonthlyParts = 0;
-        let totalYearlyParts = 0;
-        let uniqueHours = 0;
-        let uniqueDays = 0;
-        let uniqueWeeks = 0;
-        let uniqueMonths = 0;
-        let uniqueYears = 0;
         $(document).ready(function() {
             // Attach click event listener to the "Previous" button
             $("#previousButton").on("click", function() {
@@ -322,15 +294,14 @@ $(document).ready(function() {
             // Display part's properties
             const propertiesToDisplay = [
                 'time',
-                'checktime',
                 'user',
                 'worksite',
                 'floor',
                 'unit',
+                'part',
                 'side',
                 'thickness',
                 'length',
-                'length2',
                 'dA',
                 'dB',
                 'dC',
@@ -351,7 +322,7 @@ $(document).ready(function() {
             propertiesToDisplay.forEach(propKey => {
                 if (part[propKey] && part[propKey].trim() !== "") {
                     const li = document.createElement("li");
-                    li.textContent = `${propKey.charAt(0).toUpperCase() + propKey.slice(1)}: ${part[propKey]}`;
+                    li.textContent = `${propKey}: ${part[propKey]}`;
                     ul.appendChild(li);
                 }
             });
@@ -405,59 +376,6 @@ $(document).ready(function() {
     function insertAfter(newNode, referenceNode) {
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     }
-    function parseCheckTime(checktime) {
-        const [time, date] = checktime.split(' / ');
-        return new Date(`${date}T${time}`);
-    }
-    function incrementCounts(date) {
-        const hour = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:00`;
-        const day = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-        const week = `${date.getFullYear()}-W${getWeekNumber(date)}`;
-        const month = `${date.getFullYear()}-${date.getMonth() + 1}`;
-        const year = `${date.getFullYear()}`;
-
-        // Hourly counts
-        if (!hourlyCounts[hour]) {
-            hourlyCounts[hour] = 0;
-            uniqueHours++;
-        }
-        hourlyCounts[hour]++;
-        totalHourlyParts++;
-        // Daily counts
-        if (!dailyCounts[day]) {
-            dailyCounts[day] = 0;
-            uniqueDays++;
-        }
-        dailyCounts[day]++;
-        totalDailyParts++;
-        // Weekly counts
-        if (!weeklyCounts[week]) {
-            weeklyCounts[week] = 0;
-            uniqueWeeks++;
-        }
-        weeklyCounts[week]++;
-        totalWeeklyParts++;
-        // Monthly counts
-        if (!monthlyCounts[month]) {
-            monthlyCounts[month] = 0;
-            uniqueMonths++;
-        }
-        monthlyCounts[month]++;
-        totalMonthlyParts++;
-        // Yearly counts
-        if (!yearlyCounts[year]) {
-            yearlyCounts[year] = 0;
-            uniqueYears++;
-        }
-        yearlyCounts[year]++;
-        totalYearlyParts++;
-    }
-    function getWeekNumber(d) {
-        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    }
     function displayPartList(parts) {
         partListContainer.innerHTML = "";
         jsonData = parts;
@@ -471,50 +389,6 @@ $(document).ready(function() {
             partListContainer.innerHTML = "<div style='color: white; font-size: 40px;'>No matching parts found.</div>";
             return;
         }
-        const sortedParts = parts
-            .filter(part => part.checktime !== "")
-            .map(part => ({
-                ...part,
-                timestamp: parseCheckTime(part.checktime)
-            }))
-            .sort((a, b) => a.timestamp - b.timestamp);
-        let totalDowntime = 0; // in milliseconds
-        let lastTimestamp = null;
-        const allowedDowntime = 5 * 60 * 1000; // 5 minutes in milliseconds
-        sortedParts.forEach(part => {
-            if (lastTimestamp) {
-                const downtime = part.timestamp - lastTimestamp;
-                if (downtime > allowedDowntime) {
-                    totalDowntime += downtime;
-                }
-            }
-            lastTimestamp = part.timestamp;
-        });
-        const firstDay = sortedParts[0].timestamp;
-        const lastDay = sortedParts[sortedParts.length - 1].timestamp;
-        const totalDays = (lastDay - firstDay) / (1000 * 60 * 60 * 24) + 1; // +1 to include the first day
-        const averageDailyDowntime = totalDowntime / totalDays; // in milliseconds
-        const averageDailyDowntimeMinutes = averageDailyDowntime / (1000 * 60); // convert to minutes
-        var tgdh = 0;
-        parts.forEach(part => {
-            if (part.checktime !== "") {
-                const date = parseCheckTime(part.checktime);
-                incrementCounts(date);
-            }
-        });
-        const meanHourlyRate = totalHourlyParts / uniqueHours;
-        const meanDailyRate = totalDailyParts / uniqueDays;
-        const meanWeeklyRate = totalWeeklyParts / uniqueWeeks;
-        const meanMonthlyRate = totalMonthlyParts / uniqueMonths;
-        const meanYearlyRate = totalYearlyParts / uniqueYears;
-        const ratesText = 
-            `Hourly Rate: ${meanHourlyRate.toFixed(2)} parts/hour\n` +
-            `Daily Rate: ${meanDailyRate.toFixed(2)} parts/day\n` +
-            `Weekly Rate: ${meanWeeklyRate.toFixed(2)} parts/week\n` +
-            `Monthly Rate: ${meanMonthlyRate.toFixed(2)} parts/month\n` +
-            `Yearly Rate: ${meanYearlyRate.toFixed(2)} parts/year\n` +
-            `Daily Downtime: ${averageDailyDowntimeMinutes.toFixed(2)} minutes`;
-        document.getElementById('hiStat').innerHTML = `<pre>${ratesText}</pre>`;
 
         // Reverse the order of the filteredData array
         filteredData.reverse().forEach(part => {

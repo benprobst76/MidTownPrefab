@@ -18,8 +18,7 @@
             overflow-y: auto;
             overflow-x: hidden;
         }
-
-        #partListContainer {
+        #modPartListContainer {
             background-color: #303030;
             border-radius: 20px;
             padding: 40px;
@@ -30,8 +29,7 @@
             align-items: center;
             overflow-x: hidden;
         }
-
-        .part-item {
+        .modpart-item {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -39,27 +37,23 @@
             border-radius: 10px;
             color: #ffffff;
         }
-        .part-item > div.contentWrapper {
+        .modpart-item > div.contentWrapper {
             display: none;
         }
-
-        .part-item h2 {
+        .modpart-item h2 {
             font-size: 24px;
             margin-bottom: 10px;
-            cursor: pointer; /* Making the title clickable */
+            cursor: pointer;
         }
-
-        .part-item ul {
+        .modpart-item ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
-
-        .part-item li {
+        .modpart-item li {
             margin-bottom: 5px;
         }
-
-        .part-item button {
+        .modpart-item button {
             margin-top: 10px;
             padding: 5px 10px;
             font-size: 16px;
@@ -68,89 +62,42 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-
-        /* Scrollbar styles */
-        #partListContainer::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #partListContainer::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-
-        #partListContainer::-webkit-scrollbar-thumb {
-            background-color: #585858;
-            border-radius: 20px;
-        }
-
-        #partListContainer::-webkit-scrollbar-thumb:hover {
-            background-color: #555;
-        }
-        .part-description { /* This will hide the description initially */
-            display: none;
-        }
-        .unit-list {
+        }     
+        .modunit-list {
             flex: 0 0 auto;
             min-width: 450px;
-            max-height: 700px; /* or any height you'd like */
+            max-height: auto;
             overflow-y: scroll;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            margin-right: 10px; /* spacing between unit lists */
+            overflow-x: hidden;
+            margin-right: 10px;
             border: 1px solid #ccc;
             padding: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .unit-list::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .unit-list::-webkit-scrollbar-thumb {
-            background-color: darkgrey;
-            outline: 1px solid slategrey;
-        }
-
-        /* Ensuring compatibility for touch devices */
-        .unit-list {
-            -webkit-overflow-scrolling: touch;
-        }
-        .main-title {
+        .modmain-title {
             color: white; /* Change color to white */
             text-align: center; /* Center align the title */
             margin-bottom: 20px; /* Add some spacing below the title */
         }
-        .unit-list h3 {
+        .modunit-list h3 {
             color: white; /* Change color to white for unit titles */
             margin-top: 0; /* Remove any default top margin */
         }
-        .part-item img {
+        .modpart-item img {
             max-width: 100%; /* Ensures the image doesn't overflow its container */
             border-radius: 10px; /* Optional rounded corners */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for a bit of depth */
         }
-        .navigation-button {
-            position: fixed;
-            bottom: 1px;
-            left: 10px;
-            margin: 15px 0;
-            padding: 10px 20px;
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <div id="previousButton" class="navigation-button">Previous</div>
-    <div id="partListContainer">
-        <ul id="partList"></ul>
+    <div id="modPartListContainer">
+        <ul id="modPartList"></ul>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         const backendURL = "https://192.168.2.32:443"
-        const partListContainer = document.getElementById("partListContainer");
+        const modPartListContainer = document.getElementById("modPartListContainer");
         const partTitles = {
         part1: "90° Profile",
         part2: "30° Knife Edge",
@@ -230,20 +177,10 @@
                 imageUrl: backendURL + "/image15"
             }
         };
-        $(document).ready(function() {
-            // Attach click event listener to the "Previous" button
-            $("#previousButton").on("click", function() {
-                // Change the URL when the button is clicked
-                window.location.href = backendURL + "/loginReceiver";
-            });
-        });
-        // Function to generate a unique ID for each part
-        function generatePartId(part) {
-            return part.part; // Use part.part as the unique identifier
+        function generateModPartId(part) {
+            return part.modPart;
         }
-
-        function isEmptyPart(part) {
-            // Function to check if a part is empty (all dimensions are empty)
+        function isEmptyModPart(part) {
             return (
                 part.dA === "" &&
                 part.dB === "" &&
@@ -256,33 +193,29 @@
                 part.dW === ""
             );
         }
-
-        function createPartItem(part) {
-            if (!document.querySelector('.main-title')) {
+        function createModPartItem(part) {
+            if (!document.querySelector('.modmain-title')) {
                 const title = document.createElement('h2');
                 title.textContent = 'History';
-                title.className = 'main-title';
-                document.body.insertBefore(title, partListContainer); // <-- Change this line
+                title.className = 'modmain-title';
+                document.body.insertBefore(title, modPartListContainer); // <-- Change this line
             }
             const partItem = document.createElement("div");
             partItem.setAttribute('data-part-data', JSON.stringify(part));
-            partItem.classList.add("part-item");
-
+            partItem.classList.add("modpart-item");
             const title = partTitles[part.part] || part.part;
-
             const h2 = document.createElement("h2");
             h2.textContent = title;
             h2.setAttribute('data-part-name', title);
             partItem.appendChild(h2);
-
             const contentWrapper = document.createElement('div'); 
-            contentWrapper.className = 'contentWrapper';
-            
+            contentWrapper.className = 'contentWrapper';          
             const ul = document.createElement("ul");
-            ul.classList.add("part-description");
-
+            ul.classList.add("modpart-item");
+            ul.style.border = 'none'
             // Display part's properties
             const propertiesToDisplay = [
+                'checktime',
                 'time',
                 'user',
                 'worksite',
@@ -305,39 +238,40 @@
                 'dR_P',
                 'dH',
                 'dW',
-                'edge1',
-                'edge2',
+                'edgeA',
+                'edgeB',
             ];
+            let isFirstItem = true;
             propertiesToDisplay.forEach(propKey => {
                 if (part[propKey] && part[propKey].trim() !== "") {
                     const li = document.createElement("li");
                     li.textContent = `${propKey}: ${part[propKey]}`;
+                    if (isFirstItem) {
+                        li.style.marginTop = "2vw";
+                        isFirstItem = false;
+                    }
+                    li.style.marginLeft = "2vw";
                     ul.appendChild(li);
                 }
             });
-
             contentWrapper.appendChild(ul);
-
             const partInfo = partData[part.part];
             if (partInfo && partInfo.imageUrl) {
                 const img = document.createElement("img");
                 img.src = partInfo.imageUrl;
                 img.alt = partInfo.title || 'Part Image';
-                img.style.width = "400px";
-                img.style.height = "auto";
-                img.style.marginLeft = "10px";
+                img.style.width = "40%";
+                img.style.height = "40%";
                 contentWrapper.appendChild(img);
             }
-
             partItem.appendChild(contentWrapper);
-
             h2.addEventListener("click", function() {
                 if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
                 contentWrapper.style.display = 'flex';
-                contentWrapper.querySelector('.part-description').style.display = 'block'; 
+                contentWrapper.querySelector('.modpart-item').style.display = 'block'; 
             } else {
                 contentWrapper.style.display = 'none';
-                contentWrapper.querySelector('.part-description').style.display = 'none';
+                contentWrapper.querySelector('.modpart-item').style.display = 'none';
             }
         });
             const deleteButton = document.createElement("button");
@@ -345,23 +279,21 @@
             deleteButton.addEventListener("click", () => {
                 const userConfirmed = window.confirm("Are you sure you want to retrieve that part?");  
                 if (userConfirmed) {
-                    handleRetreive(part, partItem);
+                    handleModRetrieve(part, partItem);
                 } else {
                     console.log('User declined');
                 }
             });
             partItem.appendChild(deleteButton);
 
-            partItem.setAttribute("data-part-id", generatePartId(part)); // Set data-part-id attribute
+            partItem.setAttribute("data-part-id", generateModPartId(part)); // Set data-part-id attribute
             return partItem;
     }
-
-    let userValue = "";       // Variable to store user value
-    let worksiteValue = "";   // Variable to store worksite value
-    let floorValue = "";      // Variable to store floor value
-    let unitValue = "";       // Variable to store unit value
-
-    function extractUserInfo(data) {
+    let modUserValue = "";
+        let modWorksiteValue = "";
+        let modFloorValue = "";
+        let modUnitValue = "";
+    function extractModUserInfo(data) {
     if (data.length > 0) {
         userValue = data[0].user || "";   // Set default value if 'user' is not present
         worksiteValue = data[0].worksite || "";   // Set default value if 'worksite' is not present
@@ -369,28 +301,20 @@
         unitValue = data[0].unit || "";   // Set default value if 'unit' is not present
     }
 }
-
-    function displayPartList(parts) {
-        partListContainer.innerHTML = "";
-
-        // Extract user, worksite, floor, and unit values from the received data
-        extractUserInfo(parts);
-
-        const filteredData = parts.filter(part => !isEmptyPart(part) && !isBlackPart(part));
-
+    function displayModPartList(parts) {
+        modPartListContainer.innerHTML = "";
+        extractModUserInfo(parts);
+        const filteredData = parts.filter(part => !isEmptyModPart(part) && !isBlackModPart(part));
         if (filteredData.length === 0) {
-            partListContainer.innerHTML = "No matching parts found.";
+            modPartListContainer.innerHTML = "No matching parts found.";
             return;
         }
-
-        // Reverse the order of the filteredData array
         filteredData.reverse().forEach(part => {
-            const partItem = createPartItem(part);
-            partListContainer.appendChild(partItem);
+            const partItem = createModPartItem(part);
+            modPartListContainer.appendChild(partItem);
         });
     }
-
-        function isBlackPart(part) {
+        function isBlackModPart(part) {
             for (const key in part) {
                 if (part[key].trim() === "black") {
                     return true;
@@ -398,36 +322,31 @@
             }
             return false;
         }
+        function handleModRetrieve(part, partItem) {
+            const url = backendURL + "/retreiveHis";
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(part),
+            };
 
-        function handleRetreive(part, partItem) {
-        const url = backendURL + "/retreiveHis";
-        const requestOptions = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(part),
-        };
-
-        fetch(url, requestOptions)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                // We expect an empty response, so no need to parse JSON
-                return;
-            })
-            .then(() => {
-                alert('Part Retrieved');
-            })
-            .catch((error) => console.error("Error deleting part:", error));
+            fetch(url, requestOptions)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return;
+                })
+                .then(() => {
+                    alert('Part Retrieved');
+                })
+                .catch((error) => console.error("Error deleting part:", error));
     }
-
-
-// Fetch JSON data from the Go server
 fetch(backendURL + "/viewHis2")
   .then((response) => response.json())
-  .then((data) => displayPartList(data))
+  .then((data) => displayModPartList(data))
   .catch((error) => console.error(error));
 
     </script>
