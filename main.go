@@ -13,11 +13,15 @@ import (
 	"strings"
 	"time"
 
+	"database/sql"
+	"log"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Cred struct {
@@ -1628,7 +1632,6 @@ func getPrst(c *gin.Context) {
 	file.Close()
 	for _, item := range db {
 		if item.User == prst.User {
-			fmt.Println(item.Prst)
 			c.JSON(http.StatusOK, item.Prst)
 			return
 		}
@@ -1659,7 +1662,6 @@ func rmPrst(c *gin.Context) {
 		panic(err)
 	}
 	file.Close()
-	fmt.Println(prst)
 	for i, item := range db {
 		if item.User == prst.User {
 			var updatedPrst []Prst
@@ -2016,6 +2018,68 @@ func adminWorksite(c *gin.Context) {
 	c.String(http.StatusOK, floor2_page)
 }
 
+func getTest(c *gin.Context) {
+	data, err := os.ReadFile("testt.html")
+	if err != nil {
+		return
+	}
+	test_page := string(data)
+	c.Header("Content-Type", "text/html")
+	c.String(http.StatusOK, test_page)
+}
+
+func testt(c *gin.Context) {
+	type dataStruct struct {
+		User     string `json:"user"`
+		Worksite string `json:"worksite"`
+		Floor    string `json:"floor"`
+		Unit     string `json:"unit"`
+		Part     string `json:"part"`
+	}
+	var data dataStruct
+	if err := c.BindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	fmt.Println(data)
+
+	db, err := sql.Open("sqlite3", "mydb.sqlite")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// Create a table
+	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec()
+
+	// Insert data
+	statement, err = db.Prepare("INSERT INTO people (firstname, lastname) VALUES (?, ?)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec("John", "Doe")
+
+	// Query data
+	rows, err := db.Query("SELECT id, firstname, lastname FROM people")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var firstname, lastname string
+		rows.Scan(&id, &firstname, &lastname)
+		log.Println(id, firstname, lastname)
+	}
+
+	c.Status(http.StatusOK)
+}
+
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func main() {
@@ -2074,6 +2138,8 @@ func main() {
 		}
 		Cusername = username
 	}
+	router.GET("/getTest", getTest)
+	router.POST("/testt", testt)
 	router.GET("/loginOrder", authMiddleware, loginOrder)
 	router.GET("/loginReceiver", authMiddleware2, loginReceiver)
 	router.GET("/loginAdmin", authMiddleware3, loginAdmin)

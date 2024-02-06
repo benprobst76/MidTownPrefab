@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DB Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        <input type="text" name="user">
+        <input type="text" name="worksite">
+        <input type="text" name="floor">
+        <input type="text" name="unit">
+        <input type="text" name="part">
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const jsonData = {};
+        formData.forEach((value, key) => { jsonData[key] = value; });
+        console.log(formData);
+
+        fetch('/testt', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData),
+        })
+        .then(response => response.json())
+        .then(data => console.log('Success:', data))
+        .catch((error) => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

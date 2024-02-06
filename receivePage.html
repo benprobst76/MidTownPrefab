@@ -571,12 +571,12 @@
             border: none;
             background-color: rgb(35, 150, 0);
             color: white;
-            transition: transform 0.1s ease; /* Transition for smooth effect */
+            transition: transform 0.1s ease;
             }
 
             .shrinkB:active {
-            transform: scale(0.90); /* Shrinks the button */
-            background-color: rgb(8, 102, 0); /* Changes color when pressed */
+            transform: scale(0.90);
+            background-color: rgb(8, 102, 0);
             }
             .circular-checkbox {
             position: relative;
@@ -602,6 +602,23 @@
             .circular-checkbox.toggle .circular-check {
             opacity: 1;
             }
+            .partRowDel {
+                font-size: 2vw;
+                cursor: pointer;
+                width: 10vw;
+                height: 6vh;
+                border-radius: 1vw;
+                border: none;
+                background-color: #1E90FF;
+                color: white;
+                transition: transform 0.1s ease;
+                margin-top: 4vh;
+                margin-left: calc(50% - 5vw);
+            }
+            .partRowDel:active {
+                transform: scale(0.90);
+                background-color: #0c69c5;
+            }
 
     </style>
 </head>
@@ -610,7 +627,9 @@
         <div class="TopMid1">
             <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 75%;">
         </div>
-        <div id="notifPanel" style=" width: 50%; height: 60%; background-color: #888; border-radius: 3%; display: flex; justify-content: center; align-items: center; scale: 0; transition: scale 0.05s ease; position: fixed; z-index: 100;"></div>
+        <div id="notifPanel" style=" width: 50%; height: 60%; background-color: #4e4e4e; border: 0.2vw solid black; border-radius: 3%; display: flex; flex-direction: column; align-items: center; scale: 0; transition: scale 0.05s ease; position: fixed; z-index: 100;">
+            <h2 style="font-size: 2vw; font-weight: bold; display: none;" id="notiTitle">New order available</h2>
+        </div>
         <div class="TopMid2">
             <img src="https://192.168.2.32/bell1" style="width: 4%; cursor: pointer; transform: translateX(-20vw);" onclick="notif(this);" id="notifBell">
             <h1 style="color: white; font-size: 3vw;">Receive Page</h1>
@@ -778,7 +797,6 @@
         var ftchDta = [];
         var workCh = false;
         var floorCh = false;
-        let intervalId;
         let groupSort = true;
         let unitSort = false;
         var delay = 600;
@@ -798,6 +816,11 @@
         var svdta2 = [];
         var prstGet = [];
         var nsheet = [];
+        var sheetMap = {};
+        let ooldd1;
+        let ooldd2;
+        var autoFetch = true;
+        var savedDataNotif = [];
 //____________________________________________________________________________________________________________________________________________________
 //Top right info logic
 
@@ -812,7 +835,7 @@
             } else {
                 panel.style.scale = 0;
             }
-            if (document.getElementById('notifBell').src === backendURL + '/bell2') {
+            if (document.getElementById('notifBell').src === backendURL.replace(':443', '') + '/bell2') {
                 document.getElementById('notifBell').src = backendURL + '/bell1';
             }
         }
@@ -820,9 +843,51 @@
             const bell = document.getElementById('notifBell');
             const panel = document.getElementById('notifPanel');
             bell.src = backendURL + '/bell2';
-            const tt = document.createElement('h2');
-            tt.innerText = 'New order available';
-            panel.appendChild(tt);
+            document.getElementById('notiTitle').style.display = 'block';
+            const tt2 = document.createElement('p');
+            tt2.style.margin = 0;
+            const tt3 = document.createElement('p');
+            tt3.style.margin = 0;
+            tt3.style.marginTop = '0.5vw';
+            const bb = document.createElement('div');
+            if (noti[0].priority === 'Standard Processing') {
+                bb.style.border = '0.2vw solid green';
+            } else if (noti[0].priority === 'Flexible Timing') {
+                bb.style.border = '0.2vw solid yellow';
+            } else if (noti[0].priority === 'Priority Fulfillment') {
+                bb.style.border = '0.2vw solid red';
+            }
+            bb.style.borderRadius = '1vw';
+            bb.style.cursor = 'pointer';
+            bb.style.padding = '1vw';
+            bb.style.backgroundColor = '#303030';
+            bb.style.color = 'white';
+            bb.style.fontSize = '1.3vw';
+            bb.style.display = 'flex';
+            bb.style.flexDirection = 'column';
+            bb.style.boxShadow = 'rgba(0, 0, 0, 0.8) 0 8px 15px';
+            bb.style.alignItems = 'center';
+            bb.style.marginBottom = '2vw';
+            tt2.innerText = noti[0].groupO.split("/ ")[1];
+            tt3.innerText = 'Priority: ' + noti[0].priority;
+            bb.appendChild(tt2);
+            bb.appendChild(tt3);
+            bb.addEventListener('click', function() {
+                autoFetch = false;
+                groupSort = true;
+                partListContainer.innerHTML = "";
+                svdta2 = [];
+                nbr = "";
+                partSort = "";
+                firstL = 1;
+                while (ulll.children.length > 1) {
+                    ulll.removeChild(ulll.children[1]);
+                }
+                nsheet = [];
+                displayPartList(noti);
+                panel.style.scale = 0;
+            });
+            panel.appendChild(bb);
 
         }
 
@@ -931,9 +996,7 @@
                         Cinfo.worksite = item.worksite;
                         Cinfo.floor = "";
                         document.getElementById('groupB').click()
-                        if (!intervalId) {
-                            intervalId = setInterval(fetchAndDisplayData, 10000);
-                        }
+                        autoFetch = true;
                         getPrst();
                         fetchAndDisplayData();
                         fetch(backendURL + "/selectWorksite", {
@@ -991,9 +1054,7 @@
                 nbr = "";
                 partSort = "";
                 firstL = 1;
-                if (!intervalId) {
-                    intervalId = setInterval(fetchAndDisplayData, 10000);
-                }
+                autoFetch = true;
                 fetchAndDisplayData();
             } else {
                 alert("Please choose a worksite");
@@ -1046,45 +1107,47 @@
                 wrpr0.className = 'Qwrapper0';
                 pres.innerText = 'Saved Preset:'
                 quiz.appendChild(pres);
-                prstGet.forEach(prst => {
-                    const dv = document.createElement('div');
-                    dv.style.position = 'relative';
-                    const btn = document.createElement('button');
-                    const rmbtn = document.createElement('button');
-                    btn.className = 'shrinkB'
-                    rmbtn.className = 'shrinkB'
-                    btn.innerText = prst.name;
-                    rmbtn.innerText = 'X';
-                    rmbtn.style.color = 'black';
-                    rmbtn.style.backgroundColor = '#d10000';
-                    rmbtn.style.width = '3vw';
-                    rmbtn.style.position = 'absolute';
-                    rmbtn.style.top = 0;
-                    rmbtn.style.left = '10vw';
-                    rmbtn.style.border = 'solid 0.15vw black';
-                    rmbtn.value = prst.name;
-                    btn.style.width = '12vw';
-                    btn.style.border = 'solid 0.15vw black';
-                    btn.style.marginBottom = '5%';
-                    btn.style.backgroundColor = '#1E90FF';
-                    btn.addEventListener('click', function() {
-                        nbr = prst.nbr;
-                        partsort = prst.sort;
-                        svdta2 = prst.constr;
-                        getPart();
-                        close.click();
-                        document.getElementById('groupB').classList.remove('active');
-                        document.getElementById('fltB').classList.add('active');
+                if (prstGet) {
+                    prstGet.forEach(prst => {
+                        const dv = document.createElement('div');
+                        dv.style.position = 'relative';
+                        const btn = document.createElement('button');
+                        const rmbtn = document.createElement('button');
+                        btn.className = 'shrinkB'
+                        rmbtn.className = 'shrinkB'
+                        btn.innerText = prst.name;
+                        rmbtn.innerText = 'X';
+                        rmbtn.style.color = 'black';
+                        rmbtn.style.backgroundColor = '#d10000';
+                        rmbtn.style.width = '3vw';
+                        rmbtn.style.position = 'absolute';
+                        rmbtn.style.top = 0;
+                        rmbtn.style.left = '10vw';
+                        rmbtn.style.border = 'solid 0.15vw black';
+                        rmbtn.value = prst.name;
+                        btn.style.width = '12vw';
+                        btn.style.border = 'solid 0.15vw black';
+                        btn.style.marginBottom = '5%';
+                        btn.style.backgroundColor = '#1E90FF';
+                        btn.addEventListener('click', function() {
+                            nbr = prst.nbr;
+                            partsort = prst.sort;
+                            svdta2 = prst.constr;
+                            getPart();
+                            close.click();
+                            document.getElementById('groupB').classList.remove('active');
+                            document.getElementById('fltB').classList.add('active');
+                        });
+                        rmbtn.addEventListener('click', function() {
+                            rmPrst(this.value);
+                            dv.removeChild(this);
+                            dv.removeChild(btn);
+                        });
+                        dv.appendChild(btn);
+                        dv.appendChild(rmbtn);
+                        quiz.appendChild(dv);
                     });
-                    rmbtn.addEventListener('click', function() {
-                        rmPrst(this.value);
-                        dv.removeChild(this);
-                        dv.removeChild(btn);
-                    });
-                    dv.appendChild(btn);
-                    dv.appendChild(rmbtn);
-                    quiz.appendChild(dv);
-                });
+                }
                 addNew.innerText = 'Add New';
                 prev.innerText = 'Previous';
                 close.innerText = 'Close';
@@ -1774,7 +1837,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 prstGet = data;
             })
             .catch(error => {
@@ -1816,7 +1878,7 @@
                 .then(data => {
                     document.getElementById('MidLay1').style.display = 'flex';
                     document.getElementById('MidLay2').style.display = 'none';
-                    clearInterval(intervalId);
+                    autoFetch = false;
                     savedData = data.PartsWithSheets;
                     while (ulll.children.length > 1) {
                         ulll.removeChild(ulll.children[1]);
@@ -1827,6 +1889,58 @@
                     }
                     if (data.PartsWithSheets) {
                         displayPartList(data.PartsWithSheets);
+                        setTimeout(() => {
+                            let c1, c2, c3;
+                            let noonne = {};
+                            document.querySelectorAll('.part-item').forEach(element => {
+                                const prt = JSON.parse(element.getAttribute('data-part-data'));
+                                if (sheetMap[prt.sheet] === undefined) {
+                                    sheetMap[prt.sheet] = 0;
+                                    sheetMap[prt.sheet + '_2'] = 0;
+                                }
+                                if (prt.check !== "1") {
+                                    sheetMap[prt.sheet] += 1;
+                                }
+                                sheetMap[prt.sheet + '_2'] += 1;
+                            });
+                            document.querySelectorAll('.part-item').forEach(element => {
+                                const prt = JSON.parse(element.getAttribute('data-part-data'));
+                                if (prt.check === "1" && prt.sheet === "") {
+                                    Array.from(document.getElementById("Nsheet").children).forEach(item => {
+                                        if (item.innerText.split(':')[0].split(' ')[0] === "Type" || item.innerText.split(':')[0].split(' ')[0] === "Mold") {
+                                            c1 = item.innerText.split(':')[0].split(' ')[0] + ' ' + item.innerText.split(':')[0].split(' ')[1];
+                                            c2 = item.innerText.split(':')[0].split(' ')[2];
+                                            c3 = (item.innerText.split(':')[0].split(' ')[3] || "").match(/\d+/) ? (item.innerText.split(':')[0].split(' ')[3] || "").match(/\d+/)[0] : "";
+                                        } else {
+                                            c1 = item.innerText.split(':')[0].split(' ')[0];
+                                            c2 = item.innerText.split(':')[0].split(' ')[1];
+                                            c3 = (item.innerText.split(':')[0].split(' ')[2] || "").match(/\d+/) ? (item.innerText.split(':')[0].split(' ')[2] || "").match(/\d+/)[0] : "";
+                                        }
+                                        if (c1 === prt.type && c2 === prt.thickness && c3 === prt.length2) {
+                                            item.innerText = c1 + ' ' + c2 + ' ' + c3 + 'ft: ' + (item.innerText.split(':')[1].split(' ')[1] - 1);
+                                        }
+                                    });
+                                } else if (prt.check === "1" && prt.sheet !== "") {
+                                    Array.from(document.getElementById("Nsheet").children).forEach(item => {
+                                        if (item.innerText.split(':')[0].split(' ')[0] === "Type" || item.innerText.split(':')[0].split(' ')[0] === "Mold") {
+                                            c1 = item.innerText.split(':')[0].split(' ')[0] + ' ' + item.innerText.split(':')[0].split(' ')[1];
+                                            c2 = item.innerText.split(':')[0].split(' ')[2];
+                                            c3 = (item.innerText.split(':')[0].split(' ')[3] || "").match(/\d+/) ? (item.innerText.split(':')[0].split(' ')[3] || "").match(/\d+/)[0] : "";
+                                        } else {
+                                            c1 = item.innerText.split(':')[0].split(' ')[0];
+                                            c2 = item.innerText.split(':')[0].split(' ')[1];
+                                            c3 = (item.innerText.split(':')[0].split(' ')[2] || "").match(/\d+/) ? (item.innerText.split(':')[0].split(' ')[2] || "").match(/\d+/)[0] : "";
+                                        }
+                                        if (c1 === prt.type && c2 === prt.thickness && c3 === prt.length2) {
+                                            if (sheetMap[prt.sheet] === 0 && noonne[prt.sheet] === undefined) {
+                                                noonne[prt.sheet] = true;
+                                                item.innerText = c1 + ' ' + c2 + ' ' + c3 + 'ft: ' + (item.innerText.split(':')[1].split(' ')[1] - 1);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }, "800");
                     } else {
                         displayPartList(data);
                     }
@@ -1872,7 +1986,15 @@ function generatePartId(part) {
         }
 
         function addDetail(ul, label, value) {
-            const excludedKeys = ["User", "Worksite", "Price", "Rand", "UniqueID", "UniqueID2", "Side", "Unit", "Order", "Floor", "Time", "Checktime", "Sheet", "Order2", "Length2", "Sum", "Img", "GroupO", "Priority", Exlen];
+            const excludedKeys = ["User", "Worksite", "Price", "Rand", "UniqueID", "UniqueID2", "Side", "Unit", "Order", "Floor", "Time", "Checktime", "Check", "Sheet", "Order2", "Length2", "Sum", "Img", "GroupO", "Priority", Exlen];
+            if (label === 'Mrg') {
+                const detailItem = document.createElement("li");
+                detailItem.textContent = 'Time: 23:55 / 2055-55-55';
+                detailItem.style.marginBottom = '4vw';
+                detailItem.style.opacity = 0;
+                ul.appendChild(detailItem);
+                return;
+            }
             if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
                 const detailItem = document.createElement("li");
                 detailItem.textContent = `${label}: ${value}`;
@@ -1948,6 +2070,7 @@ function generatePartId(part) {
             contentWrapper.style.marginBottom = '1vw';
 
             const ul = document.createElement("ul");
+            ul.style.position = 'relative';
             ul.style.marginTop = '1vw';
             ul.style.marginLeft = '1vw';
 
@@ -1962,9 +2085,11 @@ function generatePartId(part) {
                     addDetail(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key]);
                 }
             }
+            addDetail(ul, 'Mrg', true);
             const detailItem = document.createElement("li");
             detailItem.textContent = `Time: ${part.time}`;
-            detailItem.style.marginTop = '3vw';
+            detailItem.style.position = 'absolute';
+            detailItem.style.bottom = 0;
             ul.appendChild(detailItem);
             contentWrapper.appendChild(ul);
 
@@ -2143,7 +2268,7 @@ function generatePartId(part) {
                 contentWrapper.style.maxHeight = '0';
             } else {
                 contentWrapper.classList.add('visible');
-                contentWrapper.style.maxHeight = '500px'; // This should be greater than the actual height of the content
+                contentWrapper.style.maxHeight = '80vh'; // This should be greater than the actual height of the content
             }
             });
             const checkButton = document.createElement('button');
@@ -2172,7 +2297,11 @@ function generatePartId(part) {
                             if (jsonDataString.sheet === "" && c1 === jsonDataString.type && c2 === jsonDataString.thickness && c3 === jsonDataString.length2) {
                                 item.innerText = c1 + ' ' + c2 + ' ' + c3 + 'ft: ' + (item.innerText.split(':')[1].split(' ')[1] - 1);
                             } else if (jsonDataString.sheet !== "" && c1 === jsonDataString.type && c2 === jsonDataString.thickness && c3 === jsonDataString.length2) {
-
+                                sheetMap[jsonDataString.sheet] -= 1;
+                                if (sheetMap[jsonDataString.sheet] === 0 && ooldd1 !== jsonDataString.uniqueID2) {
+                                    item.innerText = c1 + ' ' + c2 + ' ' + c3 + 'ft: ' + (item.innerText.split(':')[1].split(' ')[1] - 1);
+                                }
+                                ooldd1 = jsonDataString.uniqueID2;
                             }
                         });
                     }
@@ -2181,11 +2310,44 @@ function generatePartId(part) {
                     if (parentPartItem) {
                         parentPartItem.style.border = '2px solid white';
                     }
+                    if (nsheet.length !== 0) {
+                        let jsonDataString = JSON.parse(parentPartItem.getAttribute('data-part-data'));
+                        let c1, c2, c3;
+                        let tnbr;
+                        Array.from(document.getElementById("Nsheet").children).forEach(item => {
+                            if (item.innerText.split(':')[0].split(' ')[0] === "Type" || item.innerText.split(':')[0].split(' ')[0] === "Mold") {
+                                c1 = item.innerText.split(':')[0].split(' ')[0] + ' ' + item.innerText.split(':')[0].split(' ')[1];
+                                c2 = item.innerText.split(':')[0].split(' ')[2];
+                                c3 = (item.innerText.split(':')[0].split(' ')[3] || "").match(/\d+/) ? (item.innerText.split(':')[0].split(' ')[3] || "").match(/\d+/)[0] : "";
+                            } else {
+                                c1 = item.innerText.split(':')[0].split(' ')[0];
+                                c2 = item.innerText.split(':')[0].split(' ')[1];
+                                c3 = (item.innerText.split(':')[0].split(' ')[2] || "").match(/\d+/) ? (item.innerText.split(':')[0].split(' ')[2] || "").match(/\d+/)[0] : "";
+                            }
+                            if (jsonDataString.sheet === "" && c1 === jsonDataString.type && c2 === jsonDataString.thickness && c3 === jsonDataString.length2) {
+                                item.innerText = c1 + ' ' + c2 + ' ' + c3 + 'ft: ' + (parseInt(item.innerText.split(':')[1].split(' ')[1]) + 1);
+                            } else if (jsonDataString.sheet !== "" && c1 === jsonDataString.type && c2 === jsonDataString.thickness && c3 === jsonDataString.length2) {
+                                sheetMap[jsonDataString.sheet] += 1;
+                                if (sheetMap[jsonDataString.sheet] === sheetMap[jsonDataString.sheet + '_2']) {
+                                    tnbr = (parseInt(item.innerText.split(':')[1].split(' ')[1]) + 1);
+                                    nsheet.forEach(sheet => {
+                                        if (c1 === sheet.type && c2 === sheet.thickness && c3 === sheet.length && parseInt(item.innerText.split(':')[1].split(' ')[1]) === sheet.count) {
+                                            tnbr = sheet.count;
+                                        }
+                                    });
+                                    if (ooldd1 !== jsonDataString.uniqueID2) {
+                                        item.innerText = c1 + ' ' + c2 + ' ' + c3 + 'ft: ' + tnbr;
+                                    }
+                                }
+                                ooldd1 = jsonDataString.uniqueID2;
+                            }
+                        });
+                    }
                 }
                 const worksite = part.worksite;
                 const floor = part.floor;
                 const unit = part.unit;
-                const partName = part.part; // Renamed to avoid shadowing
+                const partName = part.part;
                 const side = part.side;
                 const thickness = part.thickness;
                 const length = part.length;
@@ -2211,9 +2373,9 @@ function generatePartId(part) {
                     check = "1"
                 }
                 if (this.style.backgroundColor === 'green') {
-                    delCheck(part);
+                    delCheck(part, partItem);
                 } else {
-                    delCheck2(part);
+                    delCheck2(part, partItem);
                 }
                 if  (!AllCD) {
                     calculateAndSendUnitProgress(Uid2, check);
@@ -2237,7 +2399,7 @@ function generatePartId(part) {
                 checkButton.style.backgroundColor = 'green';
                 const parentPartItem = checkButton.closest('.part-item');
                 setTimeout(() => {
-                    delCheck(part);
+                    delCheck(part, partItem);
                 }, delay);
                 delay += 100;
                 if (parentPartItem) {
@@ -2265,29 +2427,37 @@ function generatePartId(part) {
             });
         }
 
-        function delCheck(part) {
-            console.log("Called delCheck with:", part);
+        function delCheck(part, y) {
             for (let i = 0; i < dict.length; i++) {
                 let item = dict[i];
                 let key = Object.keys(item)[0];
                 if (part.uniqueID === key) {
                     item[key] -= 1;                  
                     if (item[key] === 0) {
-                        checkForAllChecked(part);
+                        const btn = document.createElement('button');
+                        btn.className = 'partRowDel'
+                        btn.innerText = 'Delete';
+                        y.parentNode.appendChild(btn);
+                        btn.addEventListener('click', function() {
+                            checkForAllChecked(part);
+                        });
                     }
                 }
             }
         }
 
-        function delCheck2(part) {
+        function delCheck2(part, y) {
+            const btns = y.parentNode.getElementsByClassName('partRowDel');
+            if (btns.length > 0) {
+                btns[0].remove();
+            }
             for (let i = 0; i < dict.length; i++) {
                 let item = dict[i];
-                let key = Object.keys(item)[0]; // Get the first key of the object
+                let key = Object.keys(item)[0];
                 if (part.uniqueID === key) {
                     item[key] += 1;
                 }
             }
-            console.log(dict)
         }
 
         function checkForAllChecked(part) {
@@ -2484,7 +2654,6 @@ function callrHis() {
 callrHis();
 
 function displayPartList(parts) {
-    document.getElementById("Norder").textContent = "Quantity: " + parts.length;
     parts.forEach(parts => {
         parts.sum = "";
     });
@@ -2582,6 +2751,7 @@ function displayPartList(parts) {
         currentUnitList.appendChild(partItem);
     });
     }
+    document.getElementById("Norder").textContent = "Quantity: " + document.querySelectorAll('.part-item').length;
     nsheet.forEach(sheet => {
         let li = document.createElement("li");
         li.className = 'Numb';
@@ -2632,15 +2802,27 @@ function displayPartList(parts) {
     }
     var uniqueNewData = [];
 function fetchAndDisplayData() {
-    if (document.getElementById('MidLay3').style.display === '') {
-        fetch(backendURL + "/getOrders")
-        .then((response) => response.json())
-        .then((data) => {
+    fetch(backendURL + "/getOrders")
+    .then((response) => response.json())
+    .then((data) => {
+        var passNoti = true;
+        data = data.filter(item => item.worksite === Cinfo.worksite);
+        if (savedDataNotif.length !== 0 && savedDataNotif[0].worksite !== data[0].worksite) {
+            passNoti = false;
+        }
+         if (passNoti && data.length > savedDataNotif.length) {
+            const difference = data.length - savedDataNotif.length;
+            const newElements = data.slice(0, difference);
+            if (savedDataNotif.length > 0) {
+                notifPanel(newElements);
+            }
+        }
+        savedDataNotif = data;
+        if (autoFetch && document.getElementById('MidLay3').style.display === '') {
             while (ulll.children.length > 1) {
                 ulll.removeChild(ulll.children[1]);
             }
             nsheet = [];
-            data = data.filter(item => item.worksite === Cinfo.worksite);
             if (floorCh) {
                 data = data.filter(item => item.floor === Cinfo.floor);
             }
@@ -2653,18 +2835,16 @@ function fetchAndDisplayData() {
                 document.getElementById('MidLay2').style.display = 'none';
             }
             if (data.length > savedData.length) {
-                    const difference = data.length - savedData.length;
-                    const newElements = data.slice(0, difference);
-                    if (savedData.length > 0) {
-                        notifPanel(newElements);
-                    }
-                    savedData = data;
-                    displayPartList(newElements);
+                const difference = data.length - savedData.length;
+                const newElements = data.slice(0, difference);
+                displayPartList(newElements);
+                savedData = data;
             }
-        })
-        .catch((error) => console.error(error));
-    }
+        }
+    })
+    .catch((error) => console.error(error));
 }
+setInterval(fetchAndDisplayData, 10000);
 
 //_____________________________________________________________________________________________________________________
 //Right Logic
@@ -2753,8 +2933,7 @@ function fetchAndDisplayData() {
             const propertiesToDisplay = [
                 'checktime',
                 'time',
-                'user',
-                'worksite',
+                'type',
                 'side',
                 'thickness',
                 'length',
@@ -2778,7 +2957,7 @@ function fetchAndDisplayData() {
             propertiesToDisplay.forEach(propKey => {
                 if (part[propKey] && part[propKey].trim() !== "") {
                     const li = document.createElement("li");
-                    li.textContent = `${propKey}: ${part[propKey]}`;
+                    li.textContent = `${propKey[0].toUpperCase() + propKey.slice(1)}: ${part[propKey]}`;
                     if (isFirstItem) {
                         li.style.marginTop = "2vw";
                         isFirstItem = false;
