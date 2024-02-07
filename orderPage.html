@@ -78,28 +78,28 @@
             overflow-x: hidden;
         }
         .LeftLay ul {
+            list-style: none;
             margin: 0;
             padding: 0;
+            align-self: center;
+            justify-content: center;
+            width: 90%;
         }
         .list-item {
-            box-sizing: border-box;
             list-style: none;
-            border-top: 0.3vw solid black;
-            border-bottom: 0.3vw solid #303030;
-            border-left: 0.3vw solid #303030;
-            border-right: 0.3vw solid #303030;
-            padding: 0.8vh;
             cursor: pointer;
             color: white;
+            padding: 1.4vh;
+            border-radius: 1.2vw;
             text-align: center;
             background-color: #4b4b4b;
-            background-clip: border-box;
-        }
-        .list-item:last-child {
-            border-bottom: 0.3vw solid black;
+            font-size: 1.2vw;
+            margin-bottom: 2vh;
+            border: 0.15vw solid #1A1A1A;
+            font-weight: bold;
         }
         .list-item.active {
-            border-color: #1E90FF;
+            background-color: #1E90FF;
         }
         #floorContainer input {
           padding: 8px;
@@ -133,7 +133,7 @@
             justify-content: center;
             overflow-x: auto;
             position: absolute;
-            transition: opacity 0.2s ease-in-out;
+            transition: scale 0.2s ease-in-out;
             z-index: 1;
         }
         .MidLayy {
@@ -141,14 +141,13 @@
             width: 69.5vw;
             height: 90vh;
             display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
             font-size: 1vw;
             position: absolute;
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out;
+            scale: 0;
+            transition: scale 0.2s ease-in-out;
             overflow-y: auto;
         }
         .image-box {
@@ -166,25 +165,16 @@
         }
         .image-column {
             text-align: center;
+            margin-right: 4vw;
         }
         .image-column img {
-            max-width: 28vw;
-            max-height: 30vw;
+            width: 22vw;
+            height: 28vw;
         }
-        @media only screen and (min-width: 800px) and (max-width: 50000px) {
-          .form-container {
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;                              
-              margin-top: 6vw;
+        @media only screen and (max-height: 500px) {
+          #pictureForm {
+            margin-top: 30vh;
           }
-        }
-        @media only screen and (max-width: 800px) {
-          .form-container {
-            display: flex;
-            flex-direction: column;                             
-            margin-top: 6vw;
-            }
         }
         .form-group {
             display: flex;
@@ -272,27 +262,27 @@
             border: 0.25vw solid #fff;
             background-color: transparent;
             color: #fff;
-            padding: 1.1vw 0.8vw;
+            padding: 1.5vh 0.8vw;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1vw;
-          }        
-        @media only screen and (min-width: 1300px) and (max-width: 10000px) {
-          .answer-btn {
-            border: 0.2vw solid #fff;
-            background-color: transparent;
-            color: #fff;
-            padding: 0.4vw 0.8vw;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 1vw;
-          }
-        }
+          }  
+          @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+            .answer-btn {
+              border: 0.2vw solid #fff;
+              background-color: transparent;
+              color: #fff;
+              padding: 1vh 0.8vw;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+              font-size: 1vw;
+            }
+        }      
         .answer2-btn {
             border: 0.25vw solid #fff;
             background-color: transparent;
             color: #fff;
-            padding: 1.1vw 0.8vw;
+            padding: 1.5vh 0.8vw;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1vw;
@@ -303,7 +293,7 @@
             border: 0.2vw solid #fff;
             background-color: transparent;
             color: #fff;
-            padding: 0.4vw 0.8vw;
+            padding: 1vh 0.8vw;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1vw;
@@ -314,7 +304,7 @@
             border: 0.25vw solid #fff;
             background-color: transparent;
             color: #fff;
-            padding: 1.1vw 0.8vw;
+            padding: 1.5vh 0.8vw;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1vw;
@@ -325,7 +315,7 @@
             border: 0.2vw solid #fff;
             background-color: transparent;
             color: #fff;
-            padding: 0.4vw 0.8vw;
+            padding: 1vh 0.8vw;
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1vw;
@@ -362,23 +352,12 @@
             gap: 0.6vw;
         }
 
-        @media only screen and (orientation: landscape) {
-          .header {
-              position: absolute;
-              top: 3%;
-              font-size: 3vw;
-              font-weight: bold;
-              color: white;
-              white-space: nowrap;
-          }
-        }
-        @media only screen and (orientation: portrait) {
-          .header {
-              font-size: 3vw;
-              font-weight: bold;
-              color: white;
-              white-space: nowrap;
-          }
+        .header {
+            font-size: 3vw;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 2vh;
+            width: 22vw;
         }
 /*____________________________________________________________________________________________________________*/
         .RightLay {
@@ -431,6 +410,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 22vw;
     }
 
     #listContainer2 {
@@ -710,7 +690,7 @@
 <body>
     <div class="TopLay">
         <div class="TopMid1">
-            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 75%;">
+            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 10vw;">
         </div>
         <div class="TopMid2">
             <button style="display: flex; justify-content: center; align-items: center; width: 5vw; height: 4vw; font-size: 3vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; padding: 6px 20px; margin-left: 2vw;" id="gbck">&larr;</button>
@@ -731,16 +711,16 @@
             <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Floor:</h2>
             <ul id="floorContainer"></ul>
             <div style="display: none; flex-direction: row; align-content: center; justify-content: center; margin-top: 1vw;" id="floorBC">
-              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delFloor">Delete</button>
-              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edFloor">Edit</button>
-              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addFloor">Add</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delFloor">Delete</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edFloor">Edit</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addFloor">Add</button>
             </div>
             <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Unit:</h2>
             <ul id="unitContainer"></ul>
             <div style="display: none; flex-direction: row; align-content: center; justify-content: center; margin-top: 1vw; margin-bottom: 4vw;" id="unitBC">
-              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delUnit">Delete</button>
-              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edUnit">Edit</button>
-              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addUnit">Add</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delUnit">Delete</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edUnit">Edit</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addUnit">Add</button>
             </div>
         </div>
         <div class="Mid2">
@@ -824,9 +804,7 @@
         </div> 
         <div class="MidLayy" id="MidLay2">
           <div class="image-column">
-            <div class="header-container">
-              <div class="header">90° Profile</div>
-            </div>       
+            <div class="header">90° Profile</div>
             <div style="display: flex; flex-direction: column;">
               <img src="image1" alt="Big Picture">
               <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
@@ -961,7 +939,7 @@
                   <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
                 </form>
               </div>
-        </div> 
+            </div>
         <div class="MidLayy" id="MidLay3">
             <div class="image-column">
               <div class="header-container">
@@ -4399,8 +4377,8 @@ function padlock2(imgElement) {
                     Cinfo.price = "$" + (mul * parseInt(modLength) + 172.5).toFixed(2);
                 }
             }
-            document.getElementById('MidLay1').style.opacity = 0;
-            document.getElementById(divv).style.opacity = 1;
+            document.getElementById('MidLay1').style.scale = 0;
+            document.getElementById(divv).style.scale = 1;
             document.getElementById(divv).style.zIndex = 1;
             document.getElementById('MidLay1').style.zIndex = 0;
             const answerButtons = document.querySelectorAll('.answer-btn');
@@ -4865,8 +4843,8 @@ function decimalToFraction(decimal) {
                   imgArray[Cinfo.img] = formData;
                 }
                 resetCinf();
-                document.getElementById(divv).style.opacity = 0;
-                document.getElementById('MidLay1').style.opacity = 1;
+                document.getElementById(divv).style.scale = 0;
+                document.getElementById('MidLay1').style.scale = 1;
                 document.getElementById(divv).style.zIndex = 0;
                 document.getElementById('MidLay1').style.zIndex = 1;
                 if (GroupOrder.length === 1) {
@@ -4886,8 +4864,8 @@ function decimalToFraction(decimal) {
         document.getElementById('gbck').addEventListener('click', function() {
             fbrc = 0;
             jbead = 0;
-            document.getElementById(divv).style.opacity = 0;
-            document.getElementById('MidLay1').style.opacity = 1;
+            document.getElementById(divv).style.scale = 0;
+            document.getElementById('MidLay1').style.scale = 1;
             document.getElementById(divv).style.zIndex = 0;
             document.getElementById('MidLay1').style.zIndex = 1;
         });

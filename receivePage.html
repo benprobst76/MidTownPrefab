@@ -90,29 +90,28 @@
             border-top: solid black;
         }
         .LeftLay ul {
+            list-style: none;
             margin: 0;
             padding: 0;
+            align-self: center;
+            justify-content: center;
+            width: 90%;
         }
         .list-item {
-            box-sizing: border-box;
             list-style: none;
-            border-top: 0.3vw solid black;
-            border-bottom: 0.3vw solid #303030;
-            border-left: 0.3vw solid #303030;
-            border-right: 0.3vw solid #303030;
-            padding: 0.8vh;
             cursor: pointer;
             color: white;
+            padding: 1.4vh;
+            border-radius: 6vw;
             text-align: center;
             background-color: #4b4b4b;
-            background-clip: border-box;
-            font-size: 1vw;
-        }
-        .list-item:last-child {
-            border-bottom: 0.3vw solid black;;
+            font-size: 1.2vw;
+            margin-bottom: 2vh;
+            border: 0.15vw solid #1A1A1A;
+            font-weight: bold;
         }
         .list-item.active {
-            border-color: #1E90FF;
+            background-color: #1E90FF;
         }
         .list-item2 {
             box-sizing: border-box;
@@ -506,16 +505,16 @@
             }
             .button-28 {
             background-color: #5c5c5c;
-            border: 2px solid #1A1A1A;
-            border-radius: 15px;
+            border: 0.15vw solid #1A1A1A;
+            border-radius: 1vw;
             box-sizing: border-box;
             color: white;
             cursor: pointer;
             display: inline-block;
             font-size: 1vw;
             font-weight: bold;
-            height: 4.6%;
-            width: 55%;
+            padding: 1.4vh;
+            width: 80%;
             outline: none;
             text-align: center;
             transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
@@ -625,7 +624,7 @@
 <body>
     <div class="TopLay">
         <div class="TopMid1">
-            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 75%;">
+            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 10vw;">
         </div>
         <div id="notifPanel" style=" width: 50%; height: 60%; background-color: #4e4e4e; border: 0.2vw solid black; border-radius: 3%; display: flex; flex-direction: column; align-items: center; scale: 0; transition: scale 0.05s ease; position: fixed; z-index: 100;">
             <h2 style="font-size: 2vw; font-weight: bold; display: none;" id="notiTitle">New order available</h2>
