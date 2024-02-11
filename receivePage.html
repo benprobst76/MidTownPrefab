@@ -519,7 +519,6 @@
             text-align: center;
             transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
             }
-
             .button-28:disabled {
             pointer-events: none;
             }
@@ -529,6 +528,33 @@
             } 
             .button-28.active {
             background-color: #1E90FF;
+            transform: translateY(-2px);
+            } 
+            .button-29 {
+            background-color: #5c5c5c;
+            border: 0.15vw solid #ff0000;
+            border-radius: 1vw;
+            box-sizing: border-box;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 1vw;
+            font-weight: bold;
+            padding: 1.4vh;
+            width: 80%;
+            outline: none;
+            text-align: center;
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            } 
+            .button-29:disabled {
+            pointer-events: none;
+            }
+            .button-29:active {
+            background-color: #ff0000;
+            transform: translateY(-2px);
+            } 
+            .button-29.active {
+            background-color: #ff0000;
             transform: translateY(-2px);
             }  
             .quiz {
@@ -652,6 +678,7 @@
                 <label for="shB" class="swB" style="margin-left: 1vw;"></label>
                 <h1 style="font-size: 1vw; font-weight: bold; color: white; margin-top: 0.4vw;">Group By Sheet</h1>
             </div>
+            <button class="button-29" role="button" id="rmvAllCheck" style="justify-content: center; align-self: center; margin-top: 1vw; margin-bottom: 2vh;" onclick="rmvAllCheck();">Remove all checked parts</button>
         </div>
         <div class="MidLay" id="MidLay1" style="display: none;">
             <div id="partListContainer">
@@ -798,7 +825,6 @@
         var floorCh = false;
         let groupSort = true;
         let unitSort = false;
-        var delay = 600;
         var partSort = "";
         var firstL = 1;
         var alternate = false;
@@ -2399,8 +2425,7 @@ function generatePartId(part) {
                 const parentPartItem = checkButton.closest('.part-item');
                 setTimeout(() => {
                     delCheck(part, partItem);
-                }, delay);
-                delay += 100;
+                }, 600);
                 if (parentPartItem) {
                     parentPartItem.style.border = '2px solid green';
                 }
@@ -2424,6 +2449,61 @@ function generatePartId(part) {
             })
             .catch(error => {
             });
+        }
+
+        function rmvAllCheck() {
+            var sendDelPart = [];
+            var DelPart = [];
+            var delCol = [];
+            document.querySelectorAll('.part-item').forEach(element => {
+                if (element.style.border === '2px solid green') {
+                    const prt = JSON.parse(element.getAttribute('data-part-data'));
+                    sendDelPart.push(prt.uniqueID2);
+                    DelPart.push(element);
+                    if (element.parentNode.lastElementChild.tagName === 'BUTTON' && !delCol.includes(element.parentNode)) {
+                        delCol.push(element.parentNode);
+                    }
+                }
+            });
+            const jsonArray = sendDelPart.map(value => ({ uniqueID2: value }));
+            if (sendDelPart.length > 0) {
+                fetch(backendURL + "/delReceive", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonArray)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    if (text && text.trim() !== "") {
+                        return JSON.parse(text);
+                    } else {
+                        return { success: true };
+                    }
+                })
+                .then(data => {
+                    if(data.success) {
+                        DelPart.forEach(i => {
+                            i.remove();
+                        });
+                        delCol.forEach(i => {
+                            i.remove();
+                        });
+                        callrHis();
+                    } else {
+                        console.error("Error deleting parts:", data.errorMessage);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            }
         }
 
         function delCheck(part, y) {
@@ -2470,7 +2550,6 @@ function generatePartId(part) {
             }
             savedData = savedData.filter(item => item.uniqueID !== part.uniqueID);
             const jsonArray = matchingUniqueID2.map(value => ({ uniqueID2: value }));
-            console.log(jsonArray)
             // Now send this data with the POST request:
             fetch(backendURL + "/delReceive", {
                 method: 'POST',
@@ -2951,6 +3030,7 @@ setInterval(fetchAndDisplayData, 10000);
                 'dW',
                 'edgeA',
                 'edgeB',
+                'note',
             ];
             let isFirstItem = true;
             propertiesToDisplay.forEach(propKey => {

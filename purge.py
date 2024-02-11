@@ -1,8 +1,10 @@
 import json
 
 
-with open('history.json', 'r') as file:
+with open('mid222.json', 'r') as file:
     data = json.load(file)
+
+#data = [item for item in data if (item['worksite'] == "worksites3")]
 
 def fraction_to_decimal(frac=""):
     if not isinstance(frac, str) or not frac.strip():
@@ -24,37 +26,43 @@ def fraction_to_decimal(frac=""):
 
 for item in data:
     try:
-        mod_length = fraction_to_decimal(item['length'])
+        '''mod_length = fraction_to_decimal(item['length'])
 
-        if fraction_to_decimal(item['length']) > 10:
+        if fraction_to_decimal(item['length']) > 13:
             if fraction_to_decimal(item['length']) <= 120:
                 mod_length = 10
             if fraction_to_decimal(item['length']) <= 108:
                 mod_length = 9
             if fraction_to_decimal(item['length']) <= 96:
-                mod_length = 8         
+                mod_length = 8'''    
 
         add = 0
         add2 = 0
         mul = 0
 
         # Determine add based on edge1
-        if item['edge1'] == "Plain":
+        if item['edgeA'] == "Plain":
             add = 0
-        elif item['edge1'] == "Tapered":
+        elif item['edgeA'] == "Tapered":
             add = 1.75
-        elif item['edge1'] == "D200":
+        elif item['edgeA'] == "D200":
             add = 1.5
-        elif item['edge1'] == "Fabric":
+        elif item['edgeA'] == "Fabric":
+            add = 0
+        elif item['edgeA'] == "J-Bead":
             add = 0
 
         # Determine add2 based on edge2
-        if item['edge2'] == "Plain":
+        if item['edgeB'] == "Plain":
             add2 = 0
-        elif item['edge2'] == "Tapered":
+        elif item['edgeB'] == "Tapered":
             add2 = 1.75
-        elif item['edge2'] == "D200":
+        elif item['edgeB'] == "D200":
             add2 = 1.5
+        elif item['edgeB'] == "Fabric":
+            add2 = 0
+        elif item['edgeB'] == "J-Bead":
+            add2 = 0
 
         # Determine multiplier based on thickness
         if item['part'] == "part1":
@@ -132,14 +140,19 @@ for item in data:
                 mul = 28.75
             elif item['thickness'] == "5/8":
                 mul = 29.9
+        elif item['part'] == "part15":
+            if item['thickness'] == "1/2":
+                mul = 28.75
+            elif item['thickness'] == "5/8":
+                mul = 29.9
 
-        item['price'] = f"${(mul * mod_length + add + add2):.2f}"
+        item['price'] = f"${(mul * float(item['length2']) + add + add2):.2f}"
 
     except ValueError:
         pass
 
 # Save the modified data back to the JSON file
-with open('history.json', 'w') as file:
+with open('mid222.json', 'w') as file:
     json.dump(data, file, indent=4)
 
 print("JSON file has been updated!")
