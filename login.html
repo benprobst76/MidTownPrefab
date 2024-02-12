@@ -47,7 +47,6 @@
             color: #ffffff;
         }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 16%;">
@@ -68,20 +67,14 @@
 
                 var user = $('#username').val();
                 var password = $('#password').val();
-
-                $.ajax({
-                    url: backendURL + "/login99",
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ user: user, password: password }),
-                    success: function (data) {
-                        console.log("Success:", data);
-                        window.location.href = backendURL + data;
+ 
+                fetch(backendURL + "/login99", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
                     },
-                    error: function (error) {
-                        console.error("Error:", error);
-                    }
-                });          
+                    body: JSON.stringify({ user: user, password: password })
+                });        
             });
         });
     </script>

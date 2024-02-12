@@ -1124,6 +1124,11 @@ func retreiveHis(c *gin.Context) {
 }
 
 // ______________________________________________________________________________________________________________
+func recQuiz(c *gin.Context) {
+	c.HTML(200, "filterQuiz.html", gin.H{})
+}
+
+// ______________________________________________________________________________________________________________
 func dimensionToFloat(dim string) (float64, error) {
 	if dim == "" {
 		return 0, nil
@@ -1378,7 +1383,6 @@ func sortSize2(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	//console.log()
 	groupSize, err := strconv.Atoi(nbr.Nbr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid group size"})
@@ -2089,6 +2093,7 @@ func main() {
 	router.Use(cors.Default())
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
+	router.LoadHTMLFiles("./receivePage/filterQuiz.html")
 	router.GET("/", home)
 	router.POST("/login99", login)
 	authMiddleware := func(c *gin.Context) {
@@ -2185,6 +2190,7 @@ func main() {
 	router.GET("/viewHis1", authMiddleware2, viewHis1)
 	router.GET("/viewHis2", authMiddleware2, viewHis2)
 	router.POST("/retreiveHis", authMiddleware2, retreiveHis)
+	router.GET("/recQuiz", authMiddleware2, recQuiz)
 	router.POST("/sortSize1", authMiddleware2, sortSize1)
 	router.POST("/sortSize2", authMiddleware2, sortSize2)
 	router.POST("/savePrst", authMiddleware2, savePrst)
