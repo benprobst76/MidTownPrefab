@@ -1,0 +1,687 @@
+<head>
+    <title>Order Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="icon" href="favicon" type="image/x-icon">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #535353;
+            justify-content: center;
+            width: 100%;
+            overflow: hidden;
+        }
+        @media only screen and (max-width: 1000px) {
+            body {
+                overflow: auto;
+            }
+        }
+        .TopLay {
+            background-color: #303030;
+            width: 100%;
+            height: 10vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        .TopMid1 {
+            width: 15%;
+            height: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: solid black;
+        }
+        .TopMid2 {
+            width: 70%;
+            height: 10vh;
+            display: flex;
+            align-items: center;
+        }
+        .TopMid3 {
+            width: 15%;
+            height: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: solid black;
+        }
+        .TopMid3 h2 {
+            color: white;
+            font-size: 1.5vw;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .Mid {
+            display: flex;
+            flex-direction: row;
+        }
+/*____________________________________________________________________________________________________________*/
+        .LeftLay {
+            background-color: #303030;
+            width: 15%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border-top: solid black;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .LeftLay ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-self: center;
+            justify-content: center;
+            width: 90%;
+        }
+        .list-item {
+            list-style: none;
+            cursor: pointer;
+            color: white;
+            padding: 1.4vh;
+            border-radius: 1.2vw;
+            text-align: center;
+            background-color: #4b4b4b;
+            font-size: 1.2vw;
+            margin-bottom: 2vh;
+            border: 0.15vw solid #1A1A1A;
+            font-weight: bold;
+        }
+        .list-item.active {
+            background-color: #1E90FF;
+        }
+        #floorContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+        #unitContainer input {
+          padding: 8px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          width: 100%;  /* or any desired width */
+        }
+/*____________________________________________________________________________________________________________*/
+        .Mid2 {
+          width: 70%;
+          height: 90vh;
+          display: flex;
+          background-color: #1f1f1f;
+          border: solid black;
+        }
+        .Mid3 {
+          position: relative;
+        }
+        .MidLay {
+            background-color: #1f1f1f;
+            width: 69.5vw;
+            height: 90vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            overflow-x: auto;
+            position: absolute;
+            transition: scale 0.2s ease-in-out;
+            z-index: 1;
+        }
+        .MidLayy {
+            background-color: #1f1f1f;
+            width: 69.5vw;
+            height: 90vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 1vw;
+            position: absolute;
+            scale: 0;
+            transition: scale 0.2s ease-in-out;
+            overflow-y: auto;
+        }
+        .image-box {
+            width: 20vw;
+            height: 28vw;
+            margin: 0.8vw;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: rgba(0, 0, 0, 0.8) 0 8px 15px;
+        }
+        .image-box img {
+            width: 100%;
+            height: 80%;
+            
+        }
+        .image-column {
+            text-align: center;
+            margin-right: 4vw;
+        }
+        .image-column img {
+            width: 22vw;
+            height: 28vw;
+        }
+        @media only screen and (max-height: 500px) {
+          #pictureForm {
+            margin-top: 30vh;
+          }
+        }
+        .form-group {
+            display: flex;
+            align-items: center; /* Vertically align input boxes with the submit button */
+            width: auto;
+            height: auto;
+            margin-bottom: 0.4vw;
+            font-size: 1.2vw;
+        }
+        .form-group label {
+            margin-right: 1vw;
+            text-align: right;
+            color: white;
+        }
+        .form-group input {
+            width: 10vw;
+            font-size: 1vw;
+            height: 2vw;
+        }
+        @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+          .form-group input {
+            width: 10vw;
+            font-size: 1vw;
+            height: 1.5vw;
+        }
+        }
+        .form-group select {
+            height: 2vw;
+            font-size: 1vw;
+            border: none;
+            background-color: transparent;
+        }
+        @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+          .form-group select {
+            height: 1.5vw;
+            font-size: 1vw;
+            border: none;
+            background-color: transparent;
+        }
+        }
+        .form-group2 {
+            display: flex;
+            align-items: center; /* Vertically align input boxes with the submit button */
+            margin-bottom: 0.4vw;
+        }
+        .form-group2 label {
+            min-width: 3vw;
+            margin-right: 1vw;
+            text-align: right;
+            color: white;
+        }
+        .form-group2 input {
+            width: 1.5vw; /* Make the input boxes expand to fill the available space */
+            font-size: 1.2vw;
+        }
+        .submit-btn {
+            margin-top: 1.2vw; /* Add some space between forms and the submit button */
+            width: 100%; /* Set the width of the submit button to match the form boxes */
+            text-align: center;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 0.4vw;
+            cursor: pointer;
+            margin: 0.4vw 0;
+            padding: 0.4vw 1.2vw;
+            font-size: 1vw;
+        }
+        .rstSheet {
+          background-color: #1E90FF;
+          color: #fff;
+          cursor: pointer;
+          font-size: 1vw;
+          height: 1.8vw;
+          width: 8.5vw;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 0.4vw;
+          margin-left: 1vw;
+          transform: translateX(-70%);
+          } 
+          .answer-btn {
+            border: 0.25vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 1.5vh 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+          }  
+          @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+            .answer-btn {
+              border: 0.2vw solid #fff;
+              background-color: transparent;
+              color: #fff;
+              padding: 1vh 0.8vw;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+              font-size: 1vw;
+            }
+        }      
+        .answer2-btn {
+            border: 0.25vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 1.5vh 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+            margin: 0.3vw;
+          }        
+        @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+          .answer2-btn {
+            border: 0.2vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 1vh 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+            margin: 0.3vw;
+          }
+        }
+        .answer1-btn {
+            border: 0.25vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 1.5vh 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+            margin: 0.3vw;
+          }        
+        @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+          .answer1-btn {
+            border: 0.2vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 1vh 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+            margin: 0.3vw;
+          }
+        }
+        .custm {
+            border: 0.25vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 1.1vw 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+          }        
+        @media only screen and (min-width: 1300px) and (max-width: 10000px) {
+          .custm {
+            border: 0.2vw solid #fff;
+            background-color: transparent;
+            color: #fff;
+            padding: 0.4vw 0.8vw;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1vw;
+          }
+        }
+        .answer-btn.selected {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.6vw;
+        }
+
+        .header {
+            font-size: 3vw;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 2vh;
+            width: 22vw;
+        }
+/*____________________________________________________________________________________________________________*/
+        .RightLay {
+            background-color: #303030;
+            width: 15%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-top: solid black;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .details {
+            background-color: #1d1d1d;
+            box-sizing: border-box;
+            border-bottom: 0.15vw solid black;
+        }
+        .details div {
+            display: flex;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #555555;
+            margin: 5px auto;
+            border-radius: 4px;
+            position: relative;
+        }
+
+    .progress-bar {
+        width: 1%;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        background-color: #1E90FF;
+        border-radius: 4px;
+        overflow: hidden;
+        z-index: 1;
+    }
+    .upButton {
+        color: #fff;
+        background-color: #1E90FF;
+        cursor: pointer;
+        height: 1.8vw;
+        font-size: 1.2vw;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 22vw;
+    }
+
+    #listContainer2 {
+      width: 100%;
+    }
+
+    .list-item-floor {
+        cursor: pointer;
+        background-color: #3f3f3f;
+        display: flex;
+        justify-content: center;
+        font-size: 1.6vw;
+        color: white;
+        width: 100%;
+        margin-bottom: 1vh;
+        border-top: 2px solid black;
+        border-bottom: 2px solid black;
+        height: 2.6vw;
+        align-items: center;
+        position: relative;
+    }
+
+    .list-item-unit {
+        cursor: pointer;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-self: center;
+        font-size: 1.4vw;
+        margin-top: 0;
+        transition: margin 0.3s ease;
+        border: 0.15vw solid black;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        width: 92%;
+        margin-left: auto;
+        margin-right: auto;
+        height: 2.6vw;
+        align-items: center;
+    }
+
+    .list-item-part {
+        cursor: pointer;
+        padding: 5px;
+        background-color: #1d1d1d;
+        display: flex;
+        justify-content: center;
+        align-self: center;
+        text-align: center; 
+        color: white;
+        font-size: 1.4vw;
+    }
+
+    .expandable-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out, margin 0.3s ease;
+    }
+
+    .expanded {
+        max-height: 10000px;
+        transition: max-height 0.3s ease-in;
+    }
+    .expanded2 {
+        margin-top: 2vh;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .expanded3 {
+        max-height: 10000px;
+        margin-bottom: 2vh;
+    }
+
+    .margin-top {
+        margin-top: 5vh;
+    }
+    .container-2 {
+        border: none;
+        width: 92%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .container-23 {
+      border: solid 2px rgb(0, 0, 0);
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .theArrow {
+      display: inline-block;
+      transition: transform 0.5s ease;
+      position: absolute;
+      top: 8%;
+      right: 12%;
+      scale: 1.7;
+    }
+    .theArrow-rotated {
+        transform: rotate(90deg); /* Rotates the arrow to point downwards */
+    }
+    .radio {
+      display: block;
+      cursor: pointer;
+      user-select: none;
+      text-align: left;
+    }
+
+    .radio + .radio {
+      margin-top: 12px;
+    }
+
+    .radio input {
+      display: none;
+    }
+
+    .radio input + span {
+      display: inline-block;
+      position: relative;
+      padding-left: 30px;
+      font-size: 1.6vw;
+    }
+
+    .radio input + span:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      border-radius: 50%;
+      margin-right: 5px;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #000000;
+      background: #fff;
+    }
+
+    .radio input + span:after {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 16px;
+      background: #222;
+      position: absolute;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      opacity: 0;
+      transform: scale(0, 0);
+      transition: all .2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+    }
+
+    .radio input:checked + span:after {
+      opacity: 1;
+      transform: scale(1, 1);
+    }
+    :root {
+      --hue: 223;
+      --bg: hsl(var(--hue),10%,90%);
+      --fg: hsl(var(--hue),10%,10%);
+      --primary: hsl(var(--hue),90%,55%);
+      --trans-dur: 0.3s;
+      font-size: calc(16px + (20 - 16) * (100vw - 320px) / (1280 - 320));
+    }
+    .preloader {
+      text-align: center;
+      max-width: 20em;
+      width: 100%;
+    }
+    .preloader__text {
+      position: relative;
+      height: 1.5em;
+    }
+    .preloader__msg {
+      animation: msg 0.3s 13.7s linear forwards;
+      position: absolute;
+      width: 100%;
+      color: white;
+    }
+    .cart {
+      display: block;
+      margin: 0 auto 1.5em auto;
+      width: 8em;
+      height: 8em;
+    }
+    .cart__lines,
+    .cart__top,
+    .cart__wheel1,
+    .cart__wheel2,
+    .cart__wheel-stroke {
+      animation: cartLines 2s ease-in-out infinite;
+    }
+    .cart__lines {
+      stroke: var(--primary);
+    }
+    .cart__top {
+      animation-name: cartTop;
+    }
+    .cart__wheel1 {
+      animation-name: cartWheel1;
+      transform: rotate(-0.25turn);
+      transform-origin: 43px 111px;
+    }
+    .cart__wheel2 {
+      animation-name: cartWheel2;
+      transform: rotate(0.25turn);
+      transform-origin: 102px 111px;
+    }
+    .cart__wheel-stroke {
+      animation-name: cartWheelStroke
+    }
+    .cart__track {
+      stroke: hsla(var(--hue),10%,10%,0.1);
+      transition: stroke var(--trans-dur);
+    }
+
+    /* Dark theme */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: hsl(var(--hue),10%,10%);
+        --fg: hsl(var(--hue),10%,90%);
+      }
+      .cart__track {
+        stroke: hsla(var(--hue),10%,90%,0.1);
+      }
+    }
+
+    /* Animations */
+    @keyframes cartLines {
+      from,
+      to {
+        opacity: 0;
+      }
+      8%,
+      92% {
+        opacity: 1;
+      }
+    }
+    @keyframes cartTop {
+      from {
+        stroke-dashoffset: -338;
+      }
+      50% {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: 338;
+      }
+    }
+    @keyframes cartWheel1 {
+      from {
+        transform: rotate(-0.25turn);
+      }
+      to {
+        transform: rotate(2.75turn);
+      }
+    }
+    @keyframes cartWheel2 {
+      from {
+        transform: rotate(0.25turn);
+      }
+      to {
+        transform: rotate(3.25turn);
+      }
+    }
+    @keyframes cartWheelStroke {
+      from,
+      to {
+        stroke-dashoffset: 81.68;
+      }
+      50% {
+        stroke-dashoffset: 40.84;
+      }
+    }
+
+    </style>
+</head>

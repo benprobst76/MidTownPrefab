@@ -13,9 +13,6 @@ import (
 	"strings"
 	"time"
 
-	"database/sql"
-	"log"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -137,7 +134,7 @@ var sheetCounter int
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func loadCred() {
-	file, err := os.Open("order_login.json")
+	file, err := os.Open("json/order_login.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			order_login = []Cred{}
@@ -149,7 +146,7 @@ func loadCred() {
 		panic(err)
 	}
 	file.Close()
-	file, err = os.Open("receive_login.json")
+	file, err = os.Open("json/receive_login.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			receive_login = []Cred{}
@@ -161,7 +158,7 @@ func loadCred() {
 		panic(err)
 	}
 	file.Close()
-	file, err = os.Open("admin_login.json")
+	file, err = os.Open("json/admin_login.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			admin_login = []Cred{}
@@ -177,14 +174,38 @@ func loadCred() {
 
 // ______________________________________________________________________________________________________________
 func home(c *gin.Context) {
-	data, err := os.ReadFile("login.html")
+	data1, err := os.ReadFile("loginPage/head.html")
 	if err != nil {
 		return
 	}
-	loging_page := string(data)
-
+	data2, err := os.ReadFile("loginPage/body.html")
+	if err != nil {
+		return
+	}
+	data3, err := os.ReadFile("loginPage/script.js")
+	if err != nil {
+		return
+	}
+	full := "<!DOCTYPE html><html>" + string(data1) + string(data2) + "<script>" + string(data3) + "</script>" + "</html>"
 	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, loging_page)
+	c.String(http.StatusOK, full)
+}
+
+// ______________________________________________________________________________________________________________
+func login98(c *gin.Context) {
+	data1, err := os.ReadFile("loginPage/body.html")
+	if err != nil {
+		return
+	}
+	data2, err := os.ReadFile("loginPage/head.html")
+	if err != nil {
+		return
+	}
+	data3, err := os.ReadFile("loginPage/script.js")
+	if err != nil {
+		return
+	}
+	c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3)})
 }
 
 // ______________________________________________________________________________________________________________
@@ -196,21 +217,51 @@ func login(c *gin.Context) {
 	}
 	for _, cred := range order_login {
 		if cred.User == password.User && cred.Password == password.Password {
-			c.SetCookie("username4221", password.User, 0, "/", "", false, true)
-			c.String(200, "/loginOrder")
+			c.SetCookie("username4221", password.User, 0, "/", "", false, false)
+			data1, err := os.ReadFile("orderPage/body.html")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			data2, err := os.ReadFile("orderPage/head.html")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			data3, err := os.ReadFile("orderPage/script.js")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3), "/loginOrder"})
 			return
 		}
 	}
 	for _, cred := range receive_login {
 		if cred.User == password.User && cred.Password == password.Password {
-			c.SetCookie("username7834", password.User, 0, "/", "", false, true)
-			c.String(200, "/loginReceiver")
+			c.SetCookie("username7834", password.User, 0, "/", "", false, false)
+			data1, err := os.ReadFile("receivePage/body.html")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			data2, err := os.ReadFile("receivePage/head.html")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			data3, err := os.ReadFile("receivePage/script.js")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3), "/loginReceiver"})
 			return
 		}
 	}
 	for _, cred := range admin_login {
 		if cred.User == password.User && cred.Password == password.Password {
-			c.SetCookie("username0623", password.User, 0, "/", "", false, true)
+			c.SetCookie("username0623", password.User, 0, "/", "", false, false)
 			c.String(200, "/loginAdmin")
 			return
 		}
@@ -220,29 +271,45 @@ func login(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func loginOrder(c *gin.Context) {
-	data, err := os.ReadFile("orderPage.html")
+	data1, err := os.ReadFile("orderPage/head.html")
 	if err != nil {
 		return
 	}
-	worksite_page := string(data)
+	data2, err := os.ReadFile("orderPage/body.html")
+	if err != nil {
+		return
+	}
+	data3, err := os.ReadFile("orderPage/script.js")
+	if err != nil {
+		return
+	}
+	full := "<!DOCTYPE html><html>" + string(data1) + "<script src=\"https://unpkg.com/htmx.org@1.9.10\"></script>" + string(data2) + "<script>" + string(data3) + "</script>" + "</html>"
 	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, worksite_page)
+	c.String(http.StatusOK, full)
 }
 
 // ______________________________________________________________________________________________________________
 func loginReceiver(c *gin.Context) {
-	data, err := os.ReadFile("receivePage.html")
+	data1, err := os.ReadFile("receivePage/head.html")
 	if err != nil {
 		return
 	}
-	worksite_page := string(data)
+	data2, err := os.ReadFile("receivePage/body.html")
+	if err != nil {
+		return
+	}
+	data3, err := os.ReadFile("receivePage/script.js")
+	if err != nil {
+		return
+	}
+	full := "<!DOCTYPE html><html>" + string(data1) + string(data2) + "<script>" + string(data3) + "</script>" + "</html>"
 	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, worksite_page)
+	c.String(http.StatusOK, full)
 }
 
 // ______________________________________________________________________________________________________________
 func loginAdmin(c *gin.Context) {
-	data, err := os.ReadFile("adminPanel.html")
+	data, err := os.ReadFile("adminPage/adminPanel.html")
 	if err != nil {
 		return
 	}
@@ -265,7 +332,7 @@ func addUser(c *gin.Context) {
 		return
 	}
 	order_login = append(order_login, nUsr)
-	files := "order_login.json"
+	files := "json/order_login.json"
 	file, err := os.Create(files)
 	if err != nil {
 		panic(err)
@@ -291,7 +358,7 @@ func delUser(c *gin.Context) {
 			break
 		}
 	}
-	files := "order_login.json"
+	files := "json/order_login.json"
 	file, err := os.Create(files)
 	if err != nil {
 		panic(err)
@@ -317,7 +384,7 @@ func addUser2(c *gin.Context) {
 		return
 	}
 	receive_login = append(receive_login, nUsr)
-	files := "receive_login.json"
+	files := "json/receive_login.json"
 	file, err := os.Create(files)
 	if err != nil {
 		panic(err)
@@ -344,7 +411,7 @@ func delUser2(c *gin.Context) {
 			break
 		}
 	}
-	files := "receive_login.json"
+	files := "json/receive_login.json"
 	file, err := os.Create(files)
 	if err != nil {
 		panic(err)
@@ -365,7 +432,7 @@ func getCurUser(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func getWorksites(c *gin.Context) {
-	file, err := os.Open("worksites.json")
+	file, err := os.Open("json/worksites.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			worksites = []Work{}
@@ -389,7 +456,7 @@ func addWorksite(c *gin.Context) {
 	}
 	tt := []Flor{}
 	worksites = append(worksites, nWork)
-	files := string(nWork.Worksite) + "_floors.json"
+	files := "json/" + string(nWork.Worksite) + "_floors.json"
 	file, err := os.Create(files)
 	if err != nil {
 		panic(err)
@@ -405,7 +472,7 @@ func addWorksite(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func saveWorksite() {
-	file, err := os.Create("worksites.json")
+	file, err := os.Create("json/worksites.json")
 	if err != nil {
 		panic(err)
 	}
@@ -429,7 +496,7 @@ func delWorksite(c *gin.Context) {
 			break
 		}
 	}
-	files := string(dWork.Worksite) + "_floors.json"
+	files := "json/" + string(dWork.Worksite) + "_floors.json"
 	fmt.Println(files)
 	err := os.Remove(files)
 	if err != nil {
@@ -459,8 +526,8 @@ func editWorksite(c *gin.Context) {
 			break
 		}
 	}
-	oldName := string(EditW.OldWorksite) + "_floors.json"
-	newName := string(EditW.Worksite) + "_floors.json"
+	oldName := "json/" + string(EditW.OldWorksite) + "_floors.json"
+	newName := "json/" + string(EditW.Worksite) + "_floors.json"
 	fmt.Println(oldName)
 	fmt.Println(newName)
 	err := os.Rename(oldName, newName)
@@ -484,7 +551,7 @@ func selectWorksite(c *gin.Context) {
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func openFloor() {
-	files := string(Cinfo.Worksite) + "_floors.json"
+	files := "json/" + string(Cinfo.Worksite) + "_floors.json"
 	fmt.Println(files)
 	file, err := os.Open(files)
 	if err != nil {
@@ -526,7 +593,7 @@ func addFloor(c *gin.Context) {
 	openFloor()
 	floors = append(floors, nFloor2)
 	tt := []Unt{}
-	files := string(Cinfo.Worksite) + "_" + string(nFloor.Floor) + "_units.json"
+	files := "json/" + string(Cinfo.Worksite) + "_" + string(nFloor.Floor) + "_units.json"
 	file, err := os.Create(files)
 	if err != nil {
 		panic(err)
@@ -543,7 +610,7 @@ func addFloor(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func saveFloor() {
-	files := string(Cinfo.Worksite) + "_floors.json"
+	files := "json/" + string(Cinfo.Worksite) + "_floors.json"
 	fmt.Println(files)
 	file, err := os.Create(files)
 	if err != nil {
@@ -578,7 +645,7 @@ func delFloor(c *gin.Context) {
 			break
 		}
 	}
-	files := string(Cinfo.Worksite) + "_" + string(dFloor.Floor) + "_units.json"
+	files := "json/" + string(Cinfo.Worksite) + "_" + string(dFloor.Floor) + "_units.json"
 	err := os.Remove(files)
 	if err != nil {
 		return
@@ -611,8 +678,8 @@ func editFloor(c *gin.Context) {
 			break
 		}
 	}
-	oldName := string(Cinfo.Worksite) + "_" + string(EditF.OldFloor) + "_units.json"
-	newName := string(Cinfo.Worksite) + "_" + string(EditF.Floor) + "_units.json"
+	oldName := "json/" + string(Cinfo.Worksite) + "_" + string(EditF.OldFloor) + "_units.json"
+	newName := "json/" + string(Cinfo.Worksite) + "_" + string(EditF.Floor) + "_units.json"
 	fmt.Println(oldName)
 	fmt.Println(newName)
 	err := os.Rename(oldName, newName)
@@ -636,7 +703,7 @@ func selectFloor(c *gin.Context) {
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func openUnit() {
-	files := string(Cinfo.Worksite) + "_" + string(Cinfo.Floor) + "_units.json"
+	files := "json/" + string(Cinfo.Worksite) + "_" + string(Cinfo.Floor) + "_units.json"
 	fmt.Println(files)
 	file, err := os.Open(files)
 	if err != nil {
@@ -684,7 +751,7 @@ func addUnit(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func saveUnit() {
-	files := string(Cinfo.Worksite) + "_" + string(Cinfo.Floor) + "_units.json"
+	files := "json/" + string(Cinfo.Worksite) + "_" + string(Cinfo.Floor) + "_units.json"
 	fmt.Println(files)
 	file, err := os.Create(files)
 	if err != nil {
@@ -782,7 +849,7 @@ func getPart(c *gin.Context) {
 // ______________________________________________________________________________________________________________
 func openO() {
 	orders = []Cfo{}
-	file, err := os.Open("order.json")
+	file, err := os.Open("json/order.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			orders = []Cfo{}
@@ -798,7 +865,7 @@ func openO() {
 
 // ______________________________________________________________________________________________________________
 func saveO() {
-	file, err := os.Create("order.json")
+	file, err := os.Create("json/order.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1037,7 +1104,7 @@ func delReceive(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func openHis() {
-	file, err := os.Open("history.json")
+	file, err := os.Open("json/history.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			histories = []Cfo{}
@@ -1053,7 +1120,7 @@ func openHis() {
 
 // ______________________________________________________________________________________________________________
 func saveHis() {
-	file, err := os.Create("history.json")
+	file, err := os.Create("json/history.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1066,7 +1133,7 @@ func saveHis() {
 
 // ______________________________________________________________________________________________________________
 func viewHis1(c *gin.Context) {
-	data, err := os.ReadFile("history.html")
+	data, err := os.ReadFile("adminPage/history.html")
 	if err != nil {
 		return
 	}
@@ -1125,7 +1192,12 @@ func retreiveHis(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func recQuiz(c *gin.Context) {
-	c.HTML(200, "filterQuiz.html", gin.H{})
+	data, err := os.ReadFile("receivePage/filterQuiz.js")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	c.JSON(http.StatusOK, string(data))
 }
 
 // ______________________________________________________________________________________________________________
@@ -1527,14 +1599,24 @@ func sortSize2(c *gin.Context) {
 		}
 		m[cfo.Sheet]++
 	}
+	var newType string
+	oldType := make(map[string]bool)
 	var summaries []SheetSummary
-	for key, count := range countMap {
-		summaries = append(summaries, SheetSummary{
-			Type:      key.Type,
-			Thickness: key.Thickness,
-			Length:    key.Length,
-			Count:     count,
-		})
+	for key0, _ := range countMap {
+		newType = key0.Type
+		if !oldType[key0.Type] {
+			for key, count := range countMap {
+				if key.Type == newType {
+					summaries = append(summaries, SheetSummary{
+						Type:      key.Type,
+						Thickness: key.Thickness,
+						Length:    key.Length,
+						Count:     count,
+					})
+				}
+			}
+		}
+		oldType[key0.Type] = true
 	}
 	type ResponseData struct {
 		PartsWithSheets []Cfo
@@ -1563,7 +1645,7 @@ func savePrst(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	file, err := os.Open("userDB.json")
+	file, err := os.Open("json/userDB.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1594,7 +1676,7 @@ func savePrst(c *gin.Context) {
 		newDB.Prst = append(newDB.Prst, preDB)
 		db = append(db, newDB)
 	}
-	file, err = os.Create("userDB.json")
+	file, err = os.Create("json/userDB.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1624,7 +1706,7 @@ func getPrst(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	file, err := os.Open("userDB.json")
+	file, err := os.Open("json/userDB.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1656,7 +1738,7 @@ func rmPrst(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	file, err := os.Open("userDB.json")
+	file, err := os.Open("json/userDB.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1677,7 +1759,7 @@ func rmPrst(c *gin.Context) {
 			db[i].Prst = updatedPrst
 		}
 	}
-	file, err = os.Create("userDB.json")
+	file, err = os.Create("json/userDB.json")
 	if err != nil {
 		panic(err)
 	}
@@ -1852,7 +1934,7 @@ func mHis(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func mHis2(c *gin.Context) {
-	data, err := os.ReadFile("monthHis.html")
+	data, err := os.ReadFile("adminPage/monthHis.html")
 	if err != nil {
 		return
 	}
@@ -1991,7 +2073,7 @@ func unitProgress3(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func adminUser(c *gin.Context) {
-	data, err := os.ReadFile("adminUser.html")
+	data, err := os.ReadFile("adminPage/adminUser.html")
 	if err != nil {
 		return
 	}
@@ -2002,7 +2084,7 @@ func adminUser(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func adminHistory(c *gin.Context) {
-	data, err := os.ReadFile("adminHistory.html")
+	data, err := os.ReadFile("adminPage/adminHistory.html")
 	if err != nil {
 		return
 	}
@@ -2013,75 +2095,13 @@ func adminHistory(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func adminWorksite(c *gin.Context) {
-	data, err := os.ReadFile("adminWorksite.html")
+	data, err := os.ReadFile("adminPage/adminWorksite.html")
 	if err != nil {
 		return
 	}
 	floor2_page := string(data)
 	c.Header("Content-Type", "text/html")
 	c.String(http.StatusOK, floor2_page)
-}
-
-func getTest(c *gin.Context) {
-	data, err := os.ReadFile("testt.html")
-	if err != nil {
-		return
-	}
-	test_page := string(data)
-	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, test_page)
-}
-
-func testt(c *gin.Context) {
-	type dataStruct struct {
-		User     string `json:"user"`
-		Worksite string `json:"worksite"`
-		Floor    string `json:"floor"`
-		Unit     string `json:"unit"`
-		Part     string `json:"part"`
-	}
-	var data dataStruct
-	if err := c.BindJSON(&data); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	fmt.Println(data)
-
-	db, err := sql.Open("sqlite3", "mydb.sqlite")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	// Create a table
-	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT)")
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
-
-	// Insert data
-	statement, err = db.Prepare("INSERT INTO people (firstname, lastname) VALUES (?, ?)")
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec("John", "Doe")
-
-	// Query data
-	rows, err := db.Query("SELECT id, firstname, lastname FROM people")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var id int
-		var firstname, lastname string
-		rows.Scan(&id, &firstname, &lastname)
-		log.Println(id, firstname, lastname)
-	}
-
-	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
@@ -2093,8 +2113,8 @@ func main() {
 	router.Use(cors.Default())
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
-	router.LoadHTMLFiles("./receivePage/filterQuiz.html")
 	router.GET("/", home)
+	router.GET("/login98", login98)
 	router.POST("/login99", login)
 	authMiddleware := func(c *gin.Context) {
 		// Read the username from the cookie
@@ -2143,8 +2163,6 @@ func main() {
 		}
 		Cusername = username
 	}
-	router.GET("/getTest", getTest)
-	router.POST("/testt", testt)
 	router.GET("/loginOrder", authMiddleware, loginOrder)
 	router.GET("/loginReceiver", authMiddleware2, loginReceiver)
 	router.GET("/loginAdmin", authMiddleware3, loginAdmin)
@@ -2200,70 +2218,70 @@ func main() {
 	router.POST("/unitProgress2", authMiddleware, unitProgress2)
 	router.GET("/unitProgress3", authMiddleware, unitProgress3)
 	router.GET("/image1", func(c *gin.Context) {
-		c.File("./image1.jpg")
+		c.File("./img/parts/image1.jpg")
 	})
 	router.GET("/image2", func(c *gin.Context) {
-		c.File("./image2.jpg")
+		c.File("./img/parts/image2.jpg")
 	})
 	router.GET("/image3", func(c *gin.Context) {
-		c.File("./image3.jpg")
+		c.File("./img/parts/image3.jpg")
 	})
 	router.GET("/image4", func(c *gin.Context) {
-		c.File("./image4.jpg")
+		c.File("./img/parts/image4.jpg")
 	})
 	router.GET("/image5", func(c *gin.Context) {
-		c.File("./image5.jpg")
+		c.File("./img/parts/image5.jpg")
 	})
 	router.GET("/image6", func(c *gin.Context) {
-		c.File("./image6.jpg")
+		c.File("./img/parts/image6.jpg")
 	})
 	router.GET("/image7", func(c *gin.Context) {
-		c.File("./image7.jpg")
+		c.File("./img/parts/image7.jpg")
 	})
 	router.GET("/image8", func(c *gin.Context) {
-		c.File("./image8.jpg")
+		c.File("./img/parts/image8.jpg")
 	})
 	router.GET("/image9", func(c *gin.Context) {
-		c.File("./image9.jpg")
+		c.File("./img/parts/image9.jpg")
 	})
 	router.GET("/image10", func(c *gin.Context) {
-		c.File("./image10.jpg")
+		c.File("./img/parts/image10.jpg")
 	})
 	router.GET("/image11", func(c *gin.Context) {
-		c.File("./image11.jpg")
+		c.File("./img/parts/image11.jpg")
 	})
 	router.GET("/image12", func(c *gin.Context) {
-		c.File("./image12.jpg")
+		c.File("./img/parts/image12.jpg")
 	})
 	router.GET("/image13", func(c *gin.Context) {
-		c.File("./image13.jpg")
+		c.File("./img/parts/image13.jpg")
 	})
 	router.GET("/image14", func(c *gin.Context) {
-		c.File("./image14.jpg")
+		c.File("./img/parts/image14.jpg")
 	})
 	router.GET("/image15", func(c *gin.Context) {
-		c.File("./image15.jpg")
+		c.File("./img/parts/image15.jpg")
 	})
 	router.GET("/dwnl", func(c *gin.Context) {
-		c.File("./dwnl.PNG")
+		c.File("./img/other/dwnl.PNG")
 	})
 	router.GET("/favicon", func(c *gin.Context) {
-		c.File("./midTlogo.png")
+		c.File("./img/other/midTlogo.png")
 	})
 	router.GET("/fscreen", func(c *gin.Context) {
-		c.File("./Fscreen.PNG")
+		c.File("./img/other/Fscreen.PNG")
 	})
 	router.GET("/padlockUN", func(c *gin.Context) {
-		c.File("./padlock2.PNG")
+		c.File("./img/other/padlock2.PNG")
 	})
 	router.GET("/padlockLO", func(c *gin.Context) {
-		c.File("./padlock1.PNG")
+		c.File("./img/other/padlock1.PNG")
 	})
 	router.GET("/bell1", func(c *gin.Context) {
-		c.File("./bell1.PNG")
+		c.File("./img/other/bell1.PNG")
 	})
 	router.GET("/bell2", func(c *gin.Context) {
-		c.File("./bell2.PNG")
+		c.File("./img/other/bell2.PNG")
 	})
 	router.POST("/uploadIMG", func(c *gin.Context) {
 		file, _ := c.FormFile("image")
@@ -2273,7 +2291,7 @@ func main() {
 			})
 			return
 		}
-		if err := c.SaveUploadedFile(file, file.Filename); err != nil {
+		if err := c.SaveUploadedFile(file, "./img/uploadedIMG/"+file.Filename); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Unable to save the file",
 			})
@@ -2292,7 +2310,7 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 			return
 		}
-		imageData, err := os.ReadFile(imageFilePath.Image)
+		imageData, err := os.ReadFile("./img/uploadedIMG/" + imageFilePath.Image)
 		if err != nil {
 			c.String(http.StatusInternalServerError, "Internal Server Error")
 			return
@@ -2307,7 +2325,6 @@ func main() {
 		default:
 			contentType = "application/octet-stream"
 		}
-		fmt.Println(imageFilePath.Image+":", contentType)
 		c.Data(http.StatusOK, contentType, imageData)
 	})
 	router.POST("/rmCook", func(c *gin.Context) {
