@@ -91,6 +91,8 @@ var actualData = {};
 var imgArray = {};
 var ccusttm = { name: false, data: null }
 var errFabr = false;
+var imgCinfArray = [];
+var onccee = false;
 
 function generateRandomString(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -105,19 +107,80 @@ function triggerFileInput() {
     fileInput.click();
 }
 function handleFileSelect() {
+  if (imgCinfArray.length === 0) {
   const fileInput = document.getElementById('fileInput');
   const file = fileInput.files[0];
   if (!file) return;
-  let newFormData = new FormData();
+  var reader = new FileReader();
   randomFilename = `${generateRandomString(16)}${file.name.substring(file.name.lastIndexOf('.'))}`;
+  reader.readAsDataURL(file);
+  let newFormData = new FormData();
   const newFile = new File([file], randomFilename, {
       type: file.type,
   });
   newFormData.append('image', newFile);
   formData = newFormData;
+  reader.onload = function(e) {
+    if (!onccee) {
+      var swiper = new Swiper('.mySwiper', {
+        spaceBetween: 5,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        touchRatio: 1,
+        slideToClickedSlide: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      });
+    }
+    onccee = true;
+    var newIMGDIV = document.createElement('div');
+    var newIMG = document.createElement('img');
+    var delBut = document.createElement('button');
+    delBut.innerText = 'Delete';
+    delBut.style.position = 'absolute';
+    delBut.style.top = '1em';
+    delBut.style.left= '50%';
+    delBut.style.transform = 'translateX(-50%)';
+    delBut.Cinf = randomFilename;
+    delBut.Form = formData;
+    delBut.addEventListener('click', function() {
+      var slideIndex = Array.from(newIMGDIV.parentNode.children).indexOf(newIMGDIV);
+      newIMGDIV.remove();
+      if (slideIndex > 0) {
+          swiper.slideTo(slideIndex - 1);
+      }
+      swiper.update();
+      const cinfIndex = imgCinfArray.indexOf(this.Cinf);
+      if (cinfIndex > -1) imgCinfArray.splice(cinfIndex, 1);
+      delete imgArray[randomFilename];
+    });
+    newIMGDIV.className = 'swiper-slide';
+    newIMGDIV.style.position = 'relative';
+    newIMG.src = e.target.result;
+    newIMGDIV.appendChild(newIMG);
+    newIMGDIV.appendChild(delBut);
+    document.getElementById('IMGtoAdd').appendChild(newIMGDIV);
+    
+      
+  };
   Cinfo.img = randomFilename;
+  imgCinfArray.push(randomFilename);
+  //imgArray[randomFilename] = formData;
   imgB = true;
-  alert('Image uploaded !');
+  } else {
+    alert('Only one image can be uploaded');
+  }
+}
+{
+const script1 = document.createElement('script');
+script1.src = "https://unpkg.com/swiper/swiper-bundle.min.js";
+document.head.appendChild(script1);
 }
 function noteSelClick(that) {
   document.getElementById('note').value = that.value;
@@ -131,25 +194,8 @@ function getUser() {
         let parts = cookies[i].split('=');
         if(parts[0] === "username4221") {
             Cinfo.user = parts[1];
-            document.getElementById('curUser').textContent = ('User: ' + parts[1]);
         }
     }
-}
-
-function UpdateTime() {
-    const currentDate = new Date();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
-    const currentSecond = currentDate.getSeconds();
-    const currentDay = currentDate.getDate();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    const formattedDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`;
-    const formattedTime = `${currentHour}:${currentMinute.toString().padStart(2, '0')}`;
-    const combinedText = `${formattedTime} / ${formattedDate}`;
-    document.getElementById('HourHour').textContent = combinedText;
-    tmpT = (60 - currentSecond) * 1000;
-    return currentMinute
 }
 
 document.getElementById('Discon').addEventListener('click', function() {
@@ -170,7 +216,6 @@ document.getElementById('Discon').addEventListener('click', function() {
     fetchData = undefined;
     toggleActive = undefined;
     fetchData = undefined;
-    selectWorksite = undefined;
     fetchFloors = undefined;
     fetchUnits = undefined;
     delFloorButton = undefined;
@@ -200,6 +245,8 @@ document.getElementById('Discon').addEventListener('click', function() {
     imageBoxes = undefined;
     fetchProgressData = undefined;
     storedd = undefined;
+    imgCinfArray = undefined;
+    onccee = undefined;
     fetch("https://192.168.2.32:443/login98", {
             method: 'GET',
         })
@@ -226,8 +273,6 @@ document.getElementById('Discon').addEventListener('click', function() {
 });
 
 getUser();
-UpdateTime();
-setInterval(UpdateTime, tmpT);
 
 //____________________________________________________________________________________________________________________________________________________
 //Location logic
@@ -257,11 +302,15 @@ var fetchData = async () => {
             listItem.textContent = item.worksite;
             listItem.addEventListener('click', () => {
                 if (GroupOrder.length > 0) {
-                          alert("Please send the Group Order, or delete it");
-                          return; // Return early to prevent the rest of the logic from executing
+                  alert("Please send the Group Order, or delete it");
+                  return;
                 }
                 toggleActive(listItem);
-                selectWorksite(item.worksite);
+                Cinfo.unit = "";
+                Cinfo.worksite = item.worksite;
+                fetchProgressData();
+                unitContainer.innerHTML = '';
+                fetchFloors();
                 document.getElementById('unitBC').style.display = 'none';
             });
             listContainer.appendChild(listItem);
@@ -271,29 +320,15 @@ var fetchData = async () => {
     }
 };
 
-var selectWorksite = async (worksite) => {
-    Cinfo.unit = "";
-    Cinfo.worksite = worksite;
-    try {
-        await fetch(backendURL + '/selectWorksite', {
+var fetchFloors = async () => {
+      try {
+        const response = await fetch(backendURL + '/getFloors', {
             method: 'POST',
-            body: JSON.stringify({ worksite }),
+            body: JSON.stringify({ worksite: Cinfo.worksite }),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        unitContainer.innerHTML = '';
-        fetchFloors(worksite);
-    } catch (error) {
-        console.error('Error selecting worksite:', error);
-        alert("There's a connection error, try again later");
-    }
-    fetchProgressData();
-};
-
-var fetchFloors = async (worksite) => {
-    try {
-        const response = await fetch(backendURL + '/getFloors2'); 
         const data = await response.json();
         floorContainer.innerHTML = '';
 
@@ -309,26 +344,7 @@ var fetchFloors = async (worksite) => {
                     Cinfo.unit = "";
                     Cinfo.floor = item.floor;
 
-                    // Send the selected floor to /selectFloor
-                    try {
-                        const floorResponse = await fetch(backendURL + '/selectFloor', {
-                            method: 'POST',
-                            body: JSON.stringify({ floor: item.floor }),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
-
-                        if (!floorResponse.ok) {
-                            throw new Error('Network response was not ok for selectFloor');
-                        }
-
-                        // If the POST request was successful, fetch units for the selected floor
-                        fetchUnits(item.floor);
-                    } catch (floorError) {
-                        console.error('Error selecting floor:', floorError);
-                        alert("There's a connection error, try again later");
-                    }
+                    fetchUnits();
                 });
 
                 floorContainer.appendChild(floorItem);
@@ -342,9 +358,15 @@ var fetchFloors = async (worksite) => {
         console.error('Error fetching floors:', error);
     }
 };
-var fetchUnits = async (floor) => {
-    try {
-        const response = await fetch(backendURL + '/getUnits2'); 
+var fetchUnits = async () => {
+        try {
+          const response = await fetch(backendURL + '/getUnits', {
+            method: 'POST',
+            body: JSON.stringify({ worksite: Cinfo.worksite, floor: Cinfo.floor }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         const data = await response.json();
         unitContainer.innerHTML = '';
         document.getElementById('unitBC').style.display = 'flex';
@@ -383,8 +405,8 @@ async function handleDeleteFloor() {
         const response = await fetch(backendURL + '/delFloor', {
             method: 'POST',
             body: JSON.stringify({
-                floor: Cinfo.floor,
-                Cinfo: Cinfo
+                worksite: Cinfo.worksite,
+                floor: Cinfo.floor
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -435,7 +457,7 @@ function handleEditFloor() {
             try {
                 const response = await fetch(backendURL + '/editFloor', {
                     method: 'POST',
-                    body: JSON.stringify({ oldFloor: Cinfo.floor, floor: inputElement.value, Cinfo: Cinfo }),
+                    body: JSON.stringify({ worksite: Cinfo.worksite, oldFloor: Cinfo.floor, floor: inputElement.value }),
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -484,7 +506,7 @@ function handleAddFloor() {
                 const newFloor = inputElement.value;
                 const response = await fetch(backendURL + '/addFloor', {
                     method: 'POST',
-                    body: JSON.stringify({ floor: newFloor, Cinfo: Cinfo }),
+                    body: JSON.stringify({ worksite: Cinfo.worksite, floor: newFloor }),
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -509,7 +531,7 @@ delUnitButton.addEventListener('click', async () => {
     try {
         const response = await fetch(backendURL + '/delUnit', {
             method: 'POST',
-            body: JSON.stringify({ unit: Cinfo.unit, Cinfo: Cinfo }),
+            body: JSON.stringify({ worksite: Cinfo.worksite, floor: Cinfo.floor, unit: Cinfo.unit }),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -564,7 +586,7 @@ edUnitButton.addEventListener('click', () => {
                     const editedUnit = inputElement.value;
                     const response = await fetch(backendURL + '/editUnit', {
                         method: 'POST',
-                        body: JSON.stringify({ oldUnit: Cinfo.unit, unit: editedUnit }),
+                        body: JSON.stringify({ worksite: Cinfo.worksite, floor: Cinfo.floor, oldUnit: Cinfo.unit, unit: editedUnit }),
                         headers: {
                             'Content-Type': 'application/json'
                         }
@@ -615,7 +637,7 @@ addUnitButton.addEventListener('click', () => {
                 const newUnit = inputElement.value;
                 const response = await fetch(backendURL + '/addUnit', {
                     method: 'POST',
-                    body: JSON.stringify({ unit: newUnit, Cinfo: Cinfo }),
+                    body: JSON.stringify({ worksite: Cinfo.worksite, floor: Cinfo.floor, unit: newUnit }),
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -1852,11 +1874,20 @@ if (requiredButtons2.length > 0) {
           }
         }
         calcc()
-        const newCinfo = { ...Cinfo };              
-        GroupOrder.push(newCinfo);
         if (imgB) {
           imgArray[Cinfo.img] = formData;
         }
+        /*var trueIMG = false;
+        imgCinfArray.forEach(img => {
+          if (trueIMG) {
+            Cinfo.img += ("&" + img);
+          } else {
+            Cinfo.img = img;
+            trueIMG = true;
+          }
+        });*/
+        const newCinfo = { ...Cinfo };              
+        GroupOrder.push(newCinfo);
         resetCinf();
         document.getElementById(divv).style.scale = 0;
         document.getElementById('MidLay1').style.scale = 1;
@@ -1879,6 +1910,9 @@ addToGroupOrderBtn.addEventListener('click', handleAddToGroupOrder);
 document.getElementById('gbck').addEventListener('click', function() {
     fbrc = 0;
     jbead = 0;
+    imgCinfArray = [];
+    resetCinf();
+    onccee = false;
     document.getElementById(divv).style.scale = 0;
     document.getElementById('MidLay1').style.scale = 1;
     document.getElementById(divv).style.zIndex = 0;
@@ -1963,15 +1997,12 @@ function decimalToEighthsOfInch(decimal) {
 }
 function populateFloors(selectElement, y) {
 const worksite = Cinfo.worksite;
-return fetch(backendURL + '/selectWorksite', {
+return fetch(backendURL + '/getFloors', {
     method: 'POST',
-    body: JSON.stringify({ worksite }),
+    body: JSON.stringify({ worksite: worksite }),
     headers: {
         'Content-Type': 'application/json'
     }
-})
-.then(() => {
-    return fetch(backendURL + '/getFloors2');
 })
 .then(response => response.json())
 .then(data => {
@@ -1993,30 +2024,12 @@ function populateUnits(selectElement, y) {
 const worksite = Cinfo.worksite;
 const floor = y.floor;
 
-return fetch(backendURL + '/selectWorksite', {
+return fetch(backendURL + '/getUnits', {
     method: 'POST',
-    body: JSON.stringify({ worksite }),
+    body: JSON.stringify({ worksite: worksite, floor: floor }),
     headers: {
         'Content-Type': 'application/json'
     }
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Response not ok for selectWorksite');
-    }
-    return fetch(backendURL + '/selectFloor', {
-        method: 'POST',
-        body: JSON.stringify({ floor }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Response not ok for selectFloor');
-    }
-    return fetch(backendURL + '/getUnits2');
 })
 .then(response => {
     if (!response.ok) {
@@ -2246,65 +2259,44 @@ function createExpandableList1(groupedData) {
             }
             if (key === 'floor') {
               const floor = event.target.value;
-              fetch(backendURL + '/selectFloor', {
+              console.log("THE GETUNITS")
+              fetch(backendURL + '/getUnits', {
                   method: 'POST',
-                  body: JSON.stringify({ floor }),
+                  body: JSON.stringify({ worksite: Cinfo.worksite, floor: floor }),
                   headers: {
                       'Content-Type': 'application/json'
                   }
               })
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                  }
-                  container2.removeChild(partItem);
-                  container2.removeChild(detailItem);
-                  if (container2.children.length === 0) {
-                    unitContainer.removeChild(container2);
-                    unitContainer.removeChild(unitItem)
-                    actualData[dold.floor].delete(dold.unit);
-                  }
-                  if (unitContainer.children.length === 0) {
-                    container.removeChild(unitContainer);
-                    container.removeChild(floorItem);
-                    delete actualData[dold.floor];
-                  }
-                  fetch(backendURL + '/getUnits2')
-                  .then(response => response.json())
-                  .then(data => {
-                    objectToUpdate.unit = data.units[0].unit;
-                    createExpandableList2(objectToUpdate);
-                  });
+              .then(response => response.json())
+              .then(data => {
+                container2.removeChild(partItem);
+                container2.removeChild(detailItem);
+                if (container2.children.length === 0) {
+                  unitContainer.removeChild(container2);
+                  unitContainer.removeChild(unitItem)
+                  actualData[dold.floor].delete(dold.unit);
+                }
+                if (unitContainer.children.length === 0) {
+                  container.removeChild(unitContainer);
+                  container.removeChild(floorItem);
+                  delete actualData[dold.floor];
+                }
+                objectToUpdate.unit = data.units[0].unit;
+                createExpandableList2(objectToUpdate);
               })
               .catch(error => {
                   console.error('Error fetching units:', error);
               });
             }
             if (key === 'unit') {
-              const floor = groupedData.floor;
-              fetch(backendURL + '/selectFloor', {
-                  method: 'POST',
-                  body: JSON.stringify({ floor }),
-                  headers: {
-                      'Content-Type': 'application/json'
-                  }
-              })
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                  }
-                  container2.removeChild(partItem);
-                  container2.removeChild(detailItem);
-                  if (container2.children.length === 0) {
-                    unitContainer.removeChild(container2);
-                    unitContainer.removeChild(unitItem)
-                    actualData[dold.floor].delete(dold.unit);
-                  }
-                  createExpandableList2(objectToUpdate);
-              })
-              .catch(error => {
-                  console.error('Error fetching units:', error);
-              });
+              container2.removeChild(partItem);
+              container2.removeChild(detailItem);
+              if (container2.children.length === 0) {
+                unitContainer.removeChild(container2);
+                unitContainer.removeChild(unitItem)
+                actualData[dold.floor].delete(dold.unit);
+              }
+              createExpandableList2(objectToUpdate);
             }
           }
         });
@@ -2589,65 +2581,44 @@ function createExpandableList2(groupedData) {
             }
             if (key === 'floor') {
               const floor = event.target.value;
-              fetch(backendURL + '/selectFloor', {
+              console.log("THE GETUNITS")
+              fetch(backendURL + '/getUnits', {
                   method: 'POST',
-                  body: JSON.stringify({ floor }),
+                  body: JSON.stringify({ worksite: Cinfo.worksite, floor: floor }),
                   headers: {
                       'Content-Type': 'application/json'
                   }
               })
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                  }
-                  container2.removeChild(partItem);
-                  container2.removeChild(detailItem);
-                  if (container2.children.length === 0) {
-                    unitContainer.removeChild(container2);
-                    unitContainer.removeChild(unitItem)
-                    actualData[dold.floor].delete(dold.unit);
-                  }
-                  if (unitContainer.children.length === 0) {
-                    container.removeChild(unitContainer);
-                    container.removeChild(floorItem);
-                    delete actualData[dold.floor];
-                  }
-                  fetch(backendURL + '/getUnits2')
-                  .then(response => response.json())
-                  .then(data => {
-                    objectToUpdate.unit = data.units[0].unit;
-                    createExpandableList2(objectToUpdate);
-                  });
+              .then(response => response.json())
+              .then(data => {
+                container2.removeChild(partItem);
+                container2.removeChild(detailItem);
+                if (container2.children.length === 0) {
+                  unitContainer.removeChild(container2);
+                  unitContainer.removeChild(unitItem)
+                  actualData[dold.floor].delete(dold.unit);
+                }
+                if (unitContainer.children.length === 0) {
+                  container.removeChild(unitContainer);
+                  container.removeChild(floorItem);
+                  delete actualData[dold.floor];
+                }
+                objectToUpdate.unit = data.units[0].unit;
+                createExpandableList2(objectToUpdate);
               })
               .catch(error => {
                   console.error('Error fetching units:', error);
               });
             }
             if (key === 'unit') {
-              const floor = groupedData.floor;
-              fetch(backendURL + '/selectFloor', {
-                  method: 'POST',
-                  body: JSON.stringify({ floor }),
-                  headers: {
-                      'Content-Type': 'application/json'
-                  }
-              })
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Network response was not ok');
-                  }
-                  container2.removeChild(partItem);
-                  container2.removeChild(detailItem);
-                  if (container2.children.length === 0) {
-                    unitContainer.removeChild(container2);
-                    unitContainer.removeChild(unitItem)
-                    actualData[dold.floor].delete(dold.unit);
-                  }
-                  createExpandableList2(objectToUpdate);
-              })
-              .catch(error => {
-                  console.error('Error fetching units:', error);
-              });
+              container2.removeChild(partItem);
+              container2.removeChild(detailItem);
+              if (container2.children.length === 0) {
+                unitContainer.removeChild(container2);
+                unitContainer.removeChild(unitItem)
+                actualData[dold.floor].delete(dold.unit);
+              }
+              createExpandableList2(objectToUpdate);
             }
           }
         });
@@ -2947,6 +2918,7 @@ document.getElementById('submitButton').addEventListener('click', () => {
                     }
                 }).catch(error => {
                   alert('Failed to upload image.');
+                  console.error('Error:', error);
                 });
               }
               imgArray = {};
@@ -3195,5 +3167,8 @@ function resetCinf() {
   jbead = 0;
   imgB = false;
   ccusttm['name'] = false;
+  imgCinfArray = [];
+  trueIMG = false;
+  onccee = false;
 }
 setInterval(fetchProgressData, 10000);

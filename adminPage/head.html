@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <head>
     <title>Worksite Selector</title>
     <meta charset="UTF-8">
@@ -110,41 +108,3 @@
 
     </style>
 </head>
-<body>
-    <div id="previousButton" class="navigation-button">Previous</div>
-    <div class="round-box">
-        <h1>Admin Panel</h1>
-        <hr />
-        <div class="midT">
-            <div class="midC">
-                <h2>User Manager</h2>
-                <button id="user">✓</button>
-            </div>
-            <div class="midC">
-                <h2>History</h2>
-                <button id="history">✓</button>
-            </div>
-            <div class="midC">
-                <h2>Worksite Manager</h2>
-                <button id="worksite">✓</button>
-            </div>
-        </div>
-    <hr />
-    </div>
-    <script>
-        var backendURL = "https://192.168.2.32:443";
-        document.getElementById("previousButton").addEventListener("click", function() {
-            window.location.href = backendURL + "/";
-        });
-        document.getElementById("user").addEventListener("click", function() {
-            window.location.href = backendURL + "/adminUser";
-        });
-        document.getElementById("history").addEventListener("click", function() {
-            window.location.href = backendURL + "/adminHistory";
-        });
-        document.getElementById("worksite").addEventListener("click", function() {
-            window.location.href = backendURL + "/adminWorksite";
-        });
-    </script>
-</body>
-</html>

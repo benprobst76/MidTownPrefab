@@ -2,11 +2,13 @@
     <title>Order Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <link rel="icon" href="favicon" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
     <style>
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
@@ -42,6 +44,7 @@
             height: 10vh;
             display: flex;
             align-items: center;
+            position: relative;
         }
         .TopMid3 {
             width: 15%;
@@ -93,7 +96,7 @@
             background-color: #4b4b4b;
             font-size: 1.2vw;
             margin-bottom: 2vh;
-            border: 0.15vw solid #1A1A1A;
+            border: none;
             font-weight: bold;
         }
         .list-item.active {
@@ -217,6 +220,7 @@
             display: flex;
             align-items: center; /* Vertically align input boxes with the submit button */
             margin-bottom: 0.4vw;
+            font-size: 1.2vw;
         }
         .form-group2 label {
             min-width: 3vw;
@@ -225,12 +229,13 @@
             color: white;
         }
         .form-group2 input {
-            width: 1.5vw; /* Make the input boxes expand to fill the available space */
+            width: 2vw;
             font-size: 1.2vw;
         }
         .submit-btn {
             margin-top: 1.2vw; /* Add some space between forms and the submit button */
             width: 100%; /* Set the width of the submit button to match the form boxes */
+            height: 2.5vw;
             text-align: center;
             background-color: #1E90FF;
             color: white;
@@ -239,7 +244,7 @@
             cursor: pointer;
             margin: 0.4vw 0;
             padding: 0.4vw 1.2vw;
-            font-size: 1vw;
+            font-size: 1.2vw;
         }
         .rstSheet {
           background-color: #1E90FF;
@@ -247,14 +252,14 @@
           cursor: pointer;
           font-size: 1vw;
           height: 1.8vw;
-          width: 8.5vw;
+          width: 11vw;
           text-align: center;
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: 0.4vw;
           margin-left: 1vw;
-          transform: translateX(-70%);
+          transform: translateX(-60%);
           } 
           .answer-btn {
             border: 0.25vw solid #fff;
@@ -402,13 +407,14 @@
         color: #fff;
         background-color: #1E90FF;
         cursor: pointer;
-        height: 1.8vw;
+        height: 2.5vw;
         font-size: 1.2vw;
         text-align: center;
         display: flex;
         align-items: center;
         justify-content: center;
         width: 22vw;
+        position: relative;
     }
 
     #listContainer2 {

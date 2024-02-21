@@ -140,6 +140,7 @@
     var sheetMap = {};
     var autoFetch = true;
     var savedDataNotif = [];
+    var checkNUBR = 0;
 //____________________________________________________________________________________________________________________________________________________
 //Top right info logic
 
@@ -216,25 +217,8 @@
             let parts = cookies[i].split('=');
             if(parts[0] === "username7834") {
                 Cinfo.user = parts[1];
-                document.getElementById('curUser').textContent = ('User: ' + parts[1]);
             }
         }
-    }
-
-    function UpdateTime() {
-        const currentDate = new Date();
-        const currentHour = currentDate.getHours();
-        const currentMinute = currentDate.getMinutes();
-        const currentSecond = currentDate.getSeconds();
-        const currentDay = currentDate.getDate();
-        const currentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-        const formattedDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`;
-        const formattedTime = `${currentHour}:${currentMinute.toString().padStart(2, '0')}`;
-        const combinedText = `${formattedTime} / ${formattedDate}`;
-        document.getElementById('HourHour').textContent = combinedText;
-        tmpT = (60 - currentSecond) * 1000;
-        return currentMinute
     }
 
     document.getElementById('Discon').addEventListener('click', function() {
@@ -280,6 +264,7 @@
         MidLay3 = undefined;
         fetchData = undefined;
         fetchData2 = undefined;
+        checkNUBR = undefined;
         fetch("https://192.168.2.32:443/login98", {
                 method: 'GET',
             })
@@ -306,8 +291,6 @@
     });
 
     getUser();
-    UpdateTime();
-    setInterval(UpdateTime, tmpT);
 
 //____________________________________________________________________________________________________________________________________________________
 //Location logic
@@ -363,7 +346,7 @@
                 listItem.addEventListener('click', () => {
                     toggleActive(listItem);
                     floorCh = false;
-                    if (document.getElementById('MidLay3').style.display === 'flex') {
+                    if (document.getElementById('MidLay3').style.scale === '1') {
                         fetch(backendURL + "/viewHis2")
                         .then((response) => response.json())
                         .then((data) => displayModPartList(data))
@@ -371,17 +354,11 @@
                     }
                     Cinfo.worksite = item.worksite;
                     Cinfo.floor = "";
+                    callrHis();
                     document.getElementById('groupB').click()
                     autoFetch = true;
                     getPrst();
                     fetchAndDisplayData();
-                    fetch(backendURL + "/selectWorksite", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(Cinfo)
-                    })
                 });
                 listContainer.appendChild(listItem);
             });
@@ -944,6 +921,10 @@ function generatePartId(part) {
             const isCurrentlyChecked = this.style.backgroundColor === 'green';
             this.style.backgroundColor = isCurrentlyChecked ? '' : 'green';
             if (this.style.backgroundColor === 'green') {
+                checkNUBR ++;
+                if (checkNUBR > 0) {
+                    document.getElementById('rmvAllCheck').style.backgroundColor = '#ff2020';
+                }
                 const parentPartItem = this.closest('.part-item');
                 if (parentPartItem) {
                     parentPartItem.style.border = '2px solid green';
@@ -973,6 +954,10 @@ function generatePartId(part) {
                     });
                 }
             } else {
+                checkNUBR --;
+                if (checkNUBR < 1) {
+                    document.getElementById('rmvAllCheck').style.backgroundColor = '#5c5c5c';
+                }
                 const parentPartItem = this.closest('.part-item');
                 if (parentPartItem) {
                     parentPartItem.style.border = '2px solid white';
@@ -1062,57 +1047,63 @@ function generatePartId(part) {
     }
 
     function rmvAllCheck() {
-        var sendDelPart = [];
-        var DelPart = [];
-        var delCol = [];
-        document.querySelectorAll('.part-item').forEach(element => {
-            if (element.style.border === '2px solid green') {
-                const prt = JSON.parse(element.getAttribute('data-part-data'));
-                sendDelPart.push(prt.uniqueID2);
-                DelPart.push(element);
-                if (element.parentNode.lastElementChild.tagName === 'BUTTON' && !delCol.includes(element.parentNode)) {
-                    delCol.push(element.parentNode);
+        if (confirm("Are you sure ?")) {
+            var sendDelPart = [];
+            var DelPart = [];
+            var delCol = [];
+            document.querySelectorAll('.part-item').forEach(element => {
+                if (element.style.border === '2px solid green') {
+                    const prt = JSON.parse(element.getAttribute('data-part-data'));
+                    sendDelPart.push(prt.uniqueID2);
+                    DelPart.push(element);
+                    if (element.parentNode.lastElementChild.tagName === 'BUTTON' && !delCol.includes(element.parentNode)) {
+                        delCol.push(element.parentNode);
+                    }
                 }
-            }
-        });
-        const jsonArray = sendDelPart.map(value => ({ uniqueID2: value }));
-        if (sendDelPart.length > 0) {
-            fetch(backendURL + "/delReceive", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonArray)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Server responded with status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(text => {
-                if (text && text.trim() !== "") {
-                    return JSON.parse(text);
-                } else {
-                    return { success: true };
-                }
-            })
-            .then(data => {
-                if(data.success) {
-                    DelPart.forEach(i => {
-                        i.remove();
-                    });
-                    delCol.forEach(i => {
-                        i.remove();
-                    });
-                    callrHis();
-                } else {
-                    console.error("Error deleting parts:", data.errorMessage);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
             });
+            const jsonArray = sendDelPart.map(value => ({ uniqueID2: value }));
+            if (sendDelPart.length > 0) {
+                fetch(backendURL + "/delReceive", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonArray)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    if (text && text.trim() !== "") {
+                        return JSON.parse(text);
+                    } else {
+                        return { success: true };
+                    }
+                })
+                .then(data => {
+                    if(data.success) {
+                        DelPart.forEach(i => {
+                            i.remove();
+                            checkNUBR --;
+                            if (checkNUBR < 1) {
+                                document.getElementById('rmvAllCheck').style.backgroundColor = '#5c5c5c';
+                            }
+                        });
+                        delCol.forEach(i => {
+                            i.remove();
+                        });
+                        callrHis();
+                    } else {
+                        console.error("Error deleting parts:", data.errorMessage);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            }
         }
     }
 
@@ -1187,6 +1178,12 @@ function generatePartId(part) {
             if(data.success) {
                 if (unitList) {
                     unitList.remove();
+                }
+                for (let i = 0; i < jsonArray.length; i++) {
+                    checkNUBR--;
+                    if (checkNUBR < 1) {
+                        document.getElementById('rmvAllCheck').style.backgroundColor = '#5c5c5c';
+                    }
                 }
                 callrHis();
             } else {
@@ -1293,35 +1290,39 @@ partsArray.forEach(part => {
         const currentMonth = currentDate.getMonth();  // 0-indexed
         const currentDay = currentDate.getDate();
         const today = new Date(currentYear, currentMonth, currentDay);
-        if (part.user === Cinfo.user && parsedDate.getTime() === today.getTime()) {
-            const ul = document.createElement("li");
+        if (part.worksite === Cinfo.worksite && parsedDate.getTime() === today.getTime()) {
+            const ul = document.createElement("div");
             ul.classList.add("part-description");
-            ul.style.marginTop = '0.5vw';
+            ul.style.marginTop = '1.5vh';
             for (const key in part) {
                 if (key !== "part" && key !== "delch") {
                     addDetail(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key]);
                 }
             }
-            const detailItem = document.createElement("li");
+            const detailItem = document.createElement("div");
             detailItem.textContent = `Time: ${part.checktime}`;
-            detailItem.style.marginTop = '1vw';
+            detailItem.style.marginTop = '3vh';
+            detailItem.style.marginBottom = '2vh';
             ul.appendChild(detailItem);
             var titleElement = document.createElement("span");
             titleElement.innerText = partData[part.part].title;
             titleElement.style.lineHeight = '2.3vw';
-            var lst = document.createElement("li");
+            var lst = document.createElement("div");
             lst.className = "stlHis";
             lst.appendChild(titleElement);
             lst.appendChild(ul);
             var tgl = false; 
             lst.addEventListener('click', function() {
                 if (!tgl) {
-                    lst.style.height = 'auto'
-                    ul.style.display = 'block';
-                    tgl = true;
+                    lst.style.maxHeight = '16em';
+                    setTimeout(() => {
+                        ul.style.visibility = 'visible';
+                        tgl = true;
+                      }, "100");
+                      
                 } else {
-                    ul.style.display = 'none';
-                    lst.style.height = '2.3vw'
+                    lst.style.maxHeight = '2.5em';
+                    ul.style.visibility = 'hidden';
                     tgl = false;
                 }
             });
@@ -1338,8 +1339,6 @@ fetch(backendURL + "/viewHis2")
     .then((data) => smallHis(data))
     .catch((error) => console.error(error));
 }
-
-callrHis();
 
 function displayPartList(parts) {
 parts.forEach(parts => {
@@ -1439,18 +1438,20 @@ firstL = 0;
     currentUnitList.appendChild(partItem);
 });
 }
-document.getElementById("Norder").children[1].textContent = document.querySelectorAll('.part-item').length;
+document.getElementById("Norder").children[1].children[0].textContent = document.querySelectorAll('.part-item').length;
 document.getElementById("Norder").style.display = "flex";
 nsheet.forEach(sheet => {
     let li = document.createElement("div");
     let txt = document.createElement("div");
     let nbr = document.createElement("div");
+    let spanNbr = document.createElement("span");
     li.className = 'Numb';
     nbr.className = 'NumbNBR';
     txt.style.position = "absolute";
     txt.style.left = "0.8vw";
     txt.textContent = `${sheet.type} ${sheet.thickness} ${sheet.length}ft:`;
-    nbr.textContent = sheet.count;
+    spanNbr.textContent = sheet.count;
+    nbr.appendChild(spanNbr);
     li.appendChild(txt);
     li.appendChild(nbr);
     document.getElementById("Nsheet").prepend(li);
@@ -1469,30 +1470,6 @@ dict2 = dict.reduce((acc, curr) => {
         }
         return false;
     }
-
-    function handleDelete(part, partItem) {
-    const url = backendURL + "/delCart";
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(part),
-    };
-
-    fetch(url, requestOptions)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            // We expect an empty response, so no need to parse JSON
-            return;
-        })
-        .then(() => {
-            removeDeletedPart(partItem); // Pass the partItem
-        })
-        .catch((error) => console.error("Error deleting part:", error));
-}
 
 function removeDeletedPart(partItem) {
     partListContainer.removeChild(partItem);
@@ -1553,19 +1530,18 @@ document.getElementById('changeUrlBtn').addEventListener('click', function() {
     } else if (document.getElementById('MidLay2').style.display === 'flex') {
         lastS = 'MidLay2';
     }
-    if (document.getElementById('MidLay3').style.display === '') {
+    if (document.getElementById('MidLay3').style.scale === '' || document.getElementById('MidLay3').style.scale === '0') {
         fetch(backendURL + "/viewHis2")
         .then((response) => response.json())
         .then((data) => displayModPartList(data))
         .catch((error) => console.error(error));
         document.getElementById('changeUrlBtn').style.border = '0.25vw solid green';
-        document.getElementById(lastS).style.display = 'none';
-        document.getElementById('MidLay3').style.display = 'flex';
-    } else if (document.getElementById('MidLay3').style.display === 'flex') {
+        document.getElementById(lastS).style.scale = 0;
+        document.getElementById('MidLay3').style.scale = 1;
+    } else {
         document.getElementById('changeUrlBtn').style.border = 'none';
-        document.getElementById('MidLay3').style.display = '';
-        document.getElementById('MidLay1').style.display = 'flex';
-        apB.click();
+        document.getElementById('MidLay3').style.scale = 0;
+        document.getElementById(lastS).style.scale = 1;
     }
 });
 function generateModPartId(part) {
@@ -1584,22 +1560,42 @@ function generateModPartId(part) {
             part.dW === ""
         );
     }
-    function createModPartItem(part) {           
+    function addDetail2(ul, label, value, counterObj) {
+        const excludedKeys = ["User", "Worksite", "Price", "Rand", "UniqueID", "UniqueID2", "Side", "Unit", "Order", "Floor", "Time", "Checktime", "Check", "Sheet", "Order2", "Length2", "Sum", "Img", "GroupO", "Priority", Exlen];
+        if (label === 'Mrg') {
+            const detailItem = document.createElement("li");
+            detailItem.textContent = 'Time: 23:55 / 2055-55-55';
+            detailItem.style.marginBottom = '4vw';
+            detailItem.style.opacity = 0;
+            ul.appendChild(detailItem);
+            return;
+        }
+        if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
+            const detailItem = document.createElement("li");
+            detailItem.textContent = `${label}: ${value}`;
+            ul.appendChild(detailItem);
+            counterObj.nbrOfHeight++;
+        }
+    }
+    function createModPartItem(part) {
         const partItem = document.createElement("div");
         partItem.setAttribute('data-part-data', JSON.stringify(part));
         partItem.classList.add("modpart-item");
+    
         const container = document.createElement("div");
         container.style.display = 'flex';
         const title = partTitles[part.part] || part.part;
         const title2 = part.unit;
         const h2 = document.createElement("h2");
         const h22 = document.createElement("h2");
+        const h222 = document.createElement("h2");
         const h2222 = document.createElement("h2");
         const separ1 = document.createElement("h2");
         const separ2 = document.createElement("h2");
         const separ3 = document.createElement("h2");
         h2.textContent = title;
         h22.textContent = title2;
+        h222.textContent = part.order;
         h2222.textContent = part.floor;
         separ1.textContent = '|';
         separ2.textContent = '|';
@@ -1608,6 +1604,7 @@ function generateModPartId(part) {
         h2.style.marginRight = '0.4vw';
         h2222.style.marginRight = '0.4vw';
         h22.style.marginRight = '0.4vw';
+        h222.style.marginLeft = 'auto';
         separ1.style.marginRight = '0.4vw';
         separ2.style.marginRight = '0.4vw';
         separ3.style.marginRight = '0.4vw';
@@ -1620,70 +1617,75 @@ function generateModPartId(part) {
         container.appendChild(separ2);
         container.appendChild(h22);
         container.appendChild(separ3);
+        container.appendChild(h222);
         partItem.appendChild(container);
-        const contentWrapper = document.createElement('div'); 
-        contentWrapper.className = 'contentWrapper';          
+        if (part.type === "Mold Tuff") {
+            partItem.style.boxShadow = '0 0 0 0.4vw blue';
+        } else if (part.type === "DensGlass") {
+            partItem.style.boxShadow = '0 0 0 0.4vw green';
+        } else if (part.type === "Type C") {
+            partItem.style.boxShadow = '0 0 0 0.4vw yellow';
+        } else if (part.type === "Type X") {
+            partItem.style.boxShadow = '0 0 0 0.4vw red';
+        }
+    
+        const contentWrapper = document.createElement('div');
+        contentWrapper.className = 'expandable1';
+        contentWrapper.style.marginBottom = '1vw';
+    
         const ul = document.createElement("ul");
-        ul.classList.add("modpart-item");
-        ul.style.border = 'none'
-        // Display part's properties
-        const propertiesToDisplay = [
-            'checktime',
-            'time',
-            'type',
-            'side',
-            'thickness',
-            'length',
-            'dA',
-            'dB',
-            'dC',
-            'dD',
-            'dE',
-            'd1A',
-            'd2A',
-            'd1B',
-            'd2B',
-            'dR',
-            'dR_P',
-            'dH',
-            'dW',
-            'edgeA',
-            'edgeB',
-            'note',
-        ];
-        let isFirstItem = true;
-        propertiesToDisplay.forEach(propKey => {
-            if (part[propKey] && part[propKey].trim() !== "") {
-                const li = document.createElement("li");
-                li.textContent = `${propKey[0].toUpperCase() + propKey.slice(1)}: ${part[propKey]}`;
-                if (isFirstItem) {
-                    li.style.marginTop = "2vw";
-                    isFirstItem = false;
-                }
-                li.style.marginLeft = "2vw";
-                ul.appendChild(li);
+        ul.style.position = 'relative';
+        ul.style.marginTop = '1vw';
+        ul.style.marginLeft = '1vw';
+        ul.style.width = '100%';
+    
+        if (part.length === part.length2) {
+            Exlen = "Length";
+        } else {
+            Exlen = "";
+            if (!part.length.includes("inches")) {
+                part.length = part.length + " inches"
             }
-        });
+        }
+        var heightCounter = { nbrOfHeight: 0 };
+        for (const key in part) {
+            if (key !== "part" && key !== "delch") {
+                addDetail2(ul, key.charAt(0).toUpperCase() + key.slice(1), part[key], heightCounter);
+            }
+        }
+        addDetail2(ul, 'Mrg', true, "", 0);
+        const detailItem = document.createElement("li");
+        detailItem.textContent = `Time: ${part.time}`;
+        detailItem.style.position = 'absolute';
+        detailItem.style.bottom = 0;
+        detailItem.style.width = '40vw';
+        ul.appendChild(detailItem);
         contentWrapper.appendChild(ul);
+    
+        const imgDiv = document.createElement('div');
         const partInfo = partData[part.part];
         if (partInfo && partInfo.imageUrl) {
             const img = document.createElement("img");
             img.src = partInfo.imageUrl;
             img.alt = partInfo.title || 'Part Image';
-            img.style.width = "40%";
-            img.style.height = "40%";
-            contentWrapper.appendChild(img);
+            img.style.maxWidth = "100%";
+            img.style.maxHeight = "100%";
+            //img.style.marginLeft = '20%';
+            img.style.borderLeft = 'solid 0.4vw #4b4b4b';
+            imgDiv.appendChild(img);
         }
+    
+        contentWrapper.appendChild(imgDiv);
         partItem.appendChild(contentWrapper);
         container.addEventListener("click", function() {
-            if (contentWrapper.style.display === 'none' || contentWrapper.style.display === '') {
-            contentWrapper.style.display = 'flex';
-            contentWrapper.querySelector('.modpart-item').style.display = 'block'; 
+        if (contentWrapper.classList.contains('visible')) {
+            contentWrapper.classList.remove('visible');
+            contentWrapper.style.maxHeight = '0';
         } else {
-            contentWrapper.style.display = 'none';
-            contentWrapper.querySelector('.modpart-item').style.display = 'none';
+            contentWrapper.classList.add('visible');
+            contentWrapper.style.maxHeight = heightCounter.nbrOfHeight * 3.4 + 'vw';
         }
-    });
+        });
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Retrieve Part";
         deleteButton.addEventListener("click", () => {
@@ -1691,14 +1693,24 @@ function generateModPartId(part) {
             if (userConfirmed) {
                 handleModRetrieve(part, partItem);
             } else {
-                console.log('User declined');
+                //console.log('User declined');
             }
         });
-        partItem.appendChild(deleteButton);
-
-        partItem.setAttribute("data-part-id", generateModPartId(part)); // Set data-part-id attribute
+        const container2 = document.createElement("div");
+        container2.style.display = 'flex';
+        const len22 = document.createElement("h2");
+        if (part.length2) {
+            len22.textContent = "Length: " + part.length2 + " ";
+        } else {
+            len22.textContent = "Length: " + part.length;
+        }
+        len22.style.marginLeft = "2vw";
+        len22.style.marginTop = "0.7vw";
+        container2.appendChild(deleteButton);
+        container2.appendChild(len22);
+        partItem.appendChild(container2);
         return partItem;
-}
+    }
 function extractModUserInfo(data) {
 if (data.length > 0) {
     userValue = data[0].user || "";   // Set default value if 'user' is not present
@@ -1719,10 +1731,13 @@ function displayModPartList(parts) {
         MidLay3.innerHTML = "No matching parts found.";
         return;
     }
+    const Tdiv = document.createElement('div');
+    Tdiv.style.padding = '1vw';
     filteredData.reverse().forEach(part => {
         const partItem = createModPartItem(part);
-        MidLay3.appendChild(partItem);
+        Tdiv.appendChild(partItem);
     });
+    MidLay3.appendChild(Tdiv);
 }
     function isBlackModPart(part) {
         for (const key in part) {

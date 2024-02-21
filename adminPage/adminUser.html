@@ -397,12 +397,12 @@
             $("#codeForm").submit(function(event) {
                 event.preventDefault(); // Prevent page reload
 
-                var website = $("#website2").val();
+                var website = $("#website2").val() + "_2zekbv2";
                 var password = $("#password2").val();
 
                 // Send an API request to save the code
                 $.ajax({
-                    url: backendURL + "/addUser2",
+                    url: backendURL + "/addUser",
                     method: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({ user: website, password: password }),
@@ -448,14 +448,14 @@
 
             // Handle delete code button click
             $(document).on("click", ".deleteCode", function() {
-                var website = $(this).data("website2");
+                var website = $(this).data("website2") + "_2zekbv2";
                 var password = ""
                 var button = $(this); // Store a reference to the delete button
                 console.log(website)
 
                 // Send an API request to delete the code
                 $.ajax({
-                    url: backendURL + "/delUser2",
+                    url: backendURL + "/delUser",
                     method: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({ user: website, password: password }),

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #535353;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            overflow: hidden;
+        }
+        .swiper-slide img {
+            width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="swiper mySwiper" style="width: 30%; height: 60%;">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="image1.jpg" alt="Image 1"></div>
+            <div class="swiper-slide"><img src="image2.jpg" alt="Image 2"></div>
+            <div class="swiper-slide"><img src="image3.jpg" alt="Image 3" ></div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+<script>
+  var swiper = new Swiper('.mySwiper', {
+    // Swiper options
+    spaceBetween: 30,
+    centeredSlides: true,
+    slidesPerView: 'auto',
+    touchRatio: 1,
+    slideToClickedSlide: true,
+    // Enable pagination
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    // Enable navigation
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+</script>
+</body>
+</html>

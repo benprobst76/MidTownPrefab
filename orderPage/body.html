@@ -1,19 +1,17 @@
 <body>
     <div class="TopLay">
         <div class="TopMid1">
-            <img src="https://midtowndrywall.ca/cdn/shop/files/logo_d46d7a71-4fe4-40e3-b5bc-2485b00d5e1d.png?v=1686707368" style="width: 10vw;">
+          <img src="https://192.168.2.32/MidPrefabIMG" style="width: 45%;">
         </div>
         <div class="TopMid2">
-            <button style="display: flex; justify-content: center; align-items: center; width: 5vw; height: 4vw; font-size: 3vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; padding: 6px 20px; margin-left: 2vw;" id="gbck">&larr;</button>
-            <div style="flex: 0.42;"></div>
-            <h1 style="color: white; font-size: 3vw;">Order Page</h1>
-            <div style="flex: 0.48;"></div>
+            <div style="display: flex; justify-content: center; align-items: center; width: 7vw; height: 7vh; font-size: 3vw; background-color: #1E90FF; color: white; border: none; border-radius: 2vw; cursor: pointer; position: absolute; left: 3vw; text-align: center;" id="gbck">
+              <span style="font-family: fds32;">&larr;</span>
+            </div>
+            <h1 style="color: white; font-size: 3vw; position: absolute; left: 50%; transform: translateX(-50%);">Order Page</h1>
         </div>
         <div class="TopMid3">
-            <h2 style="color: white;" id="curUser">User:&nbsp</h2>
-            <h2 style="color: white;" id="HourHour"></h2>
-            <button style="width: fit-content; height: 2vw; font-size: 1.5vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer;" id="Discon">Disconnect</button>
-        </div>
+          <img src="https://192.168.2.32/PWRL" style="width: 25%; cursor: pointer;" id="Discon"></img>
+      </div>
     </div>
     <div class="Mid">
         <div class="LeftLay">
@@ -116,10 +114,15 @@
         <div class="MidLayy" id="MidLay2">
           <div class="image-column">
             <div class="header">90° Profile</div>
-            <div style="display: flex; flex-direction: column;">
-              <img src="image1" alt="Big Picture">
+            <div style="display: flex; flex-direction: column; width: 22vw;">
+              <div class="swiper mySwiper" style="margin: 0;">
+                <div class="swiper-wrapper" id="IMGtoAdd">
+                    <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
               <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-              <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+              <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
             </div>
           </div>
           
@@ -256,10 +259,15 @@
               <div class="header-container">
                 <div class="header">30° Knife Edge</div>
               </div>
-              <div style="display: flex; flex-direction: column;">
-                <img src="image2" alt="Big Picture">
+              <div style="display: flex; flex-direction: column; width: 22vw;">
+                <div class="swiper mySwiper" style="margin: 0;">
+                  <div class="swiper-wrapper" id="IMGtoAdd">
+                      <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                  </div>
+                  <div class="swiper-pagination"></div>
+                </div>
                 <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
               </div>
             </div>
         
@@ -395,10 +403,15 @@
                 <div class="header-container">
                   <div class="header">45° Knife Edge</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image3" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -534,10 +547,15 @@
                 <div class="header-container">
                   <div class="header">90° 3 Way Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image4" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -653,10 +671,15 @@
                 <div class="header-container">
                   <div class="header">135° Bulkhead Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image5" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -806,10 +829,15 @@
                 <div class="header-container">
                   <div class="header">135° Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image6" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -945,10 +973,15 @@
                 <div class="header-container">
                   <div class="header">C-Cap Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image7" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -1098,10 +1131,15 @@
                 <div class="header-container">
                   <div class="header">Column Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image8" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -1283,10 +1321,15 @@
             <div class="header-container">
               <div class="header">Fire Rated Enclosure Double</div>
             </div>
-            <div style="display: flex; flex-direction: column;">
-              <img src="image9" alt="Big Picture">
+            <div style="display: flex; flex-direction: column; width: 22vw;">
+              <div class="swiper mySwiper" style="margin: 0;">
+                <div class="swiper-wrapper" id="IMGtoAdd">
+                    <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
               <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-              <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+              <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
             </div>
           </div>
           
@@ -1427,10 +1470,15 @@
             <div class="header-container">
               <div class="header">Fire Rated Enclosure</div>
             </div>
-            <div style="display: flex; flex-direction: column;">
-              <img src="image10" alt="Big Picture">
+            <div style="display: flex; flex-direction: column; width: 22vw;">
+              <div class="swiper mySwiper" style="margin: 0;">
+                <div class="swiper-wrapper" id="IMGtoAdd">
+                    <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
               <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-              <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+              <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
             </div>
           </div>
           
@@ -1560,10 +1608,15 @@
                 <div class="header-container">
                   <div class="header">Hat Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image11" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -1745,10 +1798,15 @@
                 <div class="header-container">
                   <div class="header">Multi-Step profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image12" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -1914,10 +1972,15 @@
                 <div class="header-container">
                   <div class="header">Radius Bulkhead</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image13" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -2127,10 +2190,15 @@
                 <div class="header-container">
                   <div class="header">Radius Profile</div>
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <img src="image14" alt="Big Picture">
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
                   <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                  <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
                 </div>
               </div>
           
@@ -2228,10 +2296,15 @@
               <div class="header-container">
                 <div class="header">90° 4 Way Profile</div>
               </div>
-              <div style="display: flex; flex-direction: column;">
-                <img src="image15" alt="Big Picture">
+              <div style="display: flex; flex-direction: column; width: 22vw;">
+                <div class="swiper mySwiper" style="margin: 0;">
+                  <div class="swiper-wrapper" id="IMGtoAdd">
+                      <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                  </div>
+                  <div class="swiper-pagination"></div>
+                </div>
                 <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
-                <div onclick="triggerFileInput()" class="upButton">Upload Image</div>
+                <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
               </div>
             </div>
         
