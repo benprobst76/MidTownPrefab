@@ -55,6 +55,19 @@
             justify-content: center;
             border-left: solid black;
         }
+        .PanelList {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          height: 6vh;
+          align-items: center;
+          color: white;
+          font-size: 1.4vw;
+          cursor: pointer;
+        }
+        .PanelList:hover {
+          background-color: #363636;
+        }
         .TopMid3 h2 {
             color: white;
             font-size: 1.5vw;
@@ -374,6 +387,11 @@
             overflow-y: auto;
             overflow-x: hidden;
         }
+        .grayed-out-content {
+            filter: grayscale(100%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
         .details {
             background-color: #1d1d1d;
             box-sizing: border-box;
@@ -687,6 +705,14 @@
       50% {
         stroke-dashoffset: 40.84;
       }
+    }
+    .delImgBtn {
+      background-color: #1E90FF;
+      border: none;
+      border-radius: 1vw;
+      color: white;
+      font-size: 1vw;
+      padding: 0.5vw;
     }
 
     </style>

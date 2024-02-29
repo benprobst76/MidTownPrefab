@@ -27,47 +27,48 @@ type Cred struct {
 	Password string `json:"password"`
 }
 type Cfo struct {
-	Time      string `json:"time"`
-	CheckTime string `json:"checktime"`
-	User      string `json:"user"`
-	Worksite  string `json:"worksite"`
-	Floor     string `json:"floor"`
-	Unit      string `json:"unit"`
-	Type      string `json:"type"`
-	Part      string `json:"part"`
-	Side      string `json:"side"`
-	Thickness string `json:"thickness"`
-	Width     string `json:"Width"`
-	Length    string `json:"length"`
-	Length2   string `json:"length2"`
-	DA        string `json:"dA"`
-	DB        string `json:"dB"`
-	DC        string `json:"dC"`
-	DD        string `json:"dD"`
-	DE        string `json:"dE"`
-	D1A       string `json:"d1A"`
-	D2A       string `json:"d2A"`
-	D1B       string `json:"d1B"`
-	D2B       string `json:"d2B"`
-	DR        string `json:"dR"`
-	DR_P      string `json:"dR_P"`
-	DH        string `json:"dH"`
-	DW        string `json:"dW"`
-	Edge1     string `json:"edgeA"`
-	Edge2     string `json:"edgeB"`
-	Price     string `json:"price"`
-	Check     string `json:"check"`
-	Rand      string `json:"rand"`
-	Sum       string `json:"sum"`
-	Order     string `json:"order"`
-	Order2    string `json:"order2"`
-	UniqueID  string `json:"uniqueID"`
-	UniqueID2 string `json:"uniqueID2"`
-	Sheet     string `json:"sheet"`
-	Img       string `json:"img"`
-	GroupO    string `json:"groupO"`
-	Priority  string `json:"priority"`
-	Note      string `json:"note"`
+	Time       string   `json:"time"`
+	CheckTime  string   `json:"checktime"`
+	User       string   `json:"user"`
+	Worksite   string   `json:"worksite"`
+	Floor      string   `json:"floor"`
+	Unit       string   `json:"unit"`
+	Type       string   `json:"type"`
+	Part       string   `json:"part"`
+	Side       string   `json:"side"`
+	Thickness  string   `json:"thickness"`
+	Width      string   `json:"Width"`
+	Length     string   `json:"length"`
+	Length2    string   `json:"length2"`
+	DA         string   `json:"dA"`
+	DB         string   `json:"dB"`
+	DC         string   `json:"dC"`
+	DD         string   `json:"dD"`
+	DE         string   `json:"dE"`
+	D1A        string   `json:"d1A"`
+	D2A        string   `json:"d2A"`
+	D1B        string   `json:"d1B"`
+	D2B        string   `json:"d2B"`
+	DR         string   `json:"dR"`
+	DR_P       string   `json:"dR_P"`
+	DH         string   `json:"dH"`
+	DW         string   `json:"dW"`
+	Edge1      string   `json:"edgeA"`
+	Edge2      string   `json:"edgeB"`
+	Price      string   `json:"price"`
+	Check      string   `json:"check"`
+	Rand       string   `json:"rand"`
+	Sum        string   `json:"sum"`
+	Order      string   `json:"order"`
+	Order2     string   `json:"order2"`
+	UniqueID   string   `json:"uniqueID"`
+	UniqueID2  string   `json:"uniqueID2"`
+	UniqueIDQR string   `json:"uniqueIDQR"`
+	Sheet      string   `json:"sheet"`
+	Img        []string `json:"img"`
+	GroupO     string   `json:"groupO"`
+	Priority   string   `json:"priority"`
+	Note       string   `json:"note"`
 }
 type Work struct {
 	Worksite string `json:"worksite"`
@@ -848,6 +849,7 @@ func saveO(orders []Cfo) {
 func sendGroup(c *gin.Context) {
 	var group []Cfo
 	if err := c.BindJSON(&group); err != nil {
+		logger.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
@@ -860,6 +862,13 @@ func sendGroup(c *gin.Context) {
 	for i := range group {
 		group[i].Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
 		group[i].UniqueID2 = uuid.New().String()
+		rand.New(rand.NewSource(time.Now().UnixNano()))
+		charset := "abcdefghijklmnopqrstuvwxyz123456789"
+		randomSTR := make([]byte, 8)
+		for i := range randomSTR {
+			randomSTR[i] = charset[rand.Intn(len(charset))]
+		}
+		group[i].UniqueIDQR = string(randomSTR)
 	}
 	orders = append(orders, group...)
 	type orderIndex struct {
@@ -931,19 +940,7 @@ func delReceive(c *gin.Context) {
 	currentTime := time.Now().In(location)
 	for _, del := range delInfo {
 		for i, item := range orders {
-			cnt := 0
 			if item.UniqueID2 == del.UniqueID2 {
-				for _, item2 := range orders {
-					if item2.Img == item.Img {
-						cnt += 1
-					}
-				}
-				if cnt == 1 {
-					err := os.Remove(item.Img)
-					if err != nil {
-						logger.Println(err)
-					}
-				}
 				item.CheckTime = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
 				histories = append(histories, item)
 				orders = append(orders[:i], orders[i+1:]...)
@@ -1038,7 +1035,6 @@ func retreiveHis(c *gin.Context) {
 	}
 	currentTime := time.Now().In(location)
 	retInfo.Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
-	retInfo.Img = ""
 	orders := openO()
 	orders = append(orders, retInfo)
 	saveO(orders)
@@ -2089,11 +2085,11 @@ func main() {
 	router.GET("/bell2", func(c *gin.Context) {
 		c.File("./img/other/bell2.PNG")
 	})
-	router.GET("/PWRL", func(c *gin.Context) {
-		c.File("./img/other/PWR.png")
-	})
 	router.GET("/MidPrefabIMG", func(c *gin.Context) {
 		c.File("./img/other/prefab.png")
+	})
+	router.GET("/PWRL", func(c *gin.Context) {
+		c.File("./img/other/logoutB.png")
 	})
 	router.POST("/uploadIMG", func(c *gin.Context) {
 		file, _ := c.FormFile("image")

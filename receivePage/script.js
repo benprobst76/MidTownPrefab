@@ -128,10 +128,6 @@
     var edP = "/sortSize2";
     var Exlen = "";
     var LocalHis = document.getElementById("listHis");
-    var imgdiv1 = document.createElement('div');
-    var imgdiv2 = document.createElement('div');
-    var imgdivimg = document.createElement('img');
-    var img2divimg = document.createElement('img');
     var ulll = document.getElementById('Nsheet');
     var svdta = [];
     var svdta2 = [];
@@ -141,6 +137,15 @@
     var autoFetch = true;
     var savedDataNotif = [];
     var checkNUBR = 0;
+    var swiper;
+    var partOrderNBR = 0;
+    var onnccee = true;
+
+    {
+    const script1 = document.createElement('script');
+    script1.src = "https://unpkg.com/swiper/swiper-bundle.min.js";
+    document.head.appendChild(script1);
+    }
 //____________________________________________________________________________________________________________________________________________________
 //Top right info logic
 
@@ -223,12 +228,9 @@
 
     document.getElementById('Discon').addEventListener('click', function() {
         document.cookie = 'username7834=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=192.168.2.32;';
+        backendURL = undefined;
         partListContainer = undefined;
         partListContainer2 = undefined;
-        imgdiv1 = undefined;
-        imgdiv2 = undefined;
-        imgdivimg = undefined;
-        img2divimg = undefined;
         ulll = undefined;
         Cinfo = undefined;
         partTitles = undefined;
@@ -265,6 +267,9 @@
         fetchData = undefined;
         fetchData2 = undefined;
         checkNUBR = undefined;
+        swiper = undefined;
+        partOrderNBR = undefined;
+        onnccee = undefined;
         fetch("https://192.168.2.32:443/login98", {
                 method: 'GET',
             })
@@ -639,7 +644,7 @@ function generatePartId(part) {
             ul.appendChild(detailItem);
             return;
         }
-        if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
+        if (!excludedKeys.includes(label) && value.trim() !== "") {
             const detailItem = document.createElement("li");
             detailItem.textContent = `${label}: ${value}`;
             ul.appendChild(detailItem);
@@ -657,6 +662,7 @@ function generatePartId(part) {
     }
 
     function createPartItem(part) {
+        partOrderNBR ++;
         const partItem = document.createElement("div");
         partItem.setAttribute('data-part-data', JSON.stringify(part));
         partItem.setAttribute('data-uniqueID2', part.uniqueID2);
@@ -739,27 +745,34 @@ function generatePartId(part) {
 
         const partInfo = partData[part.part];
         if (partInfo && partInfo.imageUrl) {
-            const carousel = document.createElement('div');
-            carousel.className = 'carousel';
-
-            const carouselImages = document.createElement('div');
-            carouselImages.className = 'carousel-images';
             const bigScreenB = document.createElement('img');
             bigScreenB.className = 'bigScreenB';
             bigScreenB.src = "https://192.168.2.32:443/fscreen";
+            const bigSwiperDiv = document.createElement('div');
+            bigSwiperDiv.className = "theIMGdivClass";
+            bigSwiperDiv.partOrderNBR = partOrderNBR;
+            bigSwiperDiv.style.width = '19vw';
+            bigSwiperDiv.style.marginLeft = '1vw';
+            bigSwiperDiv.style.borderLeft = 'solid #4b4b4b 0.4vw';
+            bigSwiperDiv.style.position = 'relative';
+            const swiperDiv = document.createElement('div');
+            swiperDiv.className = 'swiper mySwiper';
+            swiperDiv.style.margin = '0';
+            const swiperWrapper = document.createElement('div');
+            swiperWrapper.className = 'swiper-wrapper';
+            const swiperSlide = document.createElement('div');
+            swiperSlide.className = 'swiper-slide';
             const img = document.createElement('img');
             img.src = partInfo.imageUrl;
             img.style.width = "100%";
             img.style.height = "25vw";
-            carouselImages.appendChild(img);
-            if (part.img === "") {
-                carouselImages.style.width = '100%';
-            }
-            var imageUrl = "";
-            let img2;
-            if (part.img !== "") {
-                img2 = document.createElement('img');
-                img2.style.width = "auto";
+            swiperSlide.appendChild(img);
+            swiperWrapper.appendChild(swiperSlide);
+
+            if (part.img.length > 0) {
+                part.img.forEach(imgLnk => {
+                var img2 = document.createElement('img');
+                img2.style.width = "100%";
                 img2.style.maxHeight = "25vw";
                 
                 fetch(backendURL + "/upIMG", {
@@ -767,7 +780,7 @@ function generatePartId(part) {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ image: part.img })
+                    body: JSON.stringify({ image: imgLnk })
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -776,119 +789,83 @@ function generatePartId(part) {
                     return response.blob();
                 })
                 .then(blob => {
-                    imageUrl = URL.createObjectURL(blob);
+                    var imageUrl = URL.createObjectURL(blob);
                     img2.src = imageUrl;
+                    const swiperSlide = document.createElement('div');
+                    swiperSlide.className = 'swiper-slide';
+                    swiperSlide.appendChild(img2);
+                    swiperWrapper.appendChild(swiperSlide);
                 })
                 .catch(error => {
                     //console.error('There has been a problem with your fetch operation:', error);
                 });
-                carouselImages.appendChild(img2);
+                });
             }
-            carousel.appendChild(carouselImages);
-            carousel.appendChild(bigScreenB);
-            contentWrapper.appendChild(carousel);
-
-            var swImg = 1;
-            if (img2) {
-                const carouselPagination = document.createElement('div');
-                carouselPagination.className = 'carousel-pagination';
-
-                const dot1 = document.createElement('div');
-                dot1.className = 'carousel-pagination-dot active';
-                dot1.addEventListener('click', () => switchImage(0));
-                carouselPagination.appendChild(dot1);
-
-                const dot2 = document.createElement('div');
-                dot2.className = 'carousel-pagination-dot';
-                dot2.addEventListener('click', () => switchImage(1));
-                carouselPagination.appendChild(dot2);
-                carousel.appendChild(carouselPagination);
-                function switchImage(index) {
-                    const width = carousel.offsetWidth;
-                    carouselImages.style.transform = `translateX(${-width * index}px)`;
-                    dot1.classList.toggle('active', index === 0);
-                    dot2.classList.toggle('active', index === 1);
-                    if (swImg === 1) {
-                        swImg = 2;
-                    } else {
-                        swImg = 1;
-                    }
-                }
-                let currentIndex = 0;
-                function toggleImage() {
-                    currentIndex = currentIndex === 0 ? 1 : 0;
-                    switchImage(currentIndex);
-                }
-                img.addEventListener('click', toggleImage);
-                if (img2) {
-                    img2.addEventListener('click', toggleImage);
-                }
+            const swiperPagination = document.createElement('div');
+            swiperPagination.className = 'swiper-pagination';
+            swiperDiv.appendChild(swiperWrapper);
+            swiperDiv.appendChild(swiperPagination);
+            bigSwiperDiv.appendChild(swiperDiv);
+            bigSwiperDiv.appendChild(bigScreenB);
+            contentWrapper.appendChild(bigSwiperDiv);
+            if (onnccee) {
+            setTimeout(() => {
+                swiper = new Swiper('.mySwiper', {
+                    spaceBetween: 5,
+                    centeredSlides: true,
+                    slidesPerView: 'auto',
+                    touchRatio: 1,
+                    slideToClickedSlide: true,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+              }, "0");
+              onnccee = false;
             }
-           const midDiv = document.getElementsByClassName('Mid');
-            bigScreenB.addEventListener('click', function() {
-                imgdiv1.style.position = 'fixed';
-                imgdiv1.style.top = '50%';
-                imgdiv1.style.left = '50%';
-                imgdiv1.style.transform = 'translate(-50%, -50%)';
-                imgdiv1.style.width = '50vw';
-                imgdiv1.style.maxHeight = '90vh';
-                imgdiv1.style.border = 'solid 1vw black';
-                imgdiv1.style.borderRadius = '1vw';
-                imgdiv1.style.transition = 'opacity 0.2s ease-in-out';
-                imgdiv1.style.opacity = '0';
-                imgdivimg.src = partInfo.imageUrl;
-                imgdivimg.style.width = '50vw';
-                imgdivimg.style.maxHeight = '90vh';
-                imgdiv1.appendChild(imgdivimg);
-                imgdiv1.appendChild(bigScreenB);
-                imgdiv2.style.position = 'fixed';
-                imgdiv2.style.top = '50%';
-                imgdiv2.style.left = '50%';
-                imgdiv2.style.transform = 'translate(-50%, -50%)';
-                imgdiv2.style.width = '50vw';
-                imgdiv2.style.maxHeight = '90vh';
-                imgdiv2.style.border = 'solid 1vw black';
-                imgdiv2.style.borderRadius = '1vw';
-                imgdiv2.style.transition = 'opacity 0.2s ease-in-out';
-                imgdiv2.style.opacity = '0';
-                img2divimg.src = imageUrl;
-                img2divimg.style.width = '50vw';
-                img2divimg.style.maxHeight = '90vh';
-                imgdiv2.appendChild(img2divimg);
-                imgdiv2.appendChild(bigScreenB);
-                if (swImg === 1) {
-                    if (!midDiv[0].contains(imgdiv1)) {
-                        imgdiv1.appendChild(bigScreenB);
-                        midDiv[0].appendChild(imgdiv1);
-                        setTimeout(function() {
-                            imgdiv1.style.opacity = '1';
-                        }, 0);
-                        toggleBlur(imgdiv1);
-                    } else {
-                        imgdiv1.style.opacity = '0';
-                        carousel.appendChild(bigScreenB);
-                        setTimeout(function() {
-                            midDiv[0].removeChild(imgdiv1);
-                            toggleBlur(imgdiv1);
-                        }, 200);
-                    }
-                } else {
-                    if (!midDiv[0].contains(imgdiv2)) {
-                        imgdiv2.appendChild(bigScreenB);
-                        midDiv[0].appendChild(imgdiv2);
-                        setTimeout(function() {
-                            imgdiv2.style.opacity = '1';
-                        }, 0);
-                        toggleBlur(imgdiv2);
-                    } else {
-                        imgdiv2.style.opacity = '0';
-                        carousel.appendChild(bigScreenB);
-                        setTimeout(function() {
-                            midDiv[0].removeChild(imgdiv2);
-                            toggleBlur(imgdiv2);
-                        }, 200);
-                    }
-                }
+            bigScreenB.addEventListener('click', function () {
+                var imgdiv = document.createElement('div');
+                var imgdivRel = document.createElement('div');
+                var imgdivimg = document.createElement('img');
+                const bigScreenB = document.createElement('img');
+                bigScreenB.className = 'bigScreenB';
+                bigScreenB.src = "https://192.168.2.32:443/fscreen";
+                bigScreenB.style.right = '1vw';
+                bigScreenB.style.top = '1vw';
+                imgdivRel.style.position = 'relative';
+                imgdiv.style.position = 'fixed';
+                imgdiv.style.top = '50%';
+                imgdiv.style.left = '50%';
+                imgdiv.style.transform = 'translate(-50%, -50%)';
+                imgdiv.style.transition = 'opacity 0.2s ease-in-out';
+                imgdiv.style.opacity = '0';
+                imgdivimg.src = this.parentNode.children[0].children[0].children[swiper[this.parentNode.partOrderNBR-1].activeIndex].children[0].src;
+                imgdivimg.style.height = '95vh';
+                imgdivimg.style.width = 'auto';
+                imgdivimg.style.border = 'solid 0.3vw black';
+                imgdivimg.style.borderRadius = '2vw';
+                imgdivRel.appendChild(imgdivimg);
+                imgdivRel.appendChild(bigScreenB);
+                imgdiv.appendChild(imgdivRel);
+                document.getElementsByClassName('Mid')[0].appendChild(imgdiv);
+                setTimeout(function() {
+                    imgdiv.style.opacity = '1';
+                }, 0);
+                document.body.classList.add('blur');
+                imgdiv.style.zIndex = '2';
+                bigScreenB.addEventListener('click', function() {
+                    imgdiv.style.opacity = '0';
+                    setTimeout(function() {
+                        imgdiv.remove();
+                        document.body.classList.remove('blur');
+                        imgdiv = null;
+                    }, 200);
+                });
             });
         }
 
@@ -1347,7 +1324,7 @@ parts.forEach(parts => {
 // Extract user, worksite, floor, and unit values from the received data
 extractUserInfo(parts);
 
-const filteredData = parts.filter(part => !isEmptyPart(part) && !isBlackPart(part));
+const filteredData = parts.filter(part => !isEmptyPart(part));
 
 if (filteredData.length === 0) {
     partListContainer.innerHTML = "No matching parts found.";
@@ -1362,6 +1339,8 @@ var tmp = {};
 let oldun = "";
 let restrict;
 var bnbr = 1000;
+partOrderNBR = 0;
+onnccee = true;
 dict = [];
 if (groupSort) {
     filteredData.reverse().forEach(part => {
@@ -1438,6 +1417,75 @@ firstL = 0;
     currentUnitList.appendChild(partItem);
 });
 }
+/*let lastTapTime = 0;
+document.querySelectorAll('.theIMGdivClass').forEach(image => {
+    image.addEventListener('dblclick', function() {
+        const midDiv = document.getElementsByClassName('Mid');
+        var imgdivimg = document.createElement('img');
+        imgdivimg.style.position = 'fixed';
+        imgdivimg.style.top = '50%';
+        imgdivimg.style.left = '50%';
+        imgdivimg.style.transform = 'translate(-50%, -50%)';
+        imgdivimg.style.transition = 'opacity 0.2s ease-in-out';
+        imgdivimg.style.opacity = '0';
+        imgdivimg.src = this.children[0].children[0].children[swiper[this.partOrderNBR-1].activeIndex].children[0].src;
+        imgdivimg.style.height = '95vh';
+        imgdivimg.style.width = 'auto';
+        imgdivimg.style.border = 'solid 0.3vw black';
+        imgdivimg.style.borderRadius = '2vw';
+        midDiv[0].appendChild(imgdivimg);
+        setTimeout(function() {
+            imgdivimg.style.opacity = '1';
+        }, 0);
+        document.body.classList.add('blur');
+        imgdivimg.style.zIndex = '2';
+        imgdivimg.addEventListener('dblclick', function() {
+            imgdivimg.style.opacity = '0';
+            setTimeout(function() {
+                imgdivimg.remove();
+                document.body.classList.remove('blur');
+                imgdivimg = null;
+            }, 200);
+        });
+    });
+
+image.addEventListener('touchend', function(event) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTapTime;
+    if (tapLength < 500 && tapLength > 0) {
+        const midDiv = document.getElementsByClassName('Mid');
+        var imgdivimg = document.createElement('img');
+        imgdivimg.style.position = 'fixed';
+        imgdivimg.style.top = '50%';
+        imgdivimg.style.left = '50%';
+        imgdivimg.style.transform = 'translate(-50%, -50%)';
+        imgdivimg.style.transition = 'opacity 0.2s ease-in-out';
+        imgdivimg.style.opacity = '0';
+        imgdivimg.src = this.src;
+        imgdivimg.style.width = '50vw';
+        imgdivimg.style.maxHeight = '85vh';
+        imgdivimg.style.height = 'auto';
+        imgdivimg.style.border = 'solid 0.3vw black';
+        imgdivimg.style.borderRadius = '2vw';
+        midDiv[0].appendChild(imgdivimg);
+        setTimeout(function() {
+            imgdivimg.style.opacity = '1';
+        }, 0);
+        document.body.classList.add('blur');
+        imgdivimg.style.zIndex = '2';
+        imgdivimg.addEventListener('dblclick', function() {
+            imgdivimg.style.opacity = '0';
+            setTimeout(function() {
+                imgdivimg.remove();
+                document.body.classList.remove('blur');
+                imgdivimg = null;
+            }, 200);
+        });
+        event.preventDefault();
+    }
+    lastTapTime = currentTime;
+});
+});*/
 document.getElementById("Norder").children[1].children[0].textContent = document.querySelectorAll('.part-item').length;
 document.getElementById("Norder").style.display = "flex";
 nsheet.forEach(sheet => {
@@ -1461,15 +1509,6 @@ dict2 = dict.reduce((acc, curr) => {
     return {...acc, ...curr};
 }, {});
 }
-
-    function isBlackPart(part) {
-        for (const key in part) {
-            if (part[key].trim() === "black") {
-                return true;
-            }
-        }
-        return false;
-    }
 
 function removeDeletedPart(partItem) {
     partListContainer.removeChild(partItem);
@@ -1570,7 +1609,7 @@ function generateModPartId(part) {
             ul.appendChild(detailItem);
             return;
         }
-        if (value.trim() !== "" && value.trim() !== "black" && !excludedKeys.includes(label)) {
+        if (!excludedKeys.includes(label) && value.trim() !== "") {
             const detailItem = document.createElement("li");
             detailItem.textContent = `${label}: ${value}`;
             ul.appendChild(detailItem);
@@ -1726,7 +1765,7 @@ function displayModPartList(parts) {
     }
     MidLay3.innerHTML = "";
     extractModUserInfo(parts);
-    const filteredData = parts.filter(part => !isEmptyModPart(part) && !isBlackModPart(part));
+    const filteredData = parts.filter(part => !isEmptyModPart(part));
     if (filteredData.length === 0) {
         MidLay3.innerHTML = "No matching parts found.";
         return;
@@ -1739,14 +1778,6 @@ function displayModPartList(parts) {
     });
     MidLay3.appendChild(Tdiv);
 }
-    function isBlackModPart(part) {
-        for (const key in part) {
-            if (part[key].trim() === "black") {
-                return true;
-            }
-        }
-        return false;
-    }
     function handleModRetrieve(part, partItem) {
         const url = backendURL + "/retreiveHis";
         const requestOptions = {

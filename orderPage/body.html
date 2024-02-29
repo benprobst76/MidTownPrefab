@@ -1,4 +1,13 @@
 <body>
+    <div id="notifPanel" style=" width: 20%; height: max-content; background-color: #1f1f1f; border: solid 0.1vw rgb(97, 97, 97); border-radius: 3%; display: flex; flex-direction: column; scale: 0; transition: scale 0.05s ease; position: fixed; z-index: 100;">
+      <div class="PanelList">
+        <div style="margin-left: 10%">User History</div>
+      </div>
+      <div class="PanelList" id="Discon">
+        <div style="color: white; font-size: 1.4vw; width: fit-content; margin-left: 10%;">Log Out</div>
+        <img src="https://192.168.2.32/PWRL" style="max-width: 20%; max-height: 50%; margin-left: 8%;">
+      </div>
+    </div>
     <div class="TopLay">
         <div class="TopMid1">
           <img src="https://192.168.2.32/MidPrefabIMG" style="width: 45%;">
@@ -10,7 +19,10 @@
             <h1 style="color: white; font-size: 3vw; position: absolute; left: 50%; transform: translateX(-50%);">Order Page</h1>
         </div>
         <div class="TopMid3">
-          <img src="https://192.168.2.32/PWRL" style="width: 25%; cursor: pointer;" id="Discon"></img>
+          <div style="color: white; border: solid 0.1vw rgb(97, 97, 97); height: 40%; border-radius: 1vw; cursor: pointer; display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 5%;" id="TopUser">
+            <h2 style="font-size: 2vw; font-weight: lighter;"></h2>
+            <h2 style="font-size: 1.6vw; font-weight: lighter; transform: rotate(90deg) translateX(-10%) translateY(-20%);">&nbsp;&#10154;</h2>
+          </div>
       </div>
     </div>
     <div class="Mid">
@@ -262,7 +274,7 @@
               <div style="display: flex; flex-direction: column; width: 22vw;">
                 <div class="swiper mySwiper" style="margin: 0;">
                   <div class="swiper-wrapper" id="IMGtoAdd">
-                      <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                      <div class="swiper-slide"><img src="image2" alt="Big Picture"></div>
                   </div>
                   <div class="swiper-pagination"></div>
                 </div>
@@ -406,7 +418,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image3" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -550,7 +562,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image4" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -606,7 +618,6 @@
                     <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
                     <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
                     <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
-		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
                     <button type="button" class="custm" id="answer-btn2">Custom Size</button>
                   </div>
 			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
@@ -674,7 +685,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image5" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -832,7 +843,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image6" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -976,7 +987,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image7" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -1134,7 +1145,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image8" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -1324,7 +1335,7 @@
             <div style="display: flex; flex-direction: column; width: 22vw;">
               <div class="swiper mySwiper" style="margin: 0;">
                 <div class="swiper-wrapper" id="IMGtoAdd">
-                    <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    <div class="swiper-slide"><img src="image9" alt="Big Picture"></div>
                 </div>
                 <div class="swiper-pagination"></div>
               </div>
@@ -1473,7 +1484,7 @@
             <div style="display: flex; flex-direction: column; width: 22vw;">
               <div class="swiper mySwiper" style="margin: 0;">
                 <div class="swiper-wrapper" id="IMGtoAdd">
-                    <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                    <div class="swiper-slide"><img src="image10" alt="Big Picture"></div>
                 </div>
                 <div class="swiper-pagination"></div>
               </div>
@@ -1611,7 +1622,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image11" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -1801,7 +1812,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image12" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -1975,7 +1986,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image13" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -2193,7 +2204,7 @@
                 <div style="display: flex; flex-direction: column; width: 22vw;">
                   <div class="swiper mySwiper" style="margin: 0;">
                     <div class="swiper-wrapper" id="IMGtoAdd">
-                        <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                        <div class="swiper-slide"><img src="image14" alt="Big Picture"></div>
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
@@ -2299,7 +2310,7 @@
               <div style="display: flex; flex-direction: column; width: 22vw;">
                 <div class="swiper mySwiper" style="margin: 0;">
                   <div class="swiper-wrapper" id="IMGtoAdd">
-                      <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                      <div class="swiper-slide"><img src="image15" alt="Big Picture"></div>
                   </div>
                   <div class="swiper-pagination"></div>
                 </div>
@@ -2355,7 +2366,6 @@
                     <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
                     <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
                     <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
-		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
                     <button type="button" class="custm" id="answer-btn2">Custom Size</button>
                   </div>
 			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->

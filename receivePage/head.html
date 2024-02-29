@@ -2,6 +2,7 @@
     <title>Receive Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <link rel="icon" href="favicon" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
     <style>
         html, body {
             height: 100%;
@@ -452,45 +453,6 @@
             max-height: 500px;
             border-color: rgba(75, 75, 75, 1); /* Transition to opaque border */
         }
-        .carousel {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            margin-left: 1vw;
-            border-left: solid #4b4b4b 0.4vw;
-            }
-
-            .carousel-images {
-            display: flex;
-            width: 100%;
-            transition: transform 0.5s ease;
-            }
-
-            .carousel-images img {
-            width: 100%;
-            height: 25vw;
-            }
-
-            .carousel-pagination {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            }
-
-            .carousel-pagination-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #888;
-            margin: 0 5px;
-            cursor: pointer;
-            }
-
-            .carousel-pagination-dot.active {
-            background-color: #bbb;
-            }
             .bigScreenB {
             position: absolute;
             top: 0;
@@ -499,6 +461,7 @@
             height: 3vw;
             border-radius: 20%;
             cursor: pointer;
+            z-index: 1;
             }
             input[type=checkbox]{
                 height: 0;

@@ -11,6 +11,7 @@ var Cinfo = {
     "thickness": "",
     "length": "",
     "length2": "",
+    "length3": "",
     "dA": "",
     "dB": "",
     "dC": "",
@@ -30,7 +31,7 @@ var Cinfo = {
     "check": "",
     "rand": "",
     "sum": "",
-    "img": "",
+    "img": [],
     "groupO": "",
     "priority": "",
     "note": ""
@@ -85,13 +86,12 @@ var partData = {
 var GroupOrder = [];
 var tmpT = 0;
 var formData;
-var randomFilename = "";
 var imgB = false;
 var actualData = {};
 var imgArray = {};
+var imgArrayLocal = [];
 var ccusttm = { name: false, data: null }
 var errFabr = false;
-var imgCinfArray = [];
 var onccee = false;
 
 function generateRandomString(length) {
@@ -106,13 +106,14 @@ function triggerFileInput() {
     const fileInput = document.getElementById('fileInput');
     fileInput.click();
 }
+{
+let swiper;
 function handleFileSelect() {
-  if (imgCinfArray.length === 0) {
   const fileInput = document.getElementById('fileInput');
   const file = fileInput.files[0];
   if (!file) return;
   var reader = new FileReader();
-  randomFilename = `${generateRandomString(16)}${file.name.substring(file.name.lastIndexOf('.'))}`;
+  var randomFilename = `${generateRandomString(16)}${file.name.substring(file.name.lastIndexOf('.'))}`;
   reader.readAsDataURL(file);
   let newFormData = new FormData();
   const newFile = new File([file], randomFilename, {
@@ -122,7 +123,7 @@ function handleFileSelect() {
   formData = newFormData;
   reader.onload = function(e) {
     if (!onccee) {
-      var swiper = new Swiper('.mySwiper', {
+      swiper = new Swiper('.mySwiper', {
         spaceBetween: 5,
         centeredSlides: true,
         slidesPerView: 'auto',
@@ -147,8 +148,7 @@ function handleFileSelect() {
     delBut.style.top = '1em';
     delBut.style.left= '50%';
     delBut.style.transform = 'translateX(-50%)';
-    delBut.Cinf = randomFilename;
-    delBut.Form = formData;
+    delBut.className = 'delImgBtn';
     delBut.addEventListener('click', function() {
       var slideIndex = Array.from(newIMGDIV.parentNode.children).indexOf(newIMGDIV);
       newIMGDIV.remove();
@@ -156,9 +156,13 @@ function handleFileSelect() {
           swiper.slideTo(slideIndex - 1);
       }
       swiper.update();
-      const cinfIndex = imgCinfArray.indexOf(this.Cinf);
-      if (cinfIndex > -1) imgCinfArray.splice(cinfIndex, 1);
       delete imgArray[randomFilename];
+      for (let i = 0; i < imgArrayLocal.length; i++) {
+        if (imgArrayLocal[i] === randomFilename) {
+            imgArrayLocal.splice(i, 1);
+            break;
+        }
+      }
     });
     newIMGDIV.className = 'swiper-slide';
     newIMGDIV.style.position = 'relative';
@@ -169,13 +173,10 @@ function handleFileSelect() {
     
       
   };
-  Cinfo.img = randomFilename;
-  imgCinfArray.push(randomFilename);
-  //imgArray[randomFilename] = formData;
+  imgArrayLocal.push(randomFilename);
+  imgArray[randomFilename] = formData;
   imgB = true;
-  } else {
-    alert('Only one image can be uploaded');
-  }
+}
 }
 {
 const script1 = document.createElement('script');
@@ -194,9 +195,34 @@ function getUser() {
         let parts = cookies[i].split('=');
         if(parts[0] === "username4221") {
             Cinfo.user = parts[1];
+            document.getElementById('TopUser').children[0].innerText = parts[1];
         }
     }
 }
+
+function outsideClickListener(event) {
+  const panel = document.getElementById('notifPanel');
+  if (!panel.contains(event.target)) {
+    panel.style.scale = '0';
+    document.removeEventListener('click', outsideClickListener);
+  }
+}
+
+document.getElementById('TopUser').addEventListener('click', function() {
+  const user = this.getBoundingClientRect();
+  const panel = document.getElementById('notifPanel');
+  if (panel.style.scale === '0' || !panel.style.scale) {
+    panel.style.right = '2.8vw';
+    panel.style.top = user.bottom + 'px';
+    panel.style.scale = '1';
+    setTimeout(() => {
+      document.addEventListener('click', outsideClickListener);
+    }, 0);
+  } else {
+    panel.style.scale = '0';
+    document.removeEventListener('click', outsideClickListener);
+  }
+});
 
 document.getElementById('Discon').addEventListener('click', function() {
     document.cookie = 'username4221=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=192.168.2.32;';
@@ -204,7 +230,6 @@ document.getElementById('Discon').addEventListener('click', function() {
     GroupOrder = undefined;
     tmpT = undefined;
     formData = undefined;
-    randomFilename = undefined;
     imgB = undefined;
     actualData = undefined;
     imgArray = undefined;
@@ -245,7 +270,6 @@ document.getElementById('Discon').addEventListener('click', function() {
     imageBoxes = undefined;
     fetchProgressData = undefined;
     storedd = undefined;
-    imgCinfArray = undefined;
     onccee = undefined;
     fetch("https://192.168.2.32:443/login98", {
             method: 'GET',
@@ -266,6 +290,7 @@ document.getElementById('Discon').addEventListener('click', function() {
             script.innerHTML = html[2];
             document.body.appendChild(script);
             history.replaceState({ page: 1 }, "", "/");
+            document.removeEventListener('click', outsideClickListener);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -913,8 +938,17 @@ function restOfSheet() {
     console.log(Cinfo.dB);
     document.getElementById('dB').value = Cinfo.dB.split('.')[0];
     tmppp2.value = Cinfo.dB.split('.')[1];
+  } else if (tmp < 24) {
+    const userConfirmed = window.confirm("Are you sure you want dimmension B less than 6 inch ?");  
+    if (userConfirmed) {
+      const tmppp = 24 - tmp;
+      Cinfo.dB = decimalToEighthsOfInch(tmppp);
+      console.log(Cinfo.dB);
+      document.getElementById('dB').value = Cinfo.dB.split('.')[0];
+      tmppp2.value = Cinfo.dB.split('.')[1];
+    }
   } else {
-    alert('Dimension A is too big, maximum 18 in')
+    alert("Dimension A is too big, can't be greater than 24 in");
   }
 }
 function restOfSheet2() {
@@ -944,14 +978,14 @@ function restOfSheet2() {
     }
     //Cinfo[inputName] = inputValue; 
   });
-  if (tmp < 19) {
+  if (tmp < 48) {
     const tmppp = 48 - tmp;
     Cinfo.dB = decimalToEighthsOfInch(tmppp);
     console.log(Cinfo.dB);
     document.getElementById('dB').value = Cinfo.dB.split('.')[0];
     tmppp2.value = Cinfo.dB.split('.')[1];
   } else {
-    alert('Dimension A is too big, maximum 18 in')
+    alert("Dimension A is too big, can't be greater than 48 in");
   }
 }
 function fractionToDecimal(frac = "") {
@@ -1874,18 +1908,37 @@ if (requiredButtons2.length > 0) {
           }
         }
         calcc()
-        if (imgB) {
-          imgArray[Cinfo.img] = formData;
-        }
-        /*var trueIMG = false;
-        imgCinfArray.forEach(img => {
-          if (trueIMG) {
-            Cinfo.img += ("&" + img);
+        if ((Cinfo['part'] === "part4" || Cinfo['part'] === "part15")) {
+          var tmpCinf = 0;
+          if (Cinfo.length === Cinfo.length2) {
+            tmpCinf = Cinfo.length2*12;
           } else {
-            Cinfo.img = img;
-            trueIMG = true;
+            tmpCinf = fractionToDecimal(Cinfo.length);
           }
-        });*/
+          tmpCinf = tmpCinf + fractionToDecimal(Cinfo['dB']);
+          if (tmpCinf > 144) {
+            alert('Length is greater than 12ft');
+            return;
+          }
+          if (tmpCinf <= 144) {
+            Cinfo.length2 = '12';
+          } if (tmpCinf <= 120) {
+            Cinfo.length2 = '10';
+          } if (tmpCinf <= 108) {
+            Cinfo.length2 = '9';
+          } if (tmpCinf <= 96) {
+            Cinfo.length2 = '8';
+          }
+          Cinfo.length = decimalToEighthsOfInch(tmpCinf);
+        }
+        if (imgB) {
+          Cinfo.img = imgArrayLocal;
+        }
+        if (Cinfo.length === Cinfo.length2) {
+          Cinfo.length3 = Cinfo.length2 * 12;
+        } else {
+          Cinfo.length3 = Cinfo.length;
+        }
         const newCinfo = { ...Cinfo };              
         GroupOrder.push(newCinfo);
         resetCinf();
@@ -1910,9 +1963,10 @@ addToGroupOrderBtn.addEventListener('click', handleAddToGroupOrder);
 document.getElementById('gbck').addEventListener('click', function() {
     fbrc = 0;
     jbead = 0;
-    imgCinfArray = [];
+    imgArrayLocal.forEach((item) => {
+      delete imgArray[item];
+    });
     resetCinf();
-    onccee = false;
     document.getElementById(divv).style.scale = 0;
     document.getElementById('MidLay1').style.scale = 1;
     document.getElementById(divv).style.zIndex = 0;
@@ -1996,28 +2050,45 @@ function decimalToEighthsOfInch(decimal) {
   return wholePart + (fractionStr ? "." + fractionStr : "");
 }
 function populateFloors(selectElement, y) {
-const worksite = Cinfo.worksite;
-return fetch(backendURL + '/getFloors', {
-    method: 'POST',
-    body: JSON.stringify({ worksite: worksite }),
-    headers: {
-        'Content-Type': 'application/json'
-    }
-})
-.then(response => response.json())
-.then(data => {
-    selectElement.innerHTML = '';
-    data.floors.forEach(item => {
-        let option = document.createElement('option');
-        option.value = item.floor;
-        option.textContent = item.floor;
-        selectElement.appendChild(option);
-    });
-    selectElement.value = y;
-})
-.catch(error => {
-    console.error('Error:', error);
-});
+  const worksite = Cinfo.worksite;
+  return fetch(backendURL + '/getFloors', {
+      method: 'POST',
+      body: JSON.stringify({ worksite: worksite }),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  })
+  .then(data => {
+      selectElement.innerHTML = '';
+      data.floors.forEach(item => {
+          let option = document.createElement('option');
+          option.value = item.floor;
+          option.textContent = item.floor;
+          selectElement.appendChild(option);
+      });
+      selectElement.value = y;
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      // Handle the error or fallback scenario
+      selectElement.innerHTML = '';
+      let option = document.createElement('option');
+      option.value = y;
+      option.textContent = y;
+      let option2 = document.createElement('option');
+      option2.value = 'Network error, retry';
+      option2.textContent = 'Network error, retry';
+      selectElement.appendChild(option);
+      selectElement.appendChild(option2);
+      selectElement.value = y;
+      console.log("THE SUPPOSED FLOOR: ", selectElement);
+  });
 }
 
 function populateUnits(selectElement, y) {
@@ -2049,6 +2120,17 @@ return fetch(backendURL + '/getUnits', {
 })
 .catch(error => {
     console.error('Error:', error);
+    selectElement.innerHTML = '';
+    let option = document.createElement('option');
+    option.value = y.unit;
+    option.textContent = y.unit;
+    let option2 = document.createElement('option');
+    option2.value = 'Network error, retry';
+    option2.textContent = 'Network error, retry';
+    selectElement.appendChild(option);
+    selectElement.appendChild(option2);
+    selectElement.value = y.unit;
+    console.log("THE SUPPOSED UNIT: ", selectElement);
 });
 }
 function createExpandableList1(groupedData) {
@@ -2089,6 +2171,9 @@ function createExpandableList1(groupedData) {
     };
     const randNme = generateRandomString(20);
     const detailItem = document.createElement('div');
+    const detailItem2 = document.createElement('div');
+    detailItem2.style.display = 'flex';
+    detailItem2.style.flexDirection = 'row';
     Object.keys(groupedData).filter(key => groupedData[key] !== "" && key !== "price" && key !== "user" && key !== "worksite" && key !== "part" && key !== "sum" && key !== "length2" && key !== "img" && key !== "null").forEach(key => {
         const detailDiv = document.createElement('div');
         const detailLabel = document.createElement('span');
@@ -2197,7 +2282,6 @@ function createExpandableList1(groupedData) {
         } else {
           detailInput = document.createElement('input');
         }
-        const objectToUpdate = GroupOrder.find(obj => mapsAreEqual(obj, groupedData));
         detailInput.value = groupedData[key];
         detailInput.style.flexGrow = '1';
         detailInput.style.marginLeft = '0.5vw';
@@ -2207,10 +2291,16 @@ function createExpandableList1(groupedData) {
             previousValue = this.value;
           });
         }
+        var dold2;
+        var dold2Pass = true;
         detailInput.addEventListener('change', function(event) {
           const objectToUpdate = GroupOrder.find(obj => mapsAreEqual(obj, groupedData));
           if (objectToUpdate) {
             const dold = {...objectToUpdate};
+            if (dold2Pass) {
+              dold2 = {...objectToUpdate};
+              dold2Pass = false;
+            }
             objectToUpdate[key] = event.target.value;
             if (objectToUpdate['edgeA'] === 'Fabric' && objectToUpdate['edgeB'] === 'Fabric') {
               alert("Can't have both edges to Fabric");
@@ -2259,16 +2349,54 @@ function createExpandableList1(groupedData) {
             }
             if (key === 'floor') {
               const floor = event.target.value;
-              console.log("THE GETUNITS")
-              fetch(backendURL + '/getUnits', {
-                  method: 'POST',
-                  body: JSON.stringify({ worksite: Cinfo.worksite, floor: floor }),
-                  headers: {
-                      'Content-Type': 'application/json'
+              if (floor !== 'Network error, retry') {
+                fetch(backendURL + '/getUnits', {
+                    method: 'POST',
+                    body: JSON.stringify({ worksite: Cinfo.worksite, floor: floor }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (dold.floor === 'Network error, retry') {
+                    dold.floor = dold2.floor
                   }
-              })
-              .then(response => response.json())
-              .then(data => {
+                  if (dold.unit === 'Network error, retry') {
+                    dold.unit = dold2.unit
+                  }
+                  container2.removeChild(partItem);
+                  container2.removeChild(detailItem);
+                  if (container2.children.length === 0) {
+                    unitContainer.removeChild(container2);
+                    unitContainer.removeChild(unitItem)
+                    actualData[dold.floor].delete(dold.unit);
+                  }
+                  if (unitContainer.children.length === 0) {
+                    container.removeChild(unitContainer);
+                    container.removeChild(floorItem);
+                    delete actualData[dold.floor];
+                  }
+                  objectToUpdate.unit = data.units[0].unit;
+                  createExpandableList2(objectToUpdate);
+                })
+                .catch(error => {
+                    console.log("CONNECTION ERROR", error);
+                    alert('No connection, retry later');
+                    this.value = dold2.floor;
+                });
+              } else {
+                populateFloors(this, dold2[key]);
+              }
+            }
+            if (key === 'unit') {
+              if (event.target.value !== 'Network error, retry') {
+                if (dold.floor === 'Network error, retry') {
+                  dold.floor = dold2.floor
+                }
+                if (dold.unit === 'Network error, retry') {
+                  dold.unit = dold2.unit
+                }
                 container2.removeChild(partItem);
                 container2.removeChild(detailItem);
                 if (container2.children.length === 0) {
@@ -2276,30 +2404,15 @@ function createExpandableList1(groupedData) {
                   unitContainer.removeChild(unitItem)
                   actualData[dold.floor].delete(dold.unit);
                 }
-                if (unitContainer.children.length === 0) {
-                  container.removeChild(unitContainer);
-                  container.removeChild(floorItem);
-                  delete actualData[dold.floor];
-                }
-                objectToUpdate.unit = data.units[0].unit;
                 createExpandableList2(objectToUpdate);
-              })
-              .catch(error => {
-                  console.error('Error fetching units:', error);
-              });
-            }
-            if (key === 'unit') {
-              container2.removeChild(partItem);
-              container2.removeChild(detailItem);
-              if (container2.children.length === 0) {
-                unitContainer.removeChild(container2);
-                unitContainer.removeChild(unitItem)
-                actualData[dold.floor].delete(dold.unit);
+              } else {
+                populateUnits(this, dold2);
               }
-              createExpandableList2(objectToUpdate);
             }
           }
         });
+        detailInput.classList.add('grayed-out-content');
+        detailInput.classList.add('grayed-out-content-div');
         detailDiv.appendChild(detailInput);
         detailDiv.style.display = 'flex';
         detailItem.appendChild(detailDiv);
@@ -2307,7 +2420,7 @@ function createExpandableList1(groupedData) {
     detailItem.className = 'expandable-content';
     detailItem.classList.add('details');
     const deleteButton = document.createElement('button');
-    deleteButton.setAttribute('style', 'width: fit-content; height: fit-content; font-size: 1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.2vw;');
+    deleteButton.setAttribute('style', 'width: 5em; height: fit-content; font-size: 1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.2vw;');
     deleteButton.textContent = 'Delete';
     deleteButton.style.marginTop = '0.6vw';
     deleteButton.style.marginBottom = '0.2vw';
@@ -2315,6 +2428,27 @@ function createExpandableList1(groupedData) {
     deleteButton.style.display = 'block';
     deleteButton.style.marginLeft = 'auto';
     deleteButton.style.marginRight = 'auto';
+    const editButton = document.createElement('button');
+    editButton.setAttribute('style', 'width: 5em; height: fit-content; font-size: 1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.2vw;');
+    editButton.textContent = 'Edit';
+    editButton.style.marginTop = '0.6vw';
+    editButton.style.marginBottom = '0.2vw';
+    editButton.style.height = '3.3vh';
+    editButton.style.display = 'block';
+    editButton.style.marginLeft = 'auto';
+    editButton.style.marginRight = 'auto';
+    editButton.onclick = function() {
+      for (let i = 0; i < detailItem.children.length-1; i++) {
+        detailItem.children[i].children[1].classList.toggle('grayed-out-content');
+      }
+      if (!detailItem.children[0].children[1].classList.contains('grayed-out-content')) {
+        this.style.backgroundColor = 'green';
+        this.innerText = 'Save';
+      } else {
+        this.style.backgroundColor = '#1E90FF';
+        this.innerText = 'Edit';
+      }
+    }
     deleteButton.onclick = function() {
         container2.removeChild(partItem);
         container2.removeChild(detailItem);
@@ -2332,14 +2466,18 @@ function createExpandableList1(groupedData) {
         if (GroupOrder.length === 0) {
           submitButton.style.display = 'none';
         }
-        if (imgArray[groupedData.img]) {
-          delete imgArray[groupedData.img];
+        if (groupedData.img.length > 0) {
+          groupedData.img.forEach((item) => {
+            delete imgArray[item];
+          });
         }
     };
     partItem.onclick = function() {
         detailItem.classList.toggle('expanded');
     };
-    detailItem.appendChild(deleteButton);
+    detailItem2.appendChild(deleteButton);
+    detailItem2.appendChild(editButton);
+    detailItem.appendChild(detailItem2)
     container2.appendChild(partItem);
     container2.appendChild(detailItem);
     unitContainer.appendChild(unitItem);
@@ -2411,6 +2549,9 @@ function createExpandableList2(groupedData) {
 
     const randNme = generateRandomString(20);
     const detailItem = document.createElement('div');
+    const detailItem2 = document.createElement('div');
+    detailItem2.style.display = 'flex';
+    detailItem2.style.flexDirection = 'row';
     Object.keys(groupedData).filter(key => groupedData[key] !== "" && key !== "price" && key !== "user" && key !== "worksite" && key !== "part" && key !== "sum" && key !== "length2" && key !== "img" && key !== "null").forEach(key => {
         const detailDiv = document.createElement('div');
         const detailLabel = document.createElement('span');
@@ -2581,7 +2722,6 @@ function createExpandableList2(groupedData) {
             }
             if (key === 'floor') {
               const floor = event.target.value;
-              console.log("THE GETUNITS")
               fetch(backendURL + '/getUnits', {
                   method: 'POST',
                   body: JSON.stringify({ worksite: Cinfo.worksite, floor: floor }),
@@ -2622,6 +2762,8 @@ function createExpandableList2(groupedData) {
             }
           }
         });
+        detailInput.classList.add('grayed-out-content');
+        detailInput.classList.add('grayed-out-content-div');
         detailDiv.appendChild(detailInput);
         detailDiv.style.display = 'flex';
         detailItem.appendChild(detailDiv);
@@ -2637,6 +2779,27 @@ function createExpandableList2(groupedData) {
     deleteButton.style.display = 'block';
     deleteButton.style.marginLeft = 'auto';
     deleteButton.style.marginRight = 'auto';
+    const editButton = document.createElement('button');
+    editButton.setAttribute('style', 'width: 5em; height: fit-content; font-size: 1vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.2vw;');
+    editButton.textContent = 'Edit';
+    editButton.style.marginTop = '0.6vw';
+    editButton.style.marginBottom = '0.2vw';
+    editButton.style.height = '3.3vh';
+    editButton.style.display = 'block';
+    editButton.style.marginLeft = 'auto';
+    editButton.style.marginRight = 'auto';
+    editButton.onclick = function() {
+      for (let i = 0; i < detailItem.children.length-1; i++) {
+        detailItem.children[i].children[1].classList.toggle('grayed-out-content');
+      }
+      if (!detailItem.children[0].children[1].classList.contains('grayed-out-content')) {
+        this.style.backgroundColor = 'green';
+        this.innerText = 'Save';
+      } else {
+        this.style.backgroundColor = '#1E90FF';
+        this.innerText = 'Edit';
+      }
+    }
     deleteButton.onclick = function() {
       container2.removeChild(partItem);
       container2.removeChild(detailItem);
@@ -2654,14 +2817,18 @@ function createExpandableList2(groupedData) {
       if (GroupOrder.length === 0) {
         submitButton.style.display = 'none';
       }
-      if (imgArray[groupedData.img]) {
-        delete imgArray[groupedData.img];
+      if (groupedData.img.length > 0) {
+        groupedData.img.forEach((item) => {
+          delete imgArray[item];
+        });
       }
     };
     partItem.onclick = function() {
         detailItem.classList.toggle('expanded');
     };
-    detailItem.appendChild(deleteButton);
+    detailItem2.appendChild(deleteButton);
+    detailItem2.appendChild(editButton);
+    detailItem.appendChild(detailItem2);
     container2.appendChild(partItem);
     container2.appendChild(detailItem);
     if (!isUnit) {
@@ -2926,6 +3093,7 @@ document.getElementById('submitButton').addEventListener('click', () => {
             }
           } else {
             alert('Error submitting order.');
+            console.log(response);
             setLoadingScreen(false);
           }
           }).catch(error => {
@@ -3162,13 +3330,13 @@ function resetCinf() {
   Cinfo.price = "";
   Cinfo.rand = "";
   Cinfo.sum = "";
-  Cinfo.img = "";
+  Cinfo.img = [];
   fbrc = 0;
   jbead = 0;
   imgB = false;
   ccusttm['name'] = false;
-  imgCinfArray = [];
   trueIMG = false;
   onccee = false;
+  imgArrayLocal = [];
 }
 setInterval(fetchProgressData, 10000);
