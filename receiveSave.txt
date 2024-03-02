@@ -656,7 +656,7 @@
         </div>
     </div>
     <script>
-        var backendURL = "https://192.168.2.32:443";
+        var backendURL = "https://192.168.2.165:443";
         var Cinfo = {
             "time": "",
             "user": "",
@@ -1408,7 +1408,7 @@ function generatePartId(part) {
                 carouselImages.className = 'carousel-images';
                 const bigScreenB = document.createElement('img');
                 bigScreenB.className = 'bigScreenB';
-                bigScreenB.src = "https://192.168.2.32:443/fscreen";
+                bigScreenB.src = "https://192.168.2.165:443/fscreen";
                 const img = document.createElement('img');
                 img.src = partInfo.imageUrl;
                 img.style.width = "100%";

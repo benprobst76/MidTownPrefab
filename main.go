@@ -1,9 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -18,6 +20,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Cred struct {
@@ -2016,6 +2019,111 @@ func adminWorksite(c *gin.Context) {
 	c.String(http.StatusOK, floor2_page)
 }
 
+func getOrderData(c *gin.Context) {
+	type dataStruct struct {
+		User      string `json:"user"`
+		Worksite  string `json:"worksite"`
+		Floor     string `json:"floor"`
+		Unit      string `json:"unit"`
+		Part      string `json:"part"`
+		Type      string `json:"type"`
+		Side      string `json:"side"`
+		Thickness string `json:"thickness"`
+		Length    string `json:"length"`
+		Length2   string `json:"length2"`
+		dA        string `json:"dA"`
+		dB        string `json:"dB"`
+		dC        string `json:"dC"`
+		dD        string `json:"dD"`
+		dE        string `json:"dE"`
+		// d1A       string `json:"d1A"`
+		// d2A       string `json:"d2A"`
+		// d1B       string `json:"d1B"`
+		// d2B       string `json:"d2B"`
+		// dR        string `json:"dR"`
+		// dR_P      string `json:"dR_P"`
+		// dH        string `json:"dH"`
+		// dW        string `json:"dW"`
+		EdgeA string `json:"edgeA"`
+		EdgeB string `json:"edgeB"`
+		Price string `json:"price"`
+		// Check    string `json:"check"`
+		// Rand     string `json:"rand"`
+		// Sum      string `json:"sum"`
+		// Img      string `json:"img"`
+		// GroupO   string `json:"groupO"`
+		// Priority string `json:"priority"`
+		// Note     string `json:"note"`
+	}
+
+	var Cinfo dataStruct
+	if err := c.BindJSON(&Cinfo); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	fmt.Println(Cinfo)
+	c.Status(http.StatusOK)
+
+	db, err := sql.Open("sqlite3", "orders.sqlite")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	statement, err := db.Prepare(`
+		CREATE TABLE IF NOT EXISTS "orders" (
+			id INTEGER PRIMARY KEY, 
+			Time TEXT,
+			User TEXT, 
+			Worksite TEXT, 
+			Floor TEXT, 
+			Unit TEXT, 
+			Part TEXT, 
+			"Type" TEXT, 
+			Side TEXT, 
+			Thickness TEXT, 
+			Length INTEGER, 
+			Length2 INTEGER, 
+			dA TEXT,
+			dB TEXT,
+			dC TEXT,
+			dD TEXT,
+			dE TEXT,
+			EdgeA TEXT, 
+			EdgeB TEXT, 
+			Price TEXT
+	)`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec()
+
+	statement, err = db.Prepare(`
+		INSERT INTO "orders" (
+			Time, User, Worksite, Floor, Unit, Part, "Type", Side, Thickness, Length, Length2, 
+			dA, dB, dC, dD, dE, EdgeA, EdgeB, Price
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec(
+		time.Now(), Cinfo.User, Cinfo.Worksite, Cinfo.Floor, Cinfo.Unit, Cinfo.Part, Cinfo.Type, Cinfo.Side, Cinfo.Thickness,
+		Cinfo.Length, Cinfo.Length2, Cinfo.dA, Cinfo.dB, Cinfo.dC, Cinfo.dD, Cinfo.dE, Cinfo.EdgeA, Cinfo.EdgeB, Cinfo.Price)
+
+	rows, err := db.Query("SELECT id, User, Worksite, Floor, Unit, Part FROM orders")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var user, worksite, floor, unit, part string
+		rows.Scan(&id, &user, &worksite, &floor, &unit, &part)
+		fmt.Println(id, user, worksite, floor, unit, part)
+	}
+}
+
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func main() {
@@ -2074,6 +2182,7 @@ func main() {
 		}
 		Cusername = username
 	}
+	router.POST("getOrderData", authMiddleware, getOrderData)
 	router.GET("/loginOrder", authMiddleware, loginOrder)
 	router.GET("/loginReceiver", authMiddleware2, loginReceiver)
 	router.GET("/loginAdmin", authMiddleware3, loginAdmin)
