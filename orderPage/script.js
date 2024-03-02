@@ -1,4 +1,4 @@
-var backendURL = "https://192.168.2.32:443";
+var backendURL = "https://192.168.2.165:443";
 var Cinfo = {
     "time": "",
     "user": "",
@@ -225,7 +225,7 @@ document.getElementById('TopUser').addEventListener('click', function() {
 });
 
 document.getElementById('Discon').addEventListener('click', function() {
-    document.cookie = 'username4221=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=192.168.2.32;';
+    document.cookie = 'username4221=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=192.168.2.165;';
     Cinfo = undefined;
     GroupOrder = undefined;
     tmpT = undefined;
@@ -271,7 +271,7 @@ document.getElementById('Discon').addEventListener('click', function() {
     fetchProgressData = undefined;
     storedd = undefined;
     onccee = undefined;
-    fetch("https://192.168.2.32:443/login98", {
+    fetch("https://192.168.2.165:443/login98", {
             method: 'GET',
         })
         .then(response => {
@@ -705,7 +705,7 @@ if (button.classList.contains('selected') && button.dataset.name === 'type') {
 
 if (!typeSelected) {
 alert('You need to select a type value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 } else if (imgElement.id === 'Dside') {
@@ -721,7 +721,7 @@ if (button.classList.contains('selected') && button.dataset.name === 'side') {
 
 if (!sideSelected) {
 alert('You need to select a side value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 } else if (imgElement.id === 'Dthickness') {
@@ -737,7 +737,7 @@ if (button.classList.contains('selected') && button.dataset.name === 'thickness'
 
 if (!thicknessSelected) {
 alert('You need to select a side value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 } else if (imgElement.id === 'Dwidth') {
@@ -753,7 +753,7 @@ if (button.classList.contains('selected') && button.dataset.name === 'width') {
 
 if (!widthSelected) {
 alert('You need to select a side value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 } else if (imgElement.id === 'Dlength') {
@@ -776,7 +776,7 @@ if (button.classList.contains('selected') && button.dataset.name === 'length') {
 
 if (!lengthSelected) {
 alert('You need to select a side value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 }
@@ -811,7 +811,7 @@ if (button.style.backgroundColor === "rgb(255, 255, 255)" && button.dataset.name
 
 if (!typeSelected) {
 alert('You need to select a edge value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 } else if (imgElement.id === 'DedgeB') {
@@ -827,7 +827,7 @@ if (button.style.backgroundColor === "rgb(255, 255, 255)" && button.dataset.name
 
 if (!sideSelected) {
 alert('You need to select a side value first');
-imgElement.src = 'https://192.168.2.32:443/padlockUN';
+imgElement.src = 'https://192.168.2.165:443/padlockUN';
 return;
 }
 }
@@ -1468,7 +1468,7 @@ function handleImageClick(event) {
           Object.entries(savde).forEach(([key, value]) => {
             if (button.dataset.name === key && button.dataset.value === value) {
               button.classList.add('selected');
-              document.getElementById('D' + button.dataset.name).src = 'https://192.168.2.32/padlockLO';
+              document.getElementById('D' + button.dataset.name).src = 'https://192.168.2.165/padlockLO';
               const selectedValue = event.currentTarget.getAttribute('data-value');
               Cinfo[button.dataset.name] = button.dataset.value;
             }
@@ -1491,7 +1491,7 @@ function handleImageClick(event) {
                 button.style.backgroundColor = "#fff";
                 button.style.color = "#000";
                 button.classList.remove('active');
-                document.getElementById('D' + button.dataset.name).src = 'https://192.168.2.32/padlockLO';
+                document.getElementById('D' + button.dataset.name).src = 'https://192.168.2.165/padlockLO';
                 const selectedValue = event.currentTarget.getAttribute('data-value');
                 Cinfo[button.dataset.name] = button.dataset.value;
               }
@@ -1515,7 +1515,7 @@ function handleImageClick(event) {
                 button.style.backgroundColor = "#fff";
                 button.style.color = "#000";
                 button.classList.remove('active');
-                document.getElementById('D' + button.dataset.name).src = 'https://192.168.2.32/padlockLO';
+                document.getElementById('D' + button.dataset.name).src = 'https://192.168.2.165/padlockLO';
                 const selectedValue = event.currentTarget.getAttribute('data-value');
                 Cinfo[button.dataset.name] = button.dataset.value;
               }
@@ -1524,8 +1524,8 @@ function handleImageClick(event) {
         });
       }
     }
-      if (savde['length'] && savde['length'] !== 8 && savde['length'] !== 9 && savde['length'] !== 10 && savde['length'] !== 11 && savde['length'] !== 12 && document.getElementById('Dlength').src === 'https://192.168.2.32/padlockUN') {
-        document.getElementById('Dlength').src = 'https://192.168.2.32/padlockLO';
+      if (savde['length'] && savde['length'] !== 8 && savde['length'] !== 9 && savde['length'] !== 10 && savde['length'] !== 11 && savde['length'] !== 12 && document.getElementById('Dlength').src === 'https://192.168.2.165/padlockUN') {
+        document.getElementById('Dlength').src = 'https://192.168.2.165/padlockLO';
         setTimeout(() => {
           custm.forEach(btn => {
               btn.click();

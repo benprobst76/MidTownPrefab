@@ -1,4 +1,4 @@
-var backendURL = "https://192.168.2.32:443";
+var backendURL = "https://192.168.2.165:443";
 document.getElementById("previousButton").addEventListener("click", function() {
     window.location.href = backendURL + "/";
 });

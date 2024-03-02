@@ -1,4 +1,4 @@
-    var backendURL = "https://192.168.2.32:443";
+    var backendURL = "https://192.168.2.165:443";
     var Cinfo = {
         "time": "",
         "user": "",
@@ -227,7 +227,7 @@
     }
 
     document.getElementById('Discon').addEventListener('click', function() {
-        document.cookie = 'username7834=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=192.168.2.32;';
+        document.cookie = 'username7834=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=192.168.2.165;';
         backendURL = undefined;
         partListContainer = undefined;
         partListContainer2 = undefined;
@@ -270,7 +270,7 @@
         swiper = undefined;
         partOrderNBR = undefined;
         onnccee = undefined;
-        fetch("https://192.168.2.32:443/login98", {
+        fetch("https://192.168.2.165:443/login98", {
                 method: 'GET',
             })
             .then(response => {
@@ -747,7 +747,7 @@ function generatePartId(part) {
         if (partInfo && partInfo.imageUrl) {
             const bigScreenB = document.createElement('img');
             bigScreenB.className = 'bigScreenB';
-            bigScreenB.src = "https://192.168.2.32:443/fscreen";
+            bigScreenB.src = "https://192.168.2.165:443/fscreen";
             const bigSwiperDiv = document.createElement('div');
             bigSwiperDiv.className = "theIMGdivClass";
             bigSwiperDiv.partOrderNBR = partOrderNBR;
@@ -834,7 +834,7 @@ function generatePartId(part) {
                 var imgdivimg = document.createElement('img');
                 const bigScreenB = document.createElement('img');
                 bigScreenB.className = 'bigScreenB';
-                bigScreenB.src = "https://192.168.2.32:443/fscreen";
+                bigScreenB.src = "https://192.168.2.165:443/fscreen";
                 bigScreenB.style.right = '1vw';
                 bigScreenB.style.top = '1vw';
                 imgdivRel.style.position = 'relative';
