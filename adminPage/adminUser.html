@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+
+    <style>
+        /* Container for the entire page */
+        .container {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-content {
+            margin-right: 32px;  /* adjust this value to your preference */
+        }
+        .right-content {
+            margin-left: 32px;  /* adjust this value to your preference */
+        }
+        .middle-content {
+            margin-bottom: 40px;
+        }
+
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .round-box {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 600px;
+            height: 750px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .round-box2 {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 320px;
+            height: 760px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-top: 30px;
+            font-size: 48px;
+        }
+
+        hr {
+            width: 90%;
+            border: 2px solid #1E90FF;
+            margin: 30px 0;
+        }
+
+        #hr2 {
+            width: 90%;
+            border: 2px solid white;
+            margin: 30px 0;
+        }
+
+        h2 {
+            color: white;
+            font-size: 30px;
+        }
+
+        label {
+            color: white;
+            font-size: 20px;
+        }
+
+        .input32 {
+            width: 18px;
+            height: 8px;
+            margin: 15px 0;
+            padding: 5px;
+            font-size: 20px;
+        }
+
+        select {
+            width: 150px;
+            height: 25px;
+            font-size: 20px;
+        }
+
+        #passwords, #codes {
+            padding: 0;
+        }
+
+        .list-item {
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        #buttonn, button {
+        margin: 15px 0;
+        padding: 10px 20px;
+        background-color: #1E90FF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+
+        
+        /* For Chrome, Safari, and Opera */
+        .round-box::-webkit-scrollbar {
+            width: 8px;  /* Adjust width of scrollbar */
+        }
+
+        .round-box::-webkit-scrollbar-track {
+            background-color: transparent;  /* Background color of the scrollbar "track" */
+        }
+
+        .round-box::-webkit-scrollbar-thumb {
+            background-color: #585858;  /* Color of the scroll thumb */
+            border-radius: 20px;  /* Roundness of the scroll thumb */
+        }
+
+        .round-box::-webkit-scrollbar-thumb:hover {
+            background-color: #555;  /* Color of the scroll thumb when hovering */
+        }
+
+        /* For Firefox */
+        .round-box {
+            scrollbar-width: thin;  /* Make scrollbar thinner */
+            scrollbar-color: #888 transparent;  /* Color of the scrollbar */
+        }
+        /* For Chrome, Safari, and Opera */
+        .round-box2::-webkit-scrollbar {
+            width: 8px;  /* Adjust width of scrollbar */
+        }
+
+        .round-box2::-webkit-scrollbar-track {
+            background-color: transparent;  /* Background color of the scrollbar "track" */
+        }
+
+        .round-box2::-webkit-scrollbar-thumb {
+            background-color: #585858;  /* Color of the scroll thumb */
+            border-radius: 20px;  /* Roundness of the scroll thumb */
+        }
+
+        .round-box2::-webkit-scrollbar-thumb:hover {
+            background-color: #555;  /* Color of the scroll thumb when hovering */
+        }
+
+        /* For Firefox */
+        .round-box2 {
+            scrollbar-width: thin;  /* Make scrollbar thinner */
+            scrollbar-color: #888 transparent;  /* Color of the scrollbar */
+        }
+        .navigation-button {
+            position: fixed;
+            bottom: 1px;
+            left: 10px;
+            margin: 15px 0;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .Tmonth {
+            width: 35px;
+            height: 30px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .label-container {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            margin: 0 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .month-label {
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="previousButton" class="navigation-button">Previous</div>
+    <div class="container">
+        <div class="round-box">
+            <h1>User Manager</h1>
+            <hr />
+            <h2>Order User</h2>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="website">Username :</label>
+                    <input type="text" id="website" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password :</label>
+                    <input type="text" id="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Save User</button>
+                </div>
+            <hr id="hr2" />
+            </form>
+            <ul id="passwords"></ul>
+            <hr />
+            <h2>Receiver User</h2> <!-- You can replace 'New List Name' with the actual name -->
+            <form id="codeForm">
+                <div class="form-group">
+                    <label for="website2">Username :</label>
+                    <input type="text" id="website2" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Password :</label>
+                    <input type="text" id="password2" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Save User</button>
+                </div>
+            <hr id="hr2" />
+            </form>
+            <ul id="codes"></ul>
+        </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var backendURL = "https://192.168.2.32:443";
+
+                $("#previousButton").on("click", function() {
+                    // Change the URL when the button is clicked
+                    window.location.href = backendURL + "/loginAdmin";
+                });
+
+            // Handle form submission
+            $("#passwordForm").submit(function(event) {
+                event.preventDefault(); // Prevent page reload
+
+                var website = $("#website").val();
+                var password = $("#password").val();
+
+                // Send an API request to save the password
+                $.ajax({
+                    url: backendURL + "/addUser",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ user: website, password: password }),
+                    success: function(response) {
+                        // Clear input fields
+                        $("#website").val("");
+                        $("#password").val("");
+
+                        // Append the new password to the list
+                        var listItem = $("<li>").addClass("list-item");
+
+                        var contentDiv = $("<div>").addClass("contentDiv");
+
+                        var infoDiv = $("<div>")
+                            .addClass("infoDiv")
+                            .append(
+                                $("<span>").addClass("website").text(website),
+                                ": ",
+                                $("<span>").addClass("password").text(password)
+                            );
+
+                        var deleteButton = $("<button>")
+                            .attr("id", "buttonn")
+                            .text("Delete")
+                            .addClass("deletePassword")
+                            .data("website", website)
+                            .data("password", password);
+
+                        var buttonsDiv = $("<div>").addClass("buttonsDiv");
+                        buttonsDiv.append(deleteButton);
+
+                        contentDiv.append(infoDiv);
+                        contentDiv.append(buttonsDiv);
+
+                        listItem.append(contentDiv);
+
+                        $("#passwords").append(listItem);
+                    },
+                    error: function() {
+                        alert("Failed to save the user.");
+                    }
+                });
+            });
+
+            // Handle delete password button click
+            $(document).on("click", ".deletePassword", function() {
+                var website = $(this).data("website");
+                var password = ""
+                var button = $(this); // Store a reference to the delete button
+
+                // Send an API request to delete the password
+                $.ajax({
+                    url: backendURL + "/delUser",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ user: website, password: password }),
+                    success: function(response) {
+                        // Remove the password from the list
+                        button.closest("li").remove();
+                    },
+                    error: function() {
+                        alert("Failed to delete the user.");
+                    }
+                });
+            });
+
+            // Load stored passwords on page load
+            $.get(backendURL + "/getUser")
+                .done(function(response) {
+                    // Display stored passwords
+                    var inputs = response.inputs;
+
+                    inputs.forEach(function(item) {
+
+                        var listItem = $("<li>").addClass("list-item");
+
+                        var contentDiv = $("<div>").addClass("contentDiv");
+
+                        var infoDiv = $("<div>")
+                            .addClass("infoDiv")
+                            .append(
+                                $("<span>").addClass("website").text(item.user),
+                                ": ",
+                                $("<span>").addClass("password").text(item.password)
+                            );
+
+                        var deleteButton = $("<button>")
+                            .attr("id", "buttonn")
+                            .text("Delete")
+                            .addClass("deletePassword")
+                            .data("website", item.user)
+                            .data("password", password);
+
+                        var buttonsDiv = $("<div>").addClass("buttonsDiv");
+                            buttonsDiv.append(deleteButton);
+
+                        contentDiv.append(infoDiv);
+                        contentDiv.append(buttonsDiv);
+
+                        listItem.append(contentDiv);
+
+                        $("#passwords").append(listItem);
+                    });
+                })
+                .fail(function() {
+                    alert("Failed to load stored users.");
+                });
+            // Logic for the second list (Codes List)
+
+            // Handle form submission for Codes
+            $("#codeForm").submit(function(event) {
+                event.preventDefault(); // Prevent page reload
+
+                var website = $("#website2").val() + "_2zekbv2";
+                var password = $("#password2").val();
+
+                // Send an API request to save the code
+                $.ajax({
+                    url: backendURL + "/addUser",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ user: website, password: password }),
+                    success: function(response) {
+                        // Clear input fields
+                        $("#website2").val("");
+                        $("#password2").val("");
+
+                        // Append the new code to the list
+                        var listItem = $("<li>").addClass("list-item");
+                        
+                        var contentDiv = $("<div>").addClass("contentDiv");
+                        
+                        var infoDiv = $("<div>")
+                            .addClass("infoDiv")
+                            .append(
+                                $("<span>").addClass("website").text(website),
+                                ": ",
+                                $("<span>").addClass("password").text(password)
+                            );
+                        
+                        var deleteButton = $("<button>")
+                            .attr("id", "buttonn")
+                            .text("Delete")
+                            .addClass("deleteCode")
+                            .data("website2", website)
+                            .data("password2", password);
+                        
+                        var buttonsDiv = $("<div>").addClass("buttonsDiv");
+                        buttonsDiv.append(deleteButton);
+                        
+                        contentDiv.append(infoDiv);
+                        contentDiv.append(buttonsDiv);
+                        listItem.append(contentDiv);
+
+                        $("#codes").append(listItem);
+                    },
+                    error: function() {
+                        alert("Failed to save the code.");
+                    }
+                });
+            });
+
+            // Handle delete code button click
+            $(document).on("click", ".deleteCode", function() {
+                var website = $(this).data("website2") + "_2zekbv2";
+                var password = ""
+                var button = $(this); // Store a reference to the delete button
+                console.log(website)
+
+                // Send an API request to delete the code
+                $.ajax({
+                    url: backendURL + "/delUser",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ user: website, password: password }),
+                    success: function(response) {
+                        // Remove the code from the list
+                        button.closest("li").remove();
+                    },
+                    error: function() {
+                        alert("Failed to delete the code.");
+                    }
+                });
+            });
+
+            // Load stored codes on page load
+            $.get(backendURL + "/getUser2")
+                .done(function(response) {
+                    // Display stored passwords
+                    var items = response.items;
+
+                    items.forEach(function(item) {
+
+                        var listItem = $("<li>").addClass("list-item");
+
+                        var contentDiv = $("<div>").addClass("contentDiv");
+
+                        var infoDiv = $("<div>")
+                            .addClass("infoDiv")
+                            .append(
+                                $("<span>").addClass("website").text(item.user),
+                                ": ",
+                                $("<span>").addClass("password").text(item.password)
+                            );
+
+                        var deleteButton = $("<button>")
+                            .attr("id", "buttonn")
+                            .text("Delete")
+                            .addClass("deleteCode")
+                            .data("website2", item.user)
+                            .data("password2", password);
+
+                        var buttonsDiv = $("<div>").addClass("buttonsDiv");
+                            buttonsDiv.append(deleteButton);
+
+                        contentDiv.append(infoDiv);
+                        contentDiv.append(buttonsDiv);
+
+                        listItem.append(contentDiv);
+
+                        $("#codes").append(listItem);
+                    });
+                })
+                .fail(function() {
+                    alert("Failed to load stored users.");
+                });
+        });
+    </script> 
+</body>
+
+</html>

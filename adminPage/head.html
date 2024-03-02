@@ -1,0 +1,110 @@
+<head>
+    <title>Worksite Selector</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .round-box {
+            background-color: #303030;
+            border-radius: 20px;
+            padding: 40px;
+            width: 1000px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .midT {
+            display: flex;
+            flex-direction: row;
+            margin: -5%;
+        }
+
+        .midC {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5vw;
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+            margin-top: 30px;
+            font-size: 48px;
+        }
+
+        hr {
+            width: 90%;
+            border: 2px solid #1E90FF;
+            margin: 30px 0;
+        }
+
+        h2 {
+            color: rgb(255, 255, 255);
+            font-size: 30px;
+        }
+
+        label {
+            color: rgb(255, 255, 255);
+            font-size: 20px;
+        }
+
+        button {
+            width: 55px;
+            height: 50px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+        }
+
+        /* For Chrome, Safari, and Opera */
+        .round-box::-webkit-scrollbar {
+            width: 8px;  /* Adjust width of scrollbar */
+        }
+
+        .round-box::-webkit-scrollbar-track {
+            background-color: transparent;  /* Background color of the scrollbar "track" */
+        }
+
+        .round-box::-webkit-scrollbar-thumb {
+            background-color: #585858;  /* Color of the scroll thumb */
+            border-radius: 20px;  /* Roundness of the scroll thumb */
+        }
+
+        .round-box::-webkit-scrollbar-thumb:hover {
+            background-color: #555;  /* Color of the scroll thumb when hovering */
+        }
+
+        /* For Firefox */
+        .round-box {
+            scrollbar-width: thin;  /* Make scrollbar thinner */
+            scrollbar-color: #888 transparent;  /* Color of the scrollbar */
+        }
+        .navigation-button {
+            position: fixed;
+            bottom: 1px;
+            left: 10px;
+            margin: 15px 0;
+            padding: 10px 20px;
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>

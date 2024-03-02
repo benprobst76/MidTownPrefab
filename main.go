@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -18,81 +19,74 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Cred struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 }
-type Cred2 struct {
-	User1     string `json:"user1"`
-	Password1 string `json:"password1"`
-	User2     string `json:"user2"`
-	Password2 string `json:"password2"`
-}
 type Cfo struct {
-	Time      string `json:"time"`
-	CheckTime string `json:"checktime"`
-	User      string `json:"user"`
-	Worksite  string `json:"worksite"`
-	Floor     string `json:"floor"`
-	Unit      string `json:"unit"`
-	Type      string `json:"type"`
-	Part      string `json:"part"`
-	Side      string `json:"side"`
-	Thickness string `json:"thickness"`
-	Width     string `json:"Width"`
-	Length    string `json:"length"`
-	Length2   string `json:"length2"`
-	DA        string `json:"dA"`
-	DB        string `json:"dB"`
-	DC        string `json:"dC"`
-	DD        string `json:"dD"`
-	DE        string `json:"dE"`
-	D1A       string `json:"d1A"`
-	D2A       string `json:"d2A"`
-	D1B       string `json:"d1B"`
-	D2B       string `json:"d2B"`
-	DR        string `json:"dR"`
-	DR_P      string `json:"dR_P"`
-	DH        string `json:"dH"`
-	DW        string `json:"dW"`
-	Edge1     string `json:"edgeA"`
-	Edge2     string `json:"edgeB"`
-	Price     string `json:"price"`
-	Check     string `json:"check"`
-	Rand      string `json:"rand"`
-	Sum       string `json:"sum"`
-	Order     string `json:"order"`
-	Order2    string `json:"order2"`
-	UniqueID  string `json:"uniqueID"`
-	UniqueID2 string `json:"uniqueID2"`
-	Sheet     string `json:"sheet"`
-	Img       string `json:"img"`
-	GroupO    string `json:"groupO"`
-	Priority  string `json:"priority"`
-	Note      string `json:"note"`
+	Time       string   `json:"time"`
+	CheckTime  string   `json:"checktime"`
+	User       string   `json:"user"`
+	Worksite   string   `json:"worksite"`
+	Floor      string   `json:"floor"`
+	Unit       string   `json:"unit"`
+	Type       string   `json:"type"`
+	Part       string   `json:"part"`
+	Side       string   `json:"side"`
+	Thickness  string   `json:"thickness"`
+	Width      string   `json:"Width"`
+	Length     string   `json:"length"`
+	Length2    string   `json:"length2"`
+	DA         string   `json:"dA"`
+	DB         string   `json:"dB"`
+	DC         string   `json:"dC"`
+	DD         string   `json:"dD"`
+	DE         string   `json:"dE"`
+	D1A        string   `json:"d1A"`
+	D2A        string   `json:"d2A"`
+	D1B        string   `json:"d1B"`
+	D2B        string   `json:"d2B"`
+	DR         string   `json:"dR"`
+	DR_P       string   `json:"dR_P"`
+	DH         string   `json:"dH"`
+	DW         string   `json:"dW"`
+	Edge1      string   `json:"edgeA"`
+	Edge2      string   `json:"edgeB"`
+	Price      string   `json:"price"`
+	Check      string   `json:"check"`
+	Rand       string   `json:"rand"`
+	Sum        string   `json:"sum"`
+	Order      string   `json:"order"`
+	Order2     string   `json:"order2"`
+	UniqueID   string   `json:"uniqueID"`
+	UniqueID2  string   `json:"uniqueID2"`
+	UniqueIDQR string   `json:"uniqueIDQR"`
+	Sheet      string   `json:"sheet"`
+	Img        []string `json:"img"`
+	GroupO     string   `json:"groupO"`
+	Priority   string   `json:"priority"`
+	Note       string   `json:"note"`
 }
 type Work struct {
 	Worksite string `json:"worksite"`
 }
-type Flor struct {
-	Floor string `json:"floor"`
-	Cinf  Cfo    `json:"Cinfo"`
-}
 type Flor2 struct {
 	Floor string `json:"floor"`
-}
-type Unt struct {
-	Unit string `json:"unit"`
-	Cinf Cfo    `json:"Cinfo"`
 }
 type Unt2 struct {
 	Unit string `json:"unit"`
 }
-type Pgrs struct {
-	Uid2  string `json:"uid2"`
-	Check string `json:"check"`
+type Loca struct {
+	Worksite string `json:"worksite"`
+	Floor    string `json:"floor"`
+}
+type Loca2 struct {
+	Worksite string `json:"worksite"`
+	Floor    string `json:"floor"`
+	Unit     string `json:"unit"`
 }
 type Pgrs2 struct {
 	Unit     string `json:"unit"`
@@ -112,79 +106,105 @@ type DB struct {
 	Prst []Prst
 }
 
-var order_login []Cred
-var receive_login []Cred
-var admin_login []Cred
-var worksites []Work
-var floors []Flor2
-var units []Unt2
 var Cinfo Cfo
-var orders []Cfo
-var histories []Cfo
-var groupOrders []Cfo
-var input string
-var randomPassword []byte
-var Cusername string
 var hisM []Cfo
 var progressItems []Pgrs2
-var orders3 []Cfo
 var sheetCounter int
+var fileMutexO = &sync.Mutex{}
+var fileMutexH = &sync.Mutex{}
+var fileMutexW = &sync.Mutex{}
+var fileMutexF = &sync.Mutex{}
+var fileMutexU = &sync.Mutex{}
+var logFile, _ = os.OpenFile("errors.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+var logger = log.New(logFile, "ERROR: ", log.LstdFlags|log.Lshortfile)
 
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
-func loadCred() {
-	file, err := os.Open("order_login.json")
+func loadCred() ([]Cred, []Cred, []Cred) {
+	var order_login []Cred
+	file, err := os.Open("json/order_login.json")
 	if err != nil {
-		if os.IsNotExist(err) {
-			order_login = []Cred{}
-		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&order_login); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
-	file, err = os.Open("receive_login.json")
+	var receive_login []Cred
+	file, err = os.Open("json/receive_login.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			receive_login = []Cred{}
 		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder = json.NewDecoder(file)
 	if err := decoder.Decode(&receive_login); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
-	file, err = os.Open("admin_login.json")
+	var admin_login []Cred
+	file, err = os.Open("json/admin_login.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			admin_login = []Cred{}
 		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder = json.NewDecoder(file)
 	if err := decoder.Decode(&admin_login); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
+	return order_login, receive_login, admin_login
 }
 
 // ______________________________________________________________________________________________________________
 func home(c *gin.Context) {
-	data, err := os.ReadFile("login.html")
+	data1, err := os.ReadFile("loginPage/head.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	loging_page := string(data)
-
+	data2, err := os.ReadFile("loginPage/body.html")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	data3, err := os.ReadFile("loginPage/script.js")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	full := "<!DOCTYPE html><html>" + string(data1) + string(data2) + "<script>" + string(data3) + "</script>" + "</html>"
 	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, loging_page)
+	c.String(http.StatusOK, full)
+}
+
+// ______________________________________________________________________________________________________________
+func login98(c *gin.Context) {
+	data1, err := os.ReadFile("loginPage/body.html")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	data2, err := os.ReadFile("loginPage/head.html")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	data3, err := os.ReadFile("loginPage/script.js")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3)})
 }
 
 // ______________________________________________________________________________________________________________
 func login(c *gin.Context) {
+	order_login, receive_login, admin_login := loadCred()
 	var password Cred
 	if err := c.BindJSON(&password); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
@@ -192,22 +212,67 @@ func login(c *gin.Context) {
 	}
 	for _, cred := range order_login {
 		if cred.User == password.User && cred.Password == password.Password {
-			c.SetCookie("username4221", password.User, 0, "/", "", false, true)
-			c.String(200, "/loginOrder")
+			c.SetCookie("username4221", password.User, 0, "/", "", false, false)
+			data1, err := os.ReadFile("orderPage/body.html")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			data2, err := os.ReadFile("orderPage/head.html")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			data3, err := os.ReadFile("orderPage/script.js")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3), "/loginOrder"})
 			return
 		}
 	}
 	for _, cred := range receive_login {
 		if cred.User == password.User && cred.Password == password.Password {
-			c.SetCookie("username7834", password.User, 0, "/", "", false, true)
-			c.String(200, "/loginReceiver")
+			c.SetCookie("username7834", password.User, 0, "/", "", false, false)
+			data1, err := os.ReadFile("receivePage/body.html")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			data2, err := os.ReadFile("receivePage/head.html")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			data3, err := os.ReadFile("receivePage/script.js")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3), "/loginReceiver"})
 			return
 		}
 	}
 	for _, cred := range admin_login {
 		if cred.User == password.User && cred.Password == password.Password {
-			c.SetCookie("username0623", password.User, 0, "/", "", false, true)
-			c.String(200, "/loginAdmin")
+			c.SetCookie("username0623", password.User, 0, "/", "", false, false)
+			data1, err := os.ReadFile("adminPage/body.html")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			data2, err := os.ReadFile("adminPage/head.html")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			data3, err := os.ReadFile("adminPage/script.js")
+			if err != nil {
+				logger.Println(err)
+				return
+			}
+			c.JSON(http.StatusOK, []string{string(data1), string(data2), string(data3), "/loginAdmin"})
 			return
 		}
 	}
@@ -216,30 +281,53 @@ func login(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func loginOrder(c *gin.Context) {
-	data, err := os.ReadFile("orderPage.html")
+	data1, err := os.ReadFile("orderPage/head.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	worksite_page := string(data)
+	data2, err := os.ReadFile("orderPage/body.html")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	data3, err := os.ReadFile("orderPage/script.js")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	full := "<!DOCTYPE html><html>" + string(data1) + "<script src=\"https://unpkg.com/htmx.org@1.9.10\"></script>" + string(data2) + "<script>" + string(data3) + "</script>" + "</html>"
 	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, worksite_page)
+	c.String(http.StatusOK, full)
 }
 
 // ______________________________________________________________________________________________________________
 func loginReceiver(c *gin.Context) {
-	data, err := os.ReadFile("receivePage.html")
+	data1, err := os.ReadFile("receivePage/head.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	worksite_page := string(data)
+	data2, err := os.ReadFile("receivePage/body.html")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	data3, err := os.ReadFile("receivePage/script.js")
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+	full := "<!DOCTYPE html><html>" + string(data1) + string(data2) + "<script>" + string(data3) + "</script>" + "</html>"
 	c.Header("Content-Type", "text/html")
-	c.String(http.StatusOK, worksite_page)
+	c.String(http.StatusOK, full)
 }
 
 // ______________________________________________________________________________________________________________
 func loginAdmin(c *gin.Context) {
-	data, err := os.ReadFile("adminPanel.html")
+	data, err := os.ReadFile("adminPage/adminPanel.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
 	worksite_page := string(data)
@@ -250,104 +338,85 @@ func loginAdmin(c *gin.Context) {
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func getUser(c *gin.Context) {
+	order_login, _, _ := loadCred()
 	c.JSON(http.StatusOK, gin.H{"inputs": order_login})
 }
 
 // ______________________________________________________________________________________________________________
+func getUser2(c *gin.Context) {
+	_, receive_login, _ := loadCred()
+	c.JSON(http.StatusOK, gin.H{"items": receive_login})
+}
+
+// ______________________________________________________________________________________________________________
 func addUser(c *gin.Context) {
+	order_login, receive_login, _ := loadCred()
 	var nUsr Cred
 	if err := c.ShouldBindJSON(&nUsr); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	order_login = append(order_login, nUsr)
-	files := "order_login.json"
-	file, err := os.Create(files)
-	if err != nil {
-		panic(err)
+	trySplit := strings.Split(nUsr.User, "_2zekbv2")
+	if len(trySplit) > 1 {
+		nUsr.User = trySplit[0]
+		receive_login = append(receive_login, nUsr)
+		files := "json/receive_login.json"
+		file, err := os.Create(files)
+		if err != nil {
+			logger.Println(err)
+		}
+		encoder := json.NewEncoder(file)
+		if err := encoder.Encode(receive_login); err != nil {
+			logger.Println(err)
+		}
+		file.Close()
+	} else {
+		order_login = append(order_login, nUsr)
+		files := "json/order_login.json"
+		file, err := os.Create(files)
+		if err != nil {
+			logger.Println(err)
+		}
+		encoder := json.NewEncoder(file)
+		if err := encoder.Encode(order_login); err != nil {
+			logger.Println(err)
+		}
+		file.Close()
 	}
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(order_login); err != nil {
-		panic(err)
-	}
-	file.Close()
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
 func delUser(c *gin.Context) {
+	order_login, receive_login, _ := loadCred()
+	var goodLogin []Cred
+	var files string
 	var dUsr Cred
 	if err := c.BindJSON(&dUsr); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	for i, item := range order_login {
+	trySplit := strings.Split(dUsr.User, "_2zekbv2")
+	if len(trySplit) > 1 {
+		files = "json/receive_login.json"
+		goodLogin = receive_login
+	} else {
+		files = "json/order_login.json"
+		goodLogin = order_login
+	}
+	for i, item := range goodLogin {
 		if item.User == dUsr.User {
-			order_login = append(order_login[:i], order_login[i+1:]...)
+			goodLogin = append(goodLogin[:i], goodLogin[i+1:]...)
 			break
 		}
 	}
-	files := "order_login.json"
 	file, err := os.Create(files)
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(order_login); err != nil {
-		panic(err)
-	}
-	file.Close()
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func getUser2(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"items": receive_login})
-}
-
-// ______________________________________________________________________________________________________________
-func addUser2(c *gin.Context) {
-	var nUsr Cred
-	if err := c.ShouldBindJSON(&nUsr); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	receive_login = append(receive_login, nUsr)
-	files := "receive_login.json"
-	file, err := os.Create(files)
-	if err != nil {
-		panic(err)
-	}
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(receive_login); err != nil {
-		panic(err)
-	}
-	file.Close()
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func delUser2(c *gin.Context) {
-	var dUsr Cred
-	if err := c.BindJSON(&dUsr); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	fmt.Println(dUsr)
-	for i, item := range receive_login {
-		if item.User == dUsr.User {
-			receive_login = append(receive_login[:i], receive_login[i+1:]...)
-			break
-		}
-	}
-	files := "receive_login.json"
-	file, err := os.Create(files)
-	if err != nil {
-		panic(err)
-	}
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(receive_login); err != nil {
-		panic(err)
+	if err := encoder.Encode(goodLogin); err != nil {
+		logger.Println(err)
 	}
 	file.Close()
 	c.Status(http.StatusOK)
@@ -355,65 +424,70 @@ func delUser2(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
-func getCurUser(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"user": Cusername})
+func openWork() []Work {
+	fileMutexO.Lock()
+	defer fileMutexO.Unlock()
+	var worksites []Work
+	file, err := os.Open("json/worksites.json")
+	if err != nil {
+		logger.Println(err)
+	}
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&worksites); err != nil {
+		logger.Println(err)
+	}
+	file.Close()
+	return worksites
 }
 
 // ______________________________________________________________________________________________________________
 func getWorksites(c *gin.Context) {
-	file, err := os.Open("worksites.json")
-	if err != nil {
-		if os.IsNotExist(err) {
-			worksites = []Work{}
-		}
-		panic(err)
-	}
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&worksites); err != nil {
-		panic(err)
-	}
-	file.Close()
+	worksites := openWork()
 	c.JSON(http.StatusOK, gin.H{"worksites": worksites})
 }
 
 // ______________________________________________________________________________________________________________
 func addWorksite(c *gin.Context) {
+	worksites := openWork()
 	var nWork Work
 	if err := c.ShouldBindJSON(&nWork); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	tt := []Flor{}
+	tt := []Flor2{}
 	worksites = append(worksites, nWork)
-	files := string(nWork.Worksite) + "_floors.json"
+	files := "json/" + nWork.Worksite + "_floors.json"
 	file, err := os.Create(files)
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(tt); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
-	saveWorksite()
+	saveWorksite(worksites)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
-func saveWorksite() {
-	file, err := os.Create("worksites.json")
+func saveWorksite(worksites []Work) {
+	fileMutexW.Lock()
+	defer fileMutexW.Unlock()
+	file, err := os.Create("json/worksites.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(worksites); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 }
 
 // ______________________________________________________________________________________________________________
 func delWorksite(c *gin.Context) {
+	worksites := openWork()
 	var dWork Work
 	if err := c.BindJSON(&dWork); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
@@ -425,18 +499,20 @@ func delWorksite(c *gin.Context) {
 			break
 		}
 	}
-	files := string(dWork.Worksite) + "_floors.json"
+	files := "json/" + dWork.Worksite + "_floors.json"
 	fmt.Println(files)
 	err := os.Remove(files)
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	saveWorksite()
+	saveWorksite(worksites)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
 func editWorksite(c *gin.Context) {
+	worksites := openWork()
 	type Work2 struct {
 		OldWorksite string `json:"oldWorksite"`
 		Worksite    string `json:"worksite"`
@@ -455,358 +531,346 @@ func editWorksite(c *gin.Context) {
 			break
 		}
 	}
-	oldName := string(EditW.OldWorksite) + "_floors.json"
-	newName := string(EditW.Worksite) + "_floors.json"
+	oldName := "json/" + EditW.OldWorksite + "_floors.json"
+	newName := "json/" + EditW.Worksite + "_floors.json"
 	fmt.Println(oldName)
 	fmt.Println(newName)
 	err := os.Rename(oldName, newName)
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	saveWorksite()
+	saveWorksite(worksites)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
-func selectWorksite(c *gin.Context) {
-	if err := c.BindJSON(&Cinfo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	c.Status(http.StatusOK)
-	Cinfo.User = Cusername
-}
-
 // ______________________________________________________________________________________________________________
-// ______________________________________________________________________________________________________________
-func openFloor() {
-	files := string(Cinfo.Worksite) + "_floors.json"
-	fmt.Println(files)
+func openFloor(worksite string) []Flor2 {
+	fileMutexF.Lock()
+	defer fileMutexF.Unlock()
+	var floors []Flor2
+	files := "json/" + worksite + "_floors.json"
 	file, err := os.Open(files)
 	if err != nil {
 		if os.IsNotExist(err) {
 			floors = []Flor2{}
 		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&floors); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
+	return floors
 }
 
 // ______________________________________________________________________________________________________________
-func getFloors2(c *gin.Context) {
-	openFloor()
+func getFloors(c *gin.Context) {
+	var worksite Work
+	if err := c.BindJSON(&worksite); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	floors := openFloor(worksite.Worksite)
 	c.JSON(http.StatusOK, gin.H{"floors": floors})
-	floors = []Flor2{}
 }
 
 // ______________________________________________________________________________________________________________
-func getFloors3(c *gin.Context) {
-	c.JSON(http.StatusOK, Cinfo)
+func saveFloor(worksite string, floors []Flor2) {
+	fileMutexF.Lock()
+	defer fileMutexF.Unlock()
+	files := "json/" + worksite + "_floors.json"
+	file, err := os.Create(files)
+	if err != nil {
+		logger.Println(err)
+	}
+	encoder := json.NewEncoder(file)
+	if err := encoder.Encode(floors); err != nil {
+		logger.Println(err)
+	}
+	file.Close()
 }
 
 // ______________________________________________________________________________________________________________
 func addFloor(c *gin.Context) {
-	var nFloor Flor
+	var nFloor Loca
 	if err := c.ShouldBindJSON(&nFloor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	Cinfo = nFloor.Cinf
+	floors := openFloor(nFloor.Worksite)
 	nFloor2 := Flor2{
 		Floor: nFloor.Floor,
 	}
-	openFloor()
 	floors = append(floors, nFloor2)
-	tt := []Unt{}
-	files := string(Cinfo.Worksite) + "_" + string(nFloor.Floor) + "_units.json"
+	tt := []Unt2{}
+	files := "json/" + nFloor.Worksite + "_" + nFloor.Floor + "_units.json"
 	file, err := os.Create(files)
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(tt); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
-	saveFloor()
-	floors = []Flor2{}
+	saveFloor(nFloor.Worksite, floors)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
-func saveFloor() {
-	files := string(Cinfo.Worksite) + "_floors.json"
-	fmt.Println(files)
-	file, err := os.Create(files)
-	if err != nil {
-		panic(err)
-	}
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(floors); err != nil {
-		panic(err)
-	}
-	file.Close()
-}
-
-// ______________________________________________________________________________________________________________
 func delFloor(c *gin.Context) {
-	var dFloor Flor
+	var dFloor Loca
 	if err := c.BindJSON(&dFloor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	Cinfo = dFloor.Cinf
-	openO()
+	floors := openFloor(dFloor.Worksite)
+	orders := openO()
 	for _, item := range orders {
 		if item.Floor == dFloor.Floor {
 			c.String(200, "no")
 			return
 		}
 	}
-	openFloor()
 	for i, item := range floors {
 		if item.Floor == dFloor.Floor {
 			floors = append(floors[:i], floors[i+1:]...)
 			break
 		}
 	}
-	files := string(Cinfo.Worksite) + "_" + string(dFloor.Floor) + "_units.json"
+	files := "json/" + dFloor.Worksite + "_" + dFloor.Floor + "_units.json"
 	err := os.Remove(files)
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	saveFloor()
-	floors = []Flor2{}
+	saveFloor(dFloor.Worksite, floors)
 	c.String(200, "ok")
 }
 
 // ______________________________________________________________________________________________________________
 func editFloor(c *gin.Context) {
 	type Flor3 struct {
+		Worksite string `json:"worksite"`
 		OldFloor string `json:"oldFloor"`
 		Floor    string `json:"floor"`
-		Cinf     Cfo    `json:"Cinfo"`
 	}
 	var EditF Flor3
 	if err := c.BindJSON(&EditF); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	Cinfo = EditF.Cinf
+	floors := openFloor(EditF.Worksite)
 	newFloor := Flor2{
 		Floor: EditF.Floor,
 	}
-	openFloor()
 	for i, item := range floors {
 		if item.Floor == EditF.OldFloor {
 			floors[i] = newFloor
 			break
 		}
 	}
-	oldName := string(Cinfo.Worksite) + "_" + string(EditF.OldFloor) + "_units.json"
-	newName := string(Cinfo.Worksite) + "_" + string(EditF.Floor) + "_units.json"
-	fmt.Println(oldName)
-	fmt.Println(newName)
+	oldName := "json/" + EditF.Worksite + "_" + EditF.OldFloor + "_units.json"
+	newName := "json/" + EditF.Worksite + "_" + EditF.Floor + "_units.json"
 	err := os.Rename(oldName, newName)
 	if err != nil {
+		logger.Println(err)
 		return
 	}
-	saveFloor()
-	floors = []Flor2{}
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func selectFloor(c *gin.Context) {
-	if err := c.BindJSON(&Cinfo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
+	saveFloor(EditF.Worksite, floors)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
-func openUnit() {
-	files := string(Cinfo.Worksite) + "_" + string(Cinfo.Floor) + "_units.json"
-	fmt.Println(files)
+func openUnit(location Loca) []Unt2 {
+	fileMutexU.Lock()
+	defer fileMutexU.Unlock()
+	var units []Unt2
+	files := "json/" + location.Worksite + "_" + location.Floor + "_units.json"
 	file, err := os.Open(files)
 	if err != nil {
 		if os.IsNotExist(err) {
 			units = []Unt2{}
 		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&units); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
+	return units
 }
 
 // ______________________________________________________________________________________________________________
-func getUnits2(c *gin.Context) {
-	openUnit()
+func getUnits(c *gin.Context) {
+	var location Loca
+	if err := c.BindJSON(&location); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	units := openUnit(location)
 	c.JSON(http.StatusOK, gin.H{"units": units})
-	units = []Unt2{}
-}
-
-// ______________________________________________________________________________________________________________
-func getUnits3(c *gin.Context) {
-	c.JSON(http.StatusOK, Cinfo)
 }
 
 // ______________________________________________________________________________________________________________
 func addUnit(c *gin.Context) {
-	var nUnit Unt
+	var nUnit Loca2
 	if err := c.ShouldBindJSON(&nUnit); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	Cinfo = nUnit.Cinf
+	unitsSend := Loca{
+		Worksite: nUnit.Worksite,
+		Floor:    nUnit.Floor,
+	}
+	units := openUnit(unitsSend)
 	nUnit2 := Unt2{
 		Unit: nUnit.Unit,
 	}
-	openUnit()
 	units = append(units, nUnit2)
-	saveUnit()
-	units = []Unt2{}
+	saveUnit(unitsSend, units)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
-func saveUnit() {
-	files := string(Cinfo.Worksite) + "_" + string(Cinfo.Floor) + "_units.json"
-	fmt.Println(files)
+func saveUnit(unitsSend Loca, units []Unt2) {
+	fileMutexU.Lock()
+	defer fileMutexU.Unlock()
+	files := "json/" + unitsSend.Worksite + "_" + unitsSend.Floor + "_units.json"
 	file, err := os.Create(files)
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(units); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 }
 
 // ______________________________________________________________________________________________________________
 func delUnit(c *gin.Context) {
-	var dUnit Unt
+	var dUnit Loca2
 	if err := c.BindJSON(&dUnit); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	Cinfo = dUnit.Cinf
-	openO()
+	unitsSend := Loca{
+		Worksite: dUnit.Worksite,
+		Floor:    dUnit.Floor,
+	}
+	units := openUnit(unitsSend)
+	orders := openO()
 	for _, item := range orders {
 		if item.Unit == dUnit.Unit {
 			c.String(200, "no")
 			return
 		}
 	}
-	openUnit()
 	for i, item := range units {
 		if item.Unit == dUnit.Unit {
 			units = append(units[:i], units[i+1:]...)
 			break
 		}
 	}
-	saveUnit()
-	units = []Unt2{}
+	saveUnit(unitsSend, units)
 	c.String(200, "ok")
 }
 
 // ______________________________________________________________________________________________________________
 func editUnit(c *gin.Context) {
 	type Unit3 struct {
-		OldUnit string `json:"oldUnit"`
-		Unit    string `json:"unit"`
-		Cinf    Cfo    `json:"Cinfo"`
+		Worksite string `json:"worksite"`
+		Floor    string `json:"floor"`
+		OldUnit  string `json:"oldUnit"`
+		Unit     string `json:"unit"`
 	}
 	var EditU Unit3
 	if err := c.BindJSON(&EditU); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
+	unitsSend := Loca{
+		Worksite: EditU.Worksite,
+		Floor:    EditU.Floor,
+	}
+	units := openUnit(unitsSend)
 	newUnit := Unt2{
 		Unit: EditU.Unit,
 	}
-	openUnit()
 	for i, item := range units {
 		if item.Unit == EditU.OldUnit {
 			units[i] = newUnit
 			break
 		}
 	}
-	saveUnit()
-	units = []Unt2{}
+	saveUnit(unitsSend, units)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
-func selectUnit(c *gin.Context) {
-	if err := c.BindJSON(&Cinfo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func getParts2(c *gin.Context) {
-	c.JSON(http.StatusOK, Cinfo)
-}
-
-// ______________________________________________________________________________________________________________
-func selectPart(c *gin.Context) {
-	if err := c.BindJSON(&Cinfo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	c.Status(http.StatusOK)
-}
-
-// ______________________________________________________________________________________________________________
-func getPart(c *gin.Context) {
-	c.JSON(http.StatusOK, Cinfo)
-}
-
-// ______________________________________________________________________________________________________________
-func openO() {
-	orders = []Cfo{}
-	file, err := os.Open("order.json")
+func openO() []Cfo {
+	fileMutexO.Lock()
+	defer fileMutexO.Unlock()
+	var orders []Cfo
+	file, err := os.Open("json/order.json")
 	if err != nil {
-		if os.IsNotExist(err) {
-			orders = []Cfo{}
-		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&orders); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
+	return orders
 }
 
 // ______________________________________________________________________________________________________________
-func saveO() {
-	file, err := os.Create("order.json")
+func saveO(orders []Cfo) {
+	fileMutexO.Lock()
+	defer fileMutexO.Unlock()
+	file, err := os.Create("json/order.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(orders); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 }
 
 // ______________________________________________________________________________________________________________
-func setGroupO() {
+func sendGroup(c *gin.Context) {
+	var group []Cfo
+	if err := c.BindJSON(&group); err != nil {
+		logger.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	orders := openO()
+	location, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		logger.Println(err)
+	}
+	currentTime := time.Now().In(location)
+	for i := range group {
+		group[i].Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
+		group[i].UniqueID2 = uuid.New().String()
+		rand.New(rand.NewSource(time.Now().UnixNano()))
+		charset := "abcdefghijklmnopqrstuvwxyz123456789"
+		randomSTR := make([]byte, 8)
+		for i := range randomSTR {
+			randomSTR[i] = charset[rand.Intn(len(charset))]
+		}
+		group[i].UniqueIDQR = string(randomSTR)
+	}
+	orders = append(orders, group...)
 	type orderIndex struct {
 		index      int
 		parsedTime time.Time
@@ -815,6 +879,7 @@ func setGroupO() {
 	for i, order := range orders {
 		pt, err := time.Parse("15:04 / 2006-01-02", order.Time)
 		if err != nil {
+			logger.Println(err)
 			continue
 		}
 		orderIndices[i] = orderIndex{i, pt}
@@ -834,144 +899,13 @@ func setGroupO() {
 			groupCounter++
 		}
 	}
-}
-
-// ______________________________________________________________________________________________________________
-func order(c *gin.Context) {
-	var recO []Cfo
-	if err := c.BindJSON(&recO); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
+	saveO(orders)
 	c.Status(http.StatusOK)
-	openO()
-	location, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		panic(err)
-	}
-	currentTime := time.Now().In(location)
-	for _, item := range recO {
-		item.Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
-		item.UniqueID2 = uuid.New().String()
-		orders = append(orders, item)
-	}
-	setGroupO()
-	saveO()
-	Cinfo.Side = ""
-	Cinfo.Thickness = ""
-	Cinfo.Length = ""
-	Cinfo.DA = ""
-	Cinfo.DB = ""
-	Cinfo.DC = ""
-	Cinfo.DD = ""
-	Cinfo.DE = ""
-	Cinfo.D1A = ""
-	Cinfo.D2A = ""
-	Cinfo.D1B = ""
-	Cinfo.D2B = ""
-	Cinfo.DR = ""
-	Cinfo.DR_P = ""
-	Cinfo.DH = ""
-	Cinfo.DW = ""
-	Cinfo.Edge1 = ""
-	Cinfo.Edge2 = ""
-}
-
-// ______________________________________________________________________________________________________________
-func delCart(c *gin.Context) {
-	var delInfo Cfo
-	if err := c.BindJSON(&delInfo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	c.Status(http.StatusOK)
-	for i, item := range groupOrders {
-		if item.User == delInfo.User && item.Worksite == delInfo.Worksite &&
-			item.Floor == delInfo.Floor && item.Unit == delInfo.Unit &&
-			item.Part == delInfo.Part && item.Side == delInfo.Side &&
-			item.Thickness == delInfo.Thickness && item.Length == delInfo.Length &&
-			item.DA == delInfo.DA && item.DB == delInfo.DB &&
-			item.DC == delInfo.DC && item.DD == delInfo.DD &&
-			item.DE == delInfo.DE && item.D1A == delInfo.D1A &&
-			item.D2A == delInfo.D2A && item.D1B == delInfo.D1B &&
-			item.D2B == delInfo.D2B && item.DR == delInfo.DR &&
-			item.DR_P == delInfo.DR_P && item.DH == delInfo.DH &&
-			item.DW == delInfo.DW && item.Edge1 == delInfo.Edge1 &&
-			item.Edge2 == delInfo.Edge2 {
-			groupOrders = append(groupOrders[:i], groupOrders[i+1:]...)
-			break
-		}
-	}
-}
-
-// ______________________________________________________________________________________________________________
-func sendGroup(c *gin.Context) {
-	var group []Cfo
-	if err := c.BindJSON(&group); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
-	c.Status(http.StatusOK)
-	openO()
-	location, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		panic(err)
-	}
-	currentTime := time.Now().In(location)
-	for i := range group {
-		group[i].Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
-		group[i].UniqueID2 = uuid.New().String()
-	}
-	for _, item := range group {
-		orders = append(orders, item)
-	}
-	setGroupO()
-	saveO()
-	var indicesToRemove []int
-
-	for _, del := range groupOrders {
-		for i, item := range group {
-			if item.User == del.User &&
-				item.Worksite == del.Worksite &&
-				item.Floor == del.Floor &&
-				item.Unit == del.Unit &&
-				item.Part == del.Part &&
-				item.Side == del.Side &&
-				item.Thickness == del.Thickness &&
-				item.Length == del.Length &&
-				item.DA == del.DA &&
-				item.DB == del.DB &&
-				item.DC == del.DC &&
-				item.DD == del.DD &&
-				item.DE == del.DE &&
-				item.D1A == del.D1A &&
-				item.D2A == del.D2A &&
-				item.D1B == del.D1B &&
-				item.D2B == del.D2B &&
-				item.DR == del.DR &&
-				item.DR_P == del.DR_P &&
-				item.DH == del.DH &&
-				item.DW == del.DW &&
-				item.Edge1 == del.Edge1 &&
-				item.Edge2 == del.Edge2 {
-				indicesToRemove = append(indicesToRemove, i)
-				break
-			}
-		}
-	}
-
-	// Sort indices in descending order
-	sort.Sort(sort.Reverse(sort.IntSlice(indicesToRemove)))
-
-	// Remove identified items
-	for _, idx := range indicesToRemove {
-		groupOrders = append(groupOrders[:idx], groupOrders[idx+1:]...)
-	}
 }
 
 // ______________________________________________________________________________________________________________
 func getOrders(c *gin.Context) {
-	openO()
+	orders := openO()
 	sort.Slice(orders, func(i, j int) bool {
 		// Split on space to separate time and date
 		iParts := strings.Split(orders[i].Time, " / ")
@@ -984,7 +918,6 @@ func getOrders(c *gin.Context) {
 		return iParts[0] > jParts[0]
 	})
 	c.JSON(http.StatusOK, orders)
-	orders = []Cfo{}
 }
 
 // ______________________________________________________________________________________________________________
@@ -998,28 +931,16 @@ func delReceive(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusOK)
-	openO()
-	openHis()
+	orders := openO()
+	histories := openHis()
 	location, err := time.LoadLocation("America/New_York")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	currentTime := time.Now().In(location)
 	for _, del := range delInfo {
 		for i, item := range orders {
-			cnt := 0
 			if item.UniqueID2 == del.UniqueID2 {
-				for _, item2 := range orders {
-					if item2.Img == item.Img {
-						cnt += 1
-					}
-				}
-				if cnt == 1 {
-					err := os.Remove(item.Img)
-					if err != nil {
-						fmt.Println("Error removing file:", err)
-					}
-				}
 				item.CheckTime = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
 				histories = append(histories, item)
 				orders = append(orders[:i], orders[i+1:]...)
@@ -1027,43 +948,47 @@ func delReceive(c *gin.Context) {
 			}
 		}
 	}
-	saveO()
-	saveHis()
+	saveO(orders)
+	saveHis(histories)
 }
 
 // ______________________________________________________________________________________________________________
-func openHis() {
-	file, err := os.Open("history.json")
+func openHis() []Cfo {
+	var histories []Cfo
+	fileMutexH.Lock()
+	defer fileMutexH.Unlock()
+	file, err := os.Open("json/history.json")
 	if err != nil {
-		if os.IsNotExist(err) {
-			histories = []Cfo{}
-		}
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&histories); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
+	return histories
 }
 
 // ______________________________________________________________________________________________________________
-func saveHis() {
-	file, err := os.Create("history.json")
+func saveHis(histories []Cfo) {
+	fileMutexH.Lock()
+	defer fileMutexH.Unlock()
+	file, err := os.Create("json/history.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(histories); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 }
 
 // ______________________________________________________________________________________________________________
 func viewHis1(c *gin.Context) {
-	data, err := os.ReadFile("history.html")
+	data, err := os.ReadFile("adminPage/history.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
 	floor2_page := string(data)
@@ -1073,7 +998,7 @@ func viewHis1(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func viewHis2(c *gin.Context) {
-	openHis()
+	histories := openHis()
 	sort.Slice(histories, func(i, j int) bool {
 		iTime := histories[i].CheckTime
 		jTime := histories[j].CheckTime
@@ -1104,63 +1029,34 @@ func retreiveHis(c *gin.Context) {
 	}
 	retInfo.Check = ""
 	retInfo.CheckTime = ""
-	retInfo.Img = ""
-	openO()
+	location, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		logger.Println(err)
+	}
+	currentTime := time.Now().In(location)
+	retInfo.Time = fmt.Sprintf("%s / %s", currentTime.Format("15:04"), currentTime.Format("2006-01-02"))
+	orders := openO()
 	orders = append(orders, retInfo)
-	saveO()
-	openHis()
+	saveO(orders)
+	histories := openHis()
 	for i, item := range histories {
 		if item.UniqueID2 == retInfo.UniqueID2 {
 			histories = append(histories[:i], histories[i+1:]...)
 			break
 		}
 	}
-	saveHis()
+	saveHis(histories)
 	c.Status(http.StatusOK)
 }
 
 // ______________________________________________________________________________________________________________
-func dimensionToFloat(dim string) (float64, error) {
-	if dim == "" {
-		return 0, nil
+func recQuiz(c *gin.Context) {
+	data, err := os.ReadFile("receivePage/filterQuiz.js")
+	if err != nil {
+		logger.Println(err)
+		return
 	}
-	if dim == "x" || dim == "X" {
-		return 48, nil
-	}
-	parts := strings.Split(dim, "/")
-
-	if len(parts) == 1 { // simple number or mixed number without fraction
-		decimalParts := strings.Split(parts[0], ".")
-		if len(decimalParts) == 1 {
-			return strconv.ParseFloat(decimalParts[0], 64)
-		}
-		wholeNum, err1 := strconv.ParseFloat(decimalParts[0], 64)
-		if err1 != nil {
-			return 0, errors.New("invalid dimension format")
-		}
-		return wholeNum, nil
-
-	} else if len(parts) == 2 { // fraction or mixed number with fraction
-		decimalParts := strings.Split(parts[0], ".")
-		if len(decimalParts) == 1 {
-			numerator, err1 := strconv.ParseFloat(decimalParts[0], 64)
-			denominator, err2 := strconv.ParseFloat(parts[1], 64)
-			if err1 != nil || err2 != nil {
-				return 0, errors.New("invalid dimension format")
-			}
-			return numerator / denominator, nil
-		}
-		if len(decimalParts) == 2 { // mixed number
-			wholeNum, err1 := strconv.ParseFloat(decimalParts[0], 64)
-			numerator, err2 := strconv.ParseFloat(decimalParts[1], 64)
-			denominator, err3 := strconv.ParseFloat(parts[1], 64)
-			if err1 != nil || err2 != nil || err3 != nil {
-				return 0, errors.New("invalid dimension format")
-			}
-			return wholeNum + (numerator / denominator), nil
-		}
-	}
-	return 0, errors.New("invalid dimension format")
+	c.JSON(http.StatusOK, string(data))
 }
 
 // ______________________________________________________________________________________________________________
@@ -1179,12 +1075,13 @@ func sortSize1(c *gin.Context) {
 	groupSize, err := strconv.Atoi(nbr.Nbr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid group size"})
+		logger.Println(err)
 		return
 	}
 	if nbr.Constr[0] == "All orders" {
 		nbr.Constr = []string{}
 	}
-	openO()
+	orders := openO()
 	sort.Slice(orders, func(i, j int) bool {
 		// Split on space to separate time and date
 		iParts := strings.Split(orders[i].Time, " / ")
@@ -1374,13 +1271,13 @@ func sortSize2(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	//console.log()
 	groupSize, err := strconv.Atoi(nbr.Nbr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid group size"})
+		logger.Println(err)
 		return
 	}
-	openO()
+	orders := openO()
 	sort.Slice(orders, func(i, j int) bool {
 		// Split on space to separate time and date
 		iParts := strings.Split(orders[i].Time, " / ")
@@ -1519,14 +1416,24 @@ func sortSize2(c *gin.Context) {
 		}
 		m[cfo.Sheet]++
 	}
+	var newType string
+	oldType := make(map[string]bool)
 	var summaries []SheetSummary
-	for key, count := range countMap {
-		summaries = append(summaries, SheetSummary{
-			Type:      key.Type,
-			Thickness: key.Thickness,
-			Length:    key.Length,
-			Count:     count,
-		})
+	for key0 := range countMap {
+		newType = key0.Type
+		if !oldType[key0.Type] {
+			for key, count := range countMap {
+				if key.Type == newType {
+					summaries = append(summaries, SheetSummary{
+						Type:      key.Type,
+						Thickness: key.Thickness,
+						Length:    key.Length,
+						Count:     count,
+					})
+				}
+			}
+		}
+		oldType[key0.Type] = true
 	}
 	type ResponseData struct {
 		PartsWithSheets []Cfo
@@ -1555,14 +1462,14 @@ func savePrst(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	file, err := os.Open("userDB.json")
+	file, err := os.Open("json/userDB.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&db); err != nil {
 		file.Close()
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 	preDB := Prst{
@@ -1586,13 +1493,13 @@ func savePrst(c *gin.Context) {
 		newDB.Prst = append(newDB.Prst, preDB)
 		db = append(db, newDB)
 	}
-	file, err = os.Create("userDB.json")
+	file, err = os.Create("json/userDB.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(&db); err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 	c.Status(http.StatusOK)
@@ -1604,31 +1511,24 @@ func getPrst(c *gin.Context) {
 		User string `json:"user"`
 		Work string `json:"work"`
 	}
-	type Prst3 struct {
-		Sort   string   `json:"sort"`
-		Constr []string `json:"constr"`
-		Nbr    string   `json:"nbr"`
-		Name   string   `json:"name"`
-	}
 	var prst Prst2
 	var db []DB
 	if err := c.BindJSON(&prst); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	file, err := os.Open("userDB.json")
+	file, err := os.Open("json/userDB.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&db); err != nil {
 		file.Close()
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 	for _, item := range db {
 		if item.User == prst.User {
-			fmt.Println(item.Prst)
 			c.JSON(http.StatusOK, item.Prst)
 			return
 		}
@@ -1649,17 +1549,16 @@ func rmPrst(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	file, err := os.Open("userDB.json")
+	file, err := os.Open("json/userDB.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	decoder := json.NewDecoder(file)
 	if err := decoder.Decode(&db); err != nil {
 		file.Close()
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
-	fmt.Println(prst)
 	for i, item := range db {
 		if item.User == prst.User {
 			var updatedPrst []Prst
@@ -1671,14 +1570,14 @@ func rmPrst(c *gin.Context) {
 			db[i].Prst = updatedPrst
 		}
 	}
-	file, err = os.Create("userDB.json")
+	file, err = os.Create("json/userDB.json")
 	if err != nil {
-		panic(err)
+		logger.Println(err)
 	}
 	encoder := json.NewEncoder(file)
 	if err := encoder.Encode(&db); err != nil {
 		file.Close()
-		panic(err)
+		logger.Println(err)
 	}
 	file.Close()
 	c.Status(http.StatusOK)
@@ -1704,12 +1603,10 @@ func mHis(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusOK)
-	openHis()
+	histories := openHis()
 	if retM.Month == "all" {
 		if Cinfo.Worksite == "" {
-			for _, item := range histories {
-				hisM = append(hisM, item)
-			}
+			hisM = append(hisM, histories...)
 		} else if Cinfo.Floor == "" {
 			for _, item := range histories {
 				if item.Worksite == Cinfo.Worksite {
@@ -1732,7 +1629,7 @@ func mHis(c *gin.Context) {
 	} else {
 		retM2, err := strconv.Atoi(retM.Month)
 		if err != nil {
-			fmt.Println("Error converting:", err)
+			logger.Println(err)
 			return
 		}
 		currentMonth := int(time.Now().Month())
@@ -1741,7 +1638,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1753,7 +1650,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1767,7 +1664,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1779,7 +1676,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1793,7 +1690,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1805,7 +1702,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1819,7 +1716,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1831,7 +1728,7 @@ func mHis(c *gin.Context) {
 				for _, item := range histories {
 					parsedTime, err := time.Parse("15:04 / 2006-01-02", item.Time)
 					if err != nil {
-						fmt.Println("Error parsing time:", err)
+						logger.Println(err)
 						return
 					}
 					month := int(parsedTime.Month())
@@ -1846,8 +1743,9 @@ func mHis(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func mHis2(c *gin.Context) {
-	data, err := os.ReadFile("monthHis.html")
+	data, err := os.ReadFile("adminPage/monthHis.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
 	floor2_page := string(data)
@@ -1863,13 +1761,17 @@ func mHis3(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func unitProgress1(c *gin.Context) {
+	type Pgrs struct {
+		Uid2  string `json:"uid2"`
+		Check string `json:"check"`
+	}
 	var PgrsData Pgrs
 	if err := c.BindJSON(&PgrsData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
 	c.Status(http.StatusOK)
-	openO()
+	orders := openO()
 	for i, item := range orders {
 		if item.UniqueID2 == PgrsData.Uid2 && PgrsData.Check == "1" && item.Check == "" {
 			orders[i].Check = "1"
@@ -1879,7 +1781,7 @@ func unitProgress1(c *gin.Context) {
 			break
 		}
 	}
-	saveO()
+	saveO(orders)
 }
 
 // ______________________________________________________________________________________________________________
@@ -1902,7 +1804,7 @@ func unitProgress2(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	openO()
+	orders := openO()
 
 	randTimes := make(map[string]time.Time)
 	for _, item := range orders {
@@ -1918,6 +1820,7 @@ func unitProgress2(c *gin.Context) {
 
 			parsedTime, err := parseTimeString(item.Time)
 			if err != nil {
+				logger.Println(err)
 				continue
 			}
 			randTimes[item.Rand] = parsedTime
@@ -1985,8 +1888,9 @@ func unitProgress3(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func adminUser(c *gin.Context) {
-	data, err := os.ReadFile("adminUser.html")
+	data, err := os.ReadFile("adminPage/adminUser.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
 	floor2_page := string(data)
@@ -1996,8 +1900,9 @@ func adminUser(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func adminHistory(c *gin.Context) {
-	data, err := os.ReadFile("adminHistory.html")
+	data, err := os.ReadFile("adminPage/adminHistory.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
 	floor2_page := string(data)
@@ -2007,8 +1912,9 @@ func adminHistory(c *gin.Context) {
 
 // ______________________________________________________________________________________________________________
 func adminWorksite(c *gin.Context) {
-	data, err := os.ReadFile("adminWorksite.html")
+	data, err := os.ReadFile("adminPage/adminWorksite.html")
 	if err != nil {
+		logger.Println(err)
 		return
 	}
 	floor2_page := string(data)
@@ -2019,18 +1925,17 @@ func adminWorksite(c *gin.Context) {
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func main() {
-	loadCred()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(cors.Default())
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
 	router.GET("/", home)
+	router.GET("/login98", login98)
 	router.POST("/login99", login)
 	authMiddleware := func(c *gin.Context) {
 		// Read the username from the cookie
 		username, err := c.Cookie("username4221")
-		Cusername = username
 		if err != nil || username == "" {
 			// If the user is not authenticated, redirect to the login page
 			c.Redirect(http.StatusSeeOther, "/")
@@ -2072,7 +1977,6 @@ func main() {
 				}
 			}
 		}
-		Cusername = username
 	}
 	router.GET("/loginOrder", authMiddleware, loginOrder)
 	router.GET("/loginReceiver", authMiddleware2, loginReceiver)
@@ -2088,37 +1992,25 @@ func main() {
 	router.POST("/addUser", authMiddleware3, addUser)
 	router.POST("/delUser", authMiddleware3, delUser)
 	router.GET("/getUser2", authMiddleware3, getUser2)
-	router.POST("/addUser2", authMiddleware3, addUser2)
-	router.POST("/delUser2", authMiddleware3, delUser2)
-	router.GET("/getCurUser", authMiddleware4, getCurUser)
 	router.GET("/getWorksites", authMiddleware4, getWorksites)
 	router.POST("/addWorksite", authMiddleware3, addWorksite)
 	router.POST("/delWorksite", authMiddleware3, delWorksite)
 	router.POST("/editWorksite", authMiddleware3, editWorksite)
-	router.POST("/selectWorksite", authMiddleware4, selectWorksite)
-	router.GET("/getFloors2", authMiddleware4, getFloors2)
-	router.GET("/getFloors3", authMiddleware, getFloors3)
+	router.POST("/getFloors", authMiddleware4, getFloors)
 	router.POST("/addFloor", authMiddleware, addFloor)
 	router.POST("/delFloor", authMiddleware, delFloor)
 	router.POST("/editFloor", authMiddleware, editFloor)
-	router.POST("/selectFloor", authMiddleware4, selectFloor)
-	router.GET("/getUnits2", authMiddleware4, getUnits2)
-	router.GET("/getUnits3", authMiddleware, getUnits3)
+	router.POST("/getUnits", authMiddleware4, getUnits)
 	router.POST("/addUnit", authMiddleware, addUnit)
 	router.POST("/delUnit", authMiddleware, delUnit)
 	router.POST("/editUnit", authMiddleware, editUnit)
-	router.POST("/selectUnit", authMiddleware4, selectUnit)
-	router.GET("/getParts2", authMiddleware, getParts2)
-	router.POST("/selectPart", authMiddleware, selectPart)
-	router.GET("/getPart", authMiddleware, getPart)
-	router.POST("/order", authMiddleware, order)
-	router.POST("/delCart", authMiddleware, delCart)
 	router.POST("/sendGroup", authMiddleware, sendGroup)
 	router.GET("/getOrders", authMiddleware2, getOrders)
 	router.POST("/delReceive", authMiddleware2, delReceive)
 	router.GET("/viewHis1", authMiddleware2, viewHis1)
 	router.GET("/viewHis2", authMiddleware2, viewHis2)
 	router.POST("/retreiveHis", authMiddleware2, retreiveHis)
+	router.GET("/recQuiz", authMiddleware2, recQuiz)
 	router.POST("/sortSize1", authMiddleware2, sortSize1)
 	router.POST("/sortSize2", authMiddleware2, sortSize2)
 	router.POST("/savePrst", authMiddleware2, savePrst)
@@ -2128,70 +2020,76 @@ func main() {
 	router.POST("/unitProgress2", authMiddleware, unitProgress2)
 	router.GET("/unitProgress3", authMiddleware, unitProgress3)
 	router.GET("/image1", func(c *gin.Context) {
-		c.File("./image1.jpg")
+		c.File("./img/parts/image1.jpg")
 	})
 	router.GET("/image2", func(c *gin.Context) {
-		c.File("./image2.jpg")
+		c.File("./img/parts/image2.jpg")
 	})
 	router.GET("/image3", func(c *gin.Context) {
-		c.File("./image3.jpg")
+		c.File("./img/parts/image3.jpg")
 	})
 	router.GET("/image4", func(c *gin.Context) {
-		c.File("./image4.jpg")
+		c.File("./img/parts/image4.jpg")
 	})
 	router.GET("/image5", func(c *gin.Context) {
-		c.File("./image5.jpg")
+		c.File("./img/parts/image5.jpg")
 	})
 	router.GET("/image6", func(c *gin.Context) {
-		c.File("./image6.jpg")
+		c.File("./img/parts/image6.jpg")
 	})
 	router.GET("/image7", func(c *gin.Context) {
-		c.File("./image7.jpg")
+		c.File("./img/parts/image7.jpg")
 	})
 	router.GET("/image8", func(c *gin.Context) {
-		c.File("./image8.jpg")
+		c.File("./img/parts/image8.jpg")
 	})
 	router.GET("/image9", func(c *gin.Context) {
-		c.File("./image9.jpg")
+		c.File("./img/parts/image9.jpg")
 	})
 	router.GET("/image10", func(c *gin.Context) {
-		c.File("./image10.jpg")
+		c.File("./img/parts/image10.jpg")
 	})
 	router.GET("/image11", func(c *gin.Context) {
-		c.File("./image11.jpg")
+		c.File("./img/parts/image11.jpg")
 	})
 	router.GET("/image12", func(c *gin.Context) {
-		c.File("./image12.jpg")
+		c.File("./img/parts/image12.jpg")
 	})
 	router.GET("/image13", func(c *gin.Context) {
-		c.File("./image13.jpg")
+		c.File("./img/parts/image13.jpg")
 	})
 	router.GET("/image14", func(c *gin.Context) {
-		c.File("./image14.jpg")
+		c.File("./img/parts/image14.jpg")
 	})
 	router.GET("/image15", func(c *gin.Context) {
-		c.File("./image15.jpg")
+		c.File("./img/parts/image15.jpg")
 	})
 	router.GET("/dwnl", func(c *gin.Context) {
-		c.File("./dwnl.PNG")
+		c.File("./img/other/dwnl.PNG")
 	})
 	router.GET("/favicon", func(c *gin.Context) {
-		c.File("./midTlogo.png")
+		c.File("./img/other/midTlogo.png")
 	})
 	router.GET("/fscreen", func(c *gin.Context) {
-		c.File("./Fscreen.PNG")
+		c.File("./img/other/Fscreen.PNG")
 	})
 	router.GET("/padlockUN", func(c *gin.Context) {
-		c.File("./padlock2.PNG")
+		c.File("./img/other/padlock2.PNG")
 	})
 	router.GET("/padlockLO", func(c *gin.Context) {
-		c.File("./padlock1.PNG")
+		c.File("./img/other/padlock1.PNG")
 	})
 	router.GET("/bell1", func(c *gin.Context) {
-		c.File("./bell1.PNG")
+		c.File("./img/other/bell1.PNG")
 	})
 	router.GET("/bell2", func(c *gin.Context) {
-		c.File("./bell2.PNG")
+		c.File("./img/other/bell2.PNG")
+	})
+	router.GET("/MidPrefabIMG", func(c *gin.Context) {
+		c.File("./img/other/prefab.png")
+	})
+	router.GET("/PWRL", func(c *gin.Context) {
+		c.File("./img/other/logoutB.png")
 	})
 	router.POST("/uploadIMG", func(c *gin.Context) {
 		file, _ := c.FormFile("image")
@@ -2201,7 +2099,8 @@ func main() {
 			})
 			return
 		}
-		if err := c.SaveUploadedFile(file, file.Filename); err != nil {
+		if err := c.SaveUploadedFile(file, "./img/UploadedIMG/"+file.Filename); err != nil {
+			logger.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"message": "Unable to save the file",
 			})
@@ -2217,11 +2116,13 @@ func main() {
 		}
 		var imageFilePath Simg
 		if err := c.BindJSON(&imageFilePath); err != nil {
+			logger.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 			return
 		}
-		imageData, err := os.ReadFile(imageFilePath.Image)
+		imageData, err := os.ReadFile("./img/UploadedIMG/" + imageFilePath.Image)
 		if err != nil {
+			logger.Println(err)
 			c.String(http.StatusInternalServerError, "Internal Server Error")
 			return
 		}
@@ -2235,7 +2136,6 @@ func main() {
 		default:
 			contentType = "application/octet-stream"
 		}
-		fmt.Println(imageFilePath.Image+":", contentType)
 		c.Data(http.StatusOK, contentType, imageData)
 	})
 	router.POST("/rmCook", func(c *gin.Context) {
@@ -2245,7 +2145,7 @@ func main() {
 	})
 	numImages := 14
 	for i := 1; i <= numImages; i++ {
-		index := i // Capture the current value of i in a local variable
+		index := i
 		router.GET("/part"+strconv.Itoa(index), func(c *gin.Context) {
 			data, err := os.ReadFile("part" + strconv.Itoa(index) + ".html")
 			if err != nil {

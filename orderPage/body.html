@@ -1,0 +1,2439 @@
+<body>
+    <div id="notifPanel" style=" width: 20%; height: max-content; background-color: #1f1f1f; border: solid 0.1vw rgb(97, 97, 97); border-radius: 3%; display: flex; flex-direction: column; scale: 0; transition: scale 0.05s ease; position: fixed; z-index: 100;">
+      <div class="PanelList">
+        <div style="margin-left: 10%">User History</div>
+      </div>
+      <div class="PanelList" id="Discon">
+        <div style="color: white; font-size: 1.4vw; width: fit-content; margin-left: 10%;">Log Out</div>
+        <img src="https://192.168.2.32/PWRL" style="max-width: 20%; max-height: 50%; margin-left: 8%;">
+      </div>
+    </div>
+    <div class="TopLay">
+        <div class="TopMid1">
+          <img src="https://192.168.2.32/MidPrefabIMG" style="width: 45%;">
+        </div>
+        <div class="TopMid2">
+            <div style="display: flex; justify-content: center; align-items: center; width: 7vw; height: 7vh; font-size: 3vw; background-color: #1E90FF; color: white; border: none; border-radius: 2vw; cursor: pointer; position: absolute; left: 3vw; text-align: center;" id="gbck">
+              <span style="font-family: fds32;">&larr;</span>
+            </div>
+            <h1 style="color: white; font-size: 3vw; position: absolute; left: 50%; transform: translateX(-50%);">Order Page</h1>
+        </div>
+        <div class="TopMid3">
+          <div style="color: white; border: solid 0.1vw rgb(97, 97, 97); height: 40%; border-radius: 1vw; cursor: pointer; display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 5%;" id="TopUser">
+            <h2 style="font-size: 2vw; font-weight: lighter;"></h2>
+            <h2 style="font-size: 1.6vw; font-weight: lighter; transform: rotate(90deg) translateX(-10%) translateY(-20%);">&nbsp;&#10154;</h2>
+          </div>
+      </div>
+    </div>
+    <div class="Mid">
+        <div class="LeftLay">
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Worksite:</h2>
+            <ul id="listContainer"></ul>
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Floor:</h2>
+            <ul id="floorContainer"></ul>
+            <div style="display: none; flex-direction: row; align-content: center; justify-content: center; margin-top: 1vw;" id="floorBC">
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delFloor">Delete</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edFloor">Edit</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addFloor">Add</button>
+            </div>
+            <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Unit:</h2>
+            <ul id="unitContainer"></ul>
+            <div style="display: none; flex-direction: row; align-content: center; justify-content: center; margin-top: 1vw; margin-bottom: 4vw;" id="unitBC">
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.4vw;" id="delUnit">Delete</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.4vw;" id="edUnit">Edit</button>
+              <button style="display: flex; justify-content: center; align-items: center; width: 4vw; height: 2vw; font-size: 1.1vw; background-color: #131111; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.8vw;" id="addUnit">Add</button>
+            </div>
+        </div>
+        <div class="Mid2">
+        <div class="Mid3">
+        <div class="MidLay" id="MidLay1">
+            <div class="image-box" id="part1">
+                  <img src="https://192.168.2.32:443/image1" alt="90° Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">90° Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part2">
+                  <img src="https://192.168.2.32:443/image2" alt="30° Knife Edge">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">30° Knife Edge</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part3">
+                  <img src="https://192.168.2.32:443/image3" alt="45° Knife Edge">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">45° Knife Edge</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part4">
+                  <img src="https://192.168.2.32:443/image4" alt="90° 3 Way Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">90° 3 Way Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part15">
+                <img src="https://192.168.2.32:443/image15" alt="90° 4 Way Profile">
+                <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">90° 4 Way Profile</h2>
+              </a>
+            </div>
+              <div class="image-box" id="part5">
+                  <img src="https://192.168.2.32:443/image5" alt="135° Bulkhead Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">135° Bulkhead Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part6">
+                  <img src="https://192.168.2.32:443/image6" alt="135° Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">135° Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part7">
+                  <img src="https://192.168.2.32:443/image7" alt="C-Cap Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">C-Cap Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part8">
+                  <img src="https://192.168.2.32:443/image8" alt="Column Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Column Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part9">
+                  <img src="https://192.168.2.32:443/image9" alt="Fire Rated Enclosure Double">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Fire Rated Enclosure Double</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part10">
+                  <img src="https://192.168.2.32:443/image10" alt="Fire Rated Enclosure">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Fire Rated Enclosure</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part11">
+                  <img src="https://192.168.2.32:443/image11" alt="Hat Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Hat Profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part12">
+                  <img src="https://192.168.2.32:443/image12" alt="Multi-Step profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Multi-Step profile</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part13">
+                  <img src="https://192.168.2.32:443/image13" alt="Radius Bulkhead">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Radius Bulkhead</h2>
+                </a>
+              </div>
+              <div class="image-box" id="part14">
+                  <img src="https://192.168.2.32:443/image14" alt="Radius Profile">
+                  <h2 style="font-size: 1.8vw; color: white; margin-top: 0.8vw;">Radius Profile</h2>
+                </a>
+              </div>
+        </div> 
+        <div class="MidLayy" id="MidLay2">
+          <div class="image-column">
+            <div class="header">90° Profile</div>
+            <div style="display: flex; flex-direction: column; width: 22vw;">
+              <div class="swiper mySwiper" style="margin: 0;">
+                <div class="swiper-wrapper" id="IMGtoAdd">
+                    <div class="swiper-slide"><img src="image1" alt="Big Picture"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
+              <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+              <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+            </div>
+          </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness (Ft):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Length (Ft):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                      <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                      <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                    </div>
+                    <!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                  </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet();">Rest of half a sheet</div>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet2();">Rest of sheet</div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge B:</label>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                  </div>
+ 
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+            </div>
+        <div class="MidLayy" id="MidLay3">
+            <div class="image-column">
+              <div class="header-container">
+                <div class="header">30° Knife Edge</div>
+              </div>
+              <div style="display: flex; flex-direction: column; width: 22vw;">
+                <div class="swiper mySwiper" style="margin: 0;">
+                  <div class="swiper-wrapper" id="IMGtoAdd">
+                      <div class="swiper-slide"><img src="image2" alt="Big Picture"></div>
+                  </div>
+                  <div class="swiper-pagination"></div>
+                </div>
+                <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+              </div>
+            </div>
+        
+            <!-- Form container -->
+            <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                    <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                </div>
+        
+                <div class="form-group">
+                    <label>Thickness (Ft):</label>
+                    <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                </div>
+
+                <div class="form-group">
+                  <label>Width (Inches):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                    <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+                </div>
+        
+                <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+        
+                <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet();">Rest of half a sheet</div>
+                </div>
+            
+                <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet2();">Rest of sheet</div>
+                </div>
+        
+                <div class="form-group">
+                  <label>Edge A:</label>
+                    <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                    <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                    <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                    <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                </div>
+        
+                <div class="form-group">
+                  <label>Edge B:</label>
+                    <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                    <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                    <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                    <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                    <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                </div>
+                <div class="form-group">
+                  <label>Add note (optionnal):</label>
+                  <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                </div>
+                <div class="form-group2">
+                  <label for="qty">Quantity:</label>
+                  <input type="number" id="qty" name="quantity" value="1" required>
+                </div>
+        
+                <!-- Submit button -->
+                <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+            </div>  
+        </div> 
+        <div class="MidLayy" id="MidLay4">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">45° Knife Edge</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image3" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet();">Rest of half a sheet</div>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet2();">Rest of sheet</div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge B:</label>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+                      <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay5">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">90° 3 Way Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image4" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet();">Rest of half a sheet</div>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet2();">Rest of sheet</div>
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay6">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">135° Bulkhead Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image5" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                    <div class="form-group">
+                      <label>Edge A:</label>
+                        <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                        <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                        <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                        <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                    </div>
+            
+                    <div class="form-group">
+                      <label>Edge B:</label>
+                        <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                    </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay7">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">135° Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image6" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet();">Rest of half a sheet</div>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet2();">Rest of sheet</div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge B:</label>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay8">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">C-Cap Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image7" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                    <div class="form-group">
+                      <label>Edge A:</label>
+                        <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                        <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                        <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                        <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                    </div>
+            
+                    <div class="form-group">
+                      <label>Edge B:</label>
+                        <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                        <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                    </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay9">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Column Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image8" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                  <label for="dD">Dimension D (Inches):</label>
+                  <input type="number" id="dD" name="dD" required>
+                  <select style="transform: translateX(-8vw);" name="dD" class="Dselection">
+                    <option value="">- / -</option>
+                    <option value="1/8">+ 1/8</option>
+                    <option value="1/4">+ 1/4</option>
+                    <option value="3/8">+ 3/8</option>
+                    <option value="1/2">+ 1/2</option>
+                    <option value="5/8">+ 5/8</option>
+                    <option value="3/4">+ 3/4</option>
+                    <option value="7/8">+ 7/8</option>
+                  </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dE">Dimension E (Inches):</label>
+                      <input type="number" id="dE" name="dE" required>
+                      <select style="transform: translateX(-8vw);" name="dE" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge B:</label>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay10">
+          <div class="image-column">
+            <div class="header-container">
+              <div class="header">Fire Rated Enclosure Double</div>
+            </div>
+            <div style="display: flex; flex-direction: column; width: 22vw;">
+              <div class="swiper mySwiper" style="margin: 0;">
+                <div class="swiper-wrapper" id="IMGtoAdd">
+                    <div class="swiper-slide"><img src="image9" alt="Big Picture"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
+              <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+              <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+            </div>
+          </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</button>
+                      <button type="button" class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</button>
+                      <button type="button" class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</button>
+                      <button type="button" class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</button>
+                      <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay11">
+          <div class="image-column">
+            <div class="header-container">
+              <div class="header">Fire Rated Enclosure</div>
+            </div>
+            <div style="display: flex; flex-direction: column; width: 22vw;">
+              <div class="swiper mySwiper" style="margin: 0;">
+                <div class="swiper-wrapper" id="IMGtoAdd">
+                    <div class="swiper-slide"><img src="image10" alt="Big Picture"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
+              <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+              <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+            </div>
+          </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+                    <div class="form-group">
+                      <label>Add note (optionnal):</label>
+                      <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                    </div>
+                    <div class="form-group2">
+                      <label for="qty">Quantity:</label>
+                      <input type="number" id="qty" name="quantity" value="1" required>
+                    </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay12">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Hat Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image11" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                  <label for="dD">Dimension D (Inches):</label>
+                  <input type="number" id="dD" name="dD" required>
+                  <select style="transform: translateX(-8vw);" name="dD" class="Dselection">
+                    <option value="">- / -</option>
+                    <option value="1/8">+ 1/8</option>
+                    <option value="1/4">+ 1/4</option>
+                    <option value="3/8">+ 3/8</option>
+                    <option value="1/2">+ 1/2</option>
+                    <option value="5/8">+ 5/8</option>
+                    <option value="3/4">+ 3/4</option>
+                    <option value="7/8">+ 7/8</option>
+                  </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dE">Dimension E (Inches):</label>
+                      <input type="number" id="dE" name="dE" required>
+                      <select style="transform: translateX(-8vw);" name="dE" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge B:</label>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay13">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Multi-Step profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image12" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension A (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="dB">Dimension B (Inches):</label>
+                    <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dC">Dimension C (Inches):</label>
+                      <input type="number" id="dC" name="dC" required>
+                      <select style="transform: translateX(-8vw);" name="dC" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                  <label for="dD">Dimension D (Inches):</label>
+                  <input type="number" id="dD" name="dD" required>
+                  <select style="transform: translateX(-8vw);" name="dD" class="Dselection">
+                    <option value="">- / -</option>
+                    <option value="1/8">+ 1/8</option>
+                    <option value="1/4">+ 1/4</option>
+                    <option value="3/8">+ 3/8</option>
+                    <option value="1/2">+ 1/2</option>
+                    <option value="5/8">+ 5/8</option>
+                    <option value="3/4">+ 3/4</option>
+                    <option value="7/8">+ 7/8</option>
+                  </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge A:</label>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer1-btn" data-name="edgeA" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeA">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Edge B:</label>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Plain" onclick="edgeFunc(this);">Plain</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Tapered" onclick="edgeFunc(this);">Tapered</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="D200" onclick="edgeFunc(this);">D200</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="Fabric" onclick="edgeFunc(this);">Fabric</div>
+                      <div class="answer2-btn" data-name="edgeB" data-value="J-Bead" onclick="edgeFunc(this);">J-Bead</div>
+<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock2(this);" id="DedgeB">
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay14">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Radius Bulkhead</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image13" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="d1A">Dimension 1A (Inches):</label>
+                    <input type="number" id="d1A" name="d1A" required>
+                    <select style="transform: translateX(-8vw);" name="d1A" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+              
+                  <div class="form-group">
+                    <label for="d2A">Dimension 2A (Inches):</label>
+                    <input type="number" id="d2A" name="d2A" required>
+                    <select style="transform: translateX(-8vw);" name="d2A" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="d1B">Dimension 1B (Inches):</label>
+                      <input type="number" id="d1B" name="d1B" required>
+                      <select style="transform: translateX(-8vw);" name="d1B" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                      <label for="d2B">Dimension 2B (Inches):</label>
+                      <input type="number" id="d2B" name="d2B" required>
+                      <select style="transform: translateX(-8vw);" name="d2B" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dR">Dimension R (Inches):</label>
+                      <input type="number" id="dR" name="dR" required>
+                      <select style="transform: translateX(-8vw);" name="dR" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dR_P">Dimension R' (Inches):</label>
+                      <input type="number" id="dR_P" name="dR_P" required>
+                      <select style="transform: translateX(-8vw);" name="dR_P" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    </div>
+          
+                  <div class="form-group">
+                      <label for="dH">Dimension H (Inches):</label>
+                      <input type="number" id="dH" name="dH" required>
+                      <select style="transform: translateX(-8vw);" name="dH" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+          
+                  <div class="form-group">
+                      <label for="dW">Dimension W (Inches): </label>
+                      <input type="number" id="dW" name="dW" required>
+                      <select style="transform: translateX(-8vw);" name="dW" class="Dselection">
+                        <option value="">- / -</option>
+                        <option value="1/8">+ 1/8</option>
+                        <option value="1/4">+ 1/4</option>
+                        <option value="3/8">+ 3/8</option>
+                        <option value="1/2">+ 1/2</option>
+                        <option value="5/8">+ 5/8</option>
+                        <option value="3/4">+ 3/4</option>
+                        <option value="7/8">+ 7/8</option>
+                      </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay15">
+            <div class="image-column">
+                <div class="header-container">
+                  <div class="header">Radius Profile</div>
+                </div>
+                <div style="display: flex; flex-direction: column; width: 22vw;">
+                  <div class="swiper mySwiper" style="margin: 0;">
+                    <div class="swiper-wrapper" id="IMGtoAdd">
+                        <div class="swiper-slide"><img src="image14" alt="Big Picture"></div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                  <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+                </div>
+              </div>
+          
+              <!-- Form container -->
+              <div class="form-container">
+                <form id="pictureForm">
+                  <div class="form-group">
+                    <label>Drywall Type:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                      <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                  </div>
+                  <div class="form-group">
+                    <label>Dimensioned Side:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                      <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                  </div>
+          
+                  <div class="form-group">
+                    <label>Thickness:</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                      <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                    </div>
+		    <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Width (Inches):</label>
+                    <div class="btn-group">
+                      <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                      <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                    </div>
+			<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                  </div>
+          
+                  <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+		    <button type="button" class="answer-btn len-btn" data-name="length" data-value="12">12</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+          
+                  <div class="form-group">
+                    <label for="dA">Dimension ØA (Inches):</label>
+                    <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                  </div>
+                  <div class="form-group">
+                    <label>Add note (optionnal):</label>
+                    <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                  </div>
+                  <div class="form-group2">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" name="quantity" value="1" required>
+                  </div>
+          
+                  <!-- Submit button -->
+                  <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+                </form>
+              </div>
+        </div>
+        <div class="MidLayy" id="MidLay16">
+          <div class="image-column">
+              <div class="header-container">
+                <div class="header">90° 4 Way Profile</div>
+              </div>
+              <div style="display: flex; flex-direction: column; width: 22vw;">
+                <div class="swiper mySwiper" style="margin: 0;">
+                  <div class="swiper-wrapper" id="IMGtoAdd">
+                      <div class="swiper-slide"><img src="image15" alt="Big Picture"></div>
+                  </div>
+                  <div class="swiper-pagination"></div>
+                </div>
+                <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect()">
+                <div onclick="triggerFileInput()" class="upButton" style="transform: translateY(-0.3em);">Upload Image</div>
+              </div>
+            </div>
+        
+            <!-- Form container -->
+            <div class="form-container">
+              <form id="pictureForm">
+                <div class="form-group">
+                  <label>Drywall Type:</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="type" data-value="Regular">Regular</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="Mold Tuff">Mold&nbspTuff</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="DensGlass">DensGlass</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="Type C">Type&nbspC</button>
+                    <button type="button" class="answer-btn" data-name="type" data-value="Type X">Type&nbspX</button>
+                  </div>
+                  <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dtype">
+                </div>
+                <div class="form-group">
+                  <label>Dimensioned Side:</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="side" data-value="Framed">Framed</button>
+                    <button type="button" class="answer-btn" data-name="side" data-value="Finished">Finished</button>
+                  </div>
+                  <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dside">
+                </div>
+        
+                <div class="form-group">
+                  <label>Thickness:</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="1/2">1/2</button>
+                    <button type="button" class="answer-btn" data-name="thickness" data-value="5/8">5/8</button>
+                  </div>
+                  <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dthickness">
+                </div>
+
+                <div class="form-group">
+                  <label>Width (Inches):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn" data-name="width" data-value="48">48</button>
+                    <button type="button" class="answer-btn" data-name="width" data-value="54">54</button>
+                  </div>
+                  <img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dwidth">
+                </div>
+        
+                <div class="form-group">
+                  <label>Length (Ft):</label>
+                  <div class="btn-group">
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="8">8</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="9">9</button>
+                    <button type="button" class="answer-btn len-btn" data-name="length" data-value="10">10</button>
+                    <button type="button" class="custm" id="answer-btn2">Custom Size</button>
+                  </div>
+			<!--<img src="https://192.168.2.32:443/padlockUN" style="width: 2vw; cursor: pointer;" onclick="padlock(this);" id="Dlength">-->
+                </div>
+        
+                <div class="form-group">
+                  <label for="dA">Dimension A (Inches):</label>
+                  <input type="number" id="dA" name="dA" required>
+                    <select style="transform: translateX(-8vw);" name="dA" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                    <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet();">Rest of half a sheet</div>
+                </div>
+            
+                <div class="form-group">
+                  <label for="dB">Dimension B (Inches):</label>
+                  <input type="number" id="dB" name="dB" required>
+                    <select style="transform: translateX(-8vw);" name="dB" class="Dselection">
+                      <option value="">- / -</option>
+                      <option value="1/8">+ 1/8</option>
+                      <option value="1/4">+ 1/4</option>
+                      <option value="3/8">+ 3/8</option>
+                      <option value="1/2">+ 1/2</option>
+                      <option value="5/8">+ 5/8</option>
+                      <option value="3/4">+ 3/4</option>
+                      <option value="7/8">+ 7/8</option>
+                    </select>
+                  <span class="greenP" style="transform: translateX(-7vw); color: transparent; font-weight: bold; font-size: 1.3vw;"> + 1/2 </span>
+                    <div class="rstSheet" onclick="restOfSheet2();">Rest of sheet</div>
+                </div>
+
+                <div class="form-group">
+                  <label>Add note (optionnal):</label>
+                  <input style="width: 20vw;" type="text" id="note">
+                    <select style="transform: translateX(-3vw); width: 1.5vw;" id="noteSel" onclick="noteSelClick(this);">
+                      <option value=""></option>
+                      <option value="Top of window">Top of window</option>
+                      <option value="Bottom of window">Bottom of window</option>
+                      <option value="Left of window">Left of window</option>
+                      <option value="Right of Window">Right of Window</option>
+                    </select>
+                </div>
+                <div class="form-group2">
+                  <label for="qty">Quantity:</label>
+                  <input type="number" id="qty" name="quantity" value="1" required>
+                </div>
+
+                <!-- Submit button -->
+                <button type="button" class="submit-btn" id="addToGroupOrderBtn">Add To Group Order</button>
+              </form>
+            </div>
+      </div>
+      </div>
+      </div>
+        <div class="RightLay">
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Group Order:</h2>
+          <div id="listContainer2"></div>
+          <button style="width: fit-content; height: 2vw; font-size: 1.3vw; background-color: #1E90FF; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 0.7vw; display: none;" id="submitButton">Review Order</button>
+          <h2 style="display: flex; justify-content: center; width: 100%; align-self: center; color: white; box-sizing: border-box; font-size: 1.7vw;">Order Progress:</h2>
+          <div style="width: 100%;" id="progressContainer"></div>
+        </div>
+    </div>
+</body>
