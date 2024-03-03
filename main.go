@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -1922,6 +1923,128 @@ func adminWorksite(c *gin.Context) {
 	c.String(http.StatusOK, floor2_page)
 }
 
+func getOrderData(c *gin.Context) {
+	type dataStruct struct {
+		User      string `json:"user"`
+		Worksite  string `json:"worksite"`
+		Floor     string `json:"floor"`
+		Unit      string `json:"unit"`
+		Part      string `json:"part"`
+		Type      string `json:"type"`
+		Side      string `json:"side"`
+		Thickness string `json:"thickness"`
+		Length    string `json:"length"`
+		Length2   string `json:"length2"`
+		DA        string `json:"dA"`
+		DB        string `json:"dB"`
+		DC        string `json:"dC"`
+		DD        string `json:"dD"`
+		DE        string `json:"dE"`
+		D1A       string `json:"d1A"`
+		D2A       string `json:"d2A"`
+		D1B       string `json:"d1B"`
+		D2B       string `json:"d2B"`
+		DR        string `json:"dR"`
+		DR_P      string `json:"dR_P"`
+		DH        string `json:"dH"`
+		DW        string `json:"dW"`
+		EdgeA     string `json:"edgeA"`
+		EdgeB     string `json:"edgeB"`
+		Price     string `json:"price"`
+		Check     string `json:"check"`
+		Rand      string `json:"rand"`
+		Sum       string `json:"sum"`
+		//Img       list	 `json:"img"`
+		GroupO   string `json:"groupO"`
+		Priority string `json:"priority"`
+		Note     string `json:"note"`
+	}
+
+	var Cinfo dataStruct
+	if err := c.BindJSON(&Cinfo); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+	fmt.Println(Cinfo)
+	c.Status(http.StatusOK)
+
+	db, err := sql.Open("sqlite3", "orders.sqlite")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	statement, err := db.Prepare(`
+		CREATE TABLE IF NOT EXISTS "orders" (
+			id INTEGER PRIMARY KEY, 
+			Time TEXT,
+			User TEXT, 
+			Worksite TEXT, 
+			Floor TEXT, 
+			Unit TEXT, 
+			Part TEXT, 
+			"Type" TEXT, 
+			Side TEXT, 
+			Thickness TEXT, 
+			Length INTEGER, 
+			Length2 INTEGER, 
+			dA TEXT,
+			dB TEXT,
+			dC TEXT,
+			dD TEXT,
+			dE TEXT,
+			d1A TEXT,
+			d2A TEXT,
+			d1B TEXT,
+			d2B TEXT,
+			dR TEXT,
+			dR_P TEXT,
+			dH TEXT,
+			dW TEXT,
+			EdgeA TEXT, 
+			EdgeB TEXT, 
+			Price TEXT,
+			"Check" TEXT, 
+			Rand TEXT, 
+			Sum TEXT,
+			GroupO TEXT, 
+			Priority TEXT,
+			Note TEXT
+	)`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec()
+
+	statement, err = db.Prepare(`
+		INSERT INTO "orders" (
+			Time, User, Worksite, Floor, Unit, Part, "Type", Side, Thickness, Length, Length2, 
+			dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, EdgeA, EdgeB, Price, "Check", 
+			Rand, Sum, GroupO, Priority, Note
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec(
+		time.Now(), Cinfo.User, Cinfo.Worksite, Cinfo.Floor, Cinfo.Unit, Cinfo.Part, Cinfo.Type, Cinfo.Side, Cinfo.Thickness,
+		Cinfo.Length, Cinfo.Length2, Cinfo.DA, Cinfo.DB, Cinfo.DC, Cinfo.DD, Cinfo.DE, Cinfo.D1A, Cinfo.D2A, Cinfo.D1B, Cinfo.D2B,
+		Cinfo.DR, Cinfo.DR_P, Cinfo.DH, Cinfo.DW, Cinfo.EdgeA, Cinfo.EdgeB, Cinfo.Price, Cinfo.Check, Cinfo.Rand, Cinfo.Sum,
+		Cinfo.GroupO, Cinfo.Priority, Cinfo.Note)
+
+	rows, err := db.Query("SELECT id, Time, User, Worksite, Floor, Unit, Part FROM orders")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var user, worksite, floor, unit, part, time string
+		rows.Scan(&id, &time, &user, &worksite, &floor, &unit, &part)
+		fmt.Println(id, time, user, worksite, floor, unit, part)
+	}
+}
+
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
 func main() {
@@ -1978,6 +2101,7 @@ func main() {
 			}
 		}
 	}
+	router.POST("/getOrderData", authMiddleware, getOrderData)
 	router.GET("/loginOrder", authMiddleware, loginOrder)
 	router.GET("/loginReceiver", authMiddleware2, loginReceiver)
 	router.GET("/loginAdmin", authMiddleware3, loginAdmin)

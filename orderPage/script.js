@@ -1941,6 +1941,7 @@ if (requiredButtons2.length > 0) {
         }
         const newCinfo = { ...Cinfo };              
         GroupOrder.push(newCinfo);
+        sendDatatoDB(newCinfo);
         resetCinf();
         document.getElementById(divv).style.scale = 0;
         document.getElementById('MidLay1').style.scale = 1;
@@ -1959,6 +1960,20 @@ if (requiredButtons2.length > 0) {
     }
 }
 
+function sendDatatoDB(Cinfo){
+  console.log(Cinfo);
+  fetch('/getOrderData', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(Cinfo),
+})
+.then(response => response.json())
+.then(Cinfo => console.log('Success:', Cinfo))
+.catch((error) => console.error('Error:', error));
+}
+
 addToGroupOrderBtn.addEventListener('click', handleAddToGroupOrder);
 document.getElementById('gbck').addEventListener('click', function() {
     fbrc = 0;
@@ -1966,7 +1981,7 @@ document.getElementById('gbck').addEventListener('click', function() {
     imgArrayLocal.forEach((item) => {
       delete imgArray[item];
     });
-    resetCinf();
+    //resetCinf();
     document.getElementById(divv).style.scale = 0;
     document.getElementById('MidLay1').style.scale = 1;
     document.getElementById(divv).style.zIndex = 0;
