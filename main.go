@@ -900,7 +900,65 @@ func sendGroup(c *gin.Context) {
 			groupCounter++
 		}
 	}
-	saveO(orders)
+	//saveO(orders)
+	db, err := sql.Open("sqlite3", "orders.sqlite")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	statement, err := db.Prepare(`
+		CREATE TABLE IF NOT EXISTS "orders" (
+			id INTEGER PRIMARY KEY, 
+			Time TEXT,
+			User TEXT, 
+			Worksite TEXT, 
+			Floor TEXT, 
+			Unit TEXT, 
+			Part TEXT, 
+			"Type" TEXT, 
+			Side TEXT, 
+			Thickness TEXT, 
+			Length INTEGER, 
+			Length2 INTEGER, 
+			dA TEXT,
+			dB TEXT,
+			dC TEXT,
+			dD TEXT,
+			dE TEXT,
+			d1A TEXT,
+			d2A TEXT,
+			d1B TEXT,
+			d2B TEXT,
+			dR TEXT,
+			dR_P TEXT,
+			dH TEXT,
+			dW TEXT,
+			EdgeA TEXT, 
+			EdgeB TEXT, 
+			Price TEXT,
+			"Check" TEXT, 
+			Rand TEXT, 
+			Sum TEXT,
+			GroupO TEXT, 
+			Priority TEXT,
+			Note TEXT
+	)`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec()
+
+	for _, order := range orders {
+		stmt, err := db.Prepare(`INSERT INTO orders (Time, User, Worksite, Floor, Unit, Part, "Type", Side, Thickness, Length, Length2, dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, EdgeA, EdgeB, Price, "Check", Rand, Sum, GroupO, Priority, Note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = stmt.Exec(order.Time, order.User, order.Worksite, order.Floor, order.Unit, order.Part, order.Type, order.Side, order.Thickness, order.Length, order.Length2, order.DA, order.DB, order.DC, order.DD, order.DE, order.D1A, order.D2A, order.D1B, order.D2B, order.DR, order.DR_P, order.DH, order.DW, order.Edge1, order.Edge2, order.Price, order.Check, order.Rand, order.Sum, order.GroupO, order.Priority, order.Note)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	c.Status(http.StatusOK)
 }
 
@@ -1968,13 +2026,13 @@ func getOrderData(c *gin.Context) {
 	fmt.Println(Cinfo)
 	c.Status(http.StatusOK)
 
-	db, err := sql.Open("sqlite3", "orders.sqlite")
+	db, err := sql.Open("sqlite3", "holdOrders.sqlite")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	statement, err := db.Prepare(`
-		CREATE TABLE IF NOT EXISTS "orders" (
+		CREATE TABLE IF NOT EXISTS "holdOrders" (
 			id INTEGER PRIMARY KEY, 
 			Time TEXT,
 			User TEXT, 
@@ -2016,7 +2074,7 @@ func getOrderData(c *gin.Context) {
 	statement.Exec()
 
 	statement, err = db.Prepare(`
-		INSERT INTO "orders" (
+		INSERT INTO "holdOrders" (
 			Time, User, Worksite, Floor, Unit, Part, "Type", Side, Thickness, Length, Length2, 
 			dA, dB, dC, dD, dE, d1A, d2A, d1B, d2B, dR, dR_P, dH, dW, EdgeA, EdgeB, Price, "Check", 
 			Rand, Sum, GroupO, Priority, Note
@@ -2031,7 +2089,7 @@ func getOrderData(c *gin.Context) {
 		Cinfo.DR, Cinfo.DR_P, Cinfo.DH, Cinfo.DW, Cinfo.EdgeA, Cinfo.EdgeB, Cinfo.Price, Cinfo.Check, Cinfo.Rand, Cinfo.Sum,
 		Cinfo.GroupO, Cinfo.Priority, Cinfo.Note)
 
-	rows, err := db.Query("SELECT id, Time, User, Worksite, Floor, Unit, Part FROM orders")
+	rows, err := db.Query("SELECT id, Time, User, Worksite, Floor, Unit, Part FROM holdOrders")
 	if err != nil {
 		log.Fatal(err)
 	}
