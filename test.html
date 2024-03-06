@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+    <div style="display: flex; flex-direction: column;">
+        <div id="inputsContainer"></div>
+        <button onclick="sendData();" style="margin-top: 5vh; background-color: blueviolet; height: 5vh; color: white; border: none;">Submit</button>
+    </div>
+    <script>
+        var backendURL = "https://192.168.2.165:443";
+        var Cinfo = {
+            "time": "",
+            "user": "",
+            "worksite": "",
+            "floor": "",
+            "unit": "",
+            "part": "",
+            "type": "",
+            "side": "",
+            "thickness": "",
+            "length": "",
+            "length2": "",
+            "dA": "",
+            "dB": "",
+            "dC": "",
+            "dD": "",
+            "dE": "",
+            "d1A": "",
+            "d2A": "",
+            "d1B": "",
+            "d2B": "",
+            "dR": "",
+            "dR_P": "",
+            "dH": "",
+            "dW": "",
+            "edgeA": "",
+            "edgeB": "",
+            "price": "",
+            "check": "",
+            "rand": "",
+            "sum": "",
+            "img": "",
+            "groupO": "",
+            "priority": "",
+            "note": ""
+        }
+
+
+        const container = document.getElementById('inputsContainer');
+        const fields = [
+            "user", "worksite", "floor", "unit", "part", "type", "side", "thickness",
+            "length", "length2", "dA", "dB", "dC", "dD", "dE", "d1A", "d2A", "d1B", "d2B",
+            "dR", "dR_P", "dH", "dW", "edgeA", "edgeB", "price", "rand", "sum", "img", "note"
+        ];
+        fields.forEach(field => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = field;
+            input.name = field;
+            input.placeholder = field;
+            input.addEventListener('change', function(event) {
+                console.log(Cinfo[field]);
+                Cinfo[field] = event.target.value;
+                console.log(Cinfo);
+            });
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        });
+   
+        function sendData() {
+            fetch(backendURL + '/sendOrderTest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Cinfo)
+            }).catch(error => {
+                console.error('Error:', error);
+                alert("There's a connection error");
+            });
+        }
+    </script>
+</body>
+</html>

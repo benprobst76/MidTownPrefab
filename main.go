@@ -1981,44 +1981,39 @@ func adminWorksite(c *gin.Context) {
 	c.String(http.StatusOK, floor2_page)
 }
 
-func getOrderData(c *gin.Context) {
-	type dataStruct struct {
-		User      string `json:"user"`
-		Worksite  string `json:"worksite"`
-		Floor     string `json:"floor"`
-		Unit      string `json:"unit"`
-		Part      string `json:"part"`
-		Type      string `json:"type"`
-		Side      string `json:"side"`
-		Thickness string `json:"thickness"`
-		Length    string `json:"length"`
-		Length2   string `json:"length2"`
-		DA        string `json:"dA"`
-		DB        string `json:"dB"`
-		DC        string `json:"dC"`
-		DD        string `json:"dD"`
-		DE        string `json:"dE"`
-		D1A       string `json:"d1A"`
-		D2A       string `json:"d2A"`
-		D1B       string `json:"d1B"`
-		D2B       string `json:"d2B"`
-		DR        string `json:"dR"`
-		DR_P      string `json:"dR_P"`
-		DH        string `json:"dH"`
-		DW        string `json:"dW"`
-		EdgeA     string `json:"edgeA"`
-		EdgeB     string `json:"edgeB"`
-		Price     string `json:"price"`
-		Check     string `json:"check"`
-		Rand      string `json:"rand"`
-		Sum       string `json:"sum"`
-		//Img       list	 `json:"img"`
-		GroupO   string `json:"groupO"`
-		Priority string `json:"priority"`
-		Note     string `json:"note"`
+func getUserOrder(c *gin.Context, user string) {
+	// Open the SQLite database file
+	db, err := sql.Open("sqlite3", "orders.sqlite")
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	// Query the database to look fr
+	rows, err := db.Query("SELECT * FROM orders WHERE user = ?", user)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	// Iterate through the result set
+	for rows.Next() {
+		var id int
+		var user, product string
+		err := rows.Scan(&id, &user, &product)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("ID: %d, User: %s, Product: %s\n", id, user, product)
 	}
 
-	var Cinfo dataStruct
+	if err := rows.Err(); err != nil {
+		panic(err)
+	}
+}
+
+func getOrderData(c *gin.Context) {
+	var Cinfo Cfo
 	if err := c.BindJSON(&Cinfo); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
@@ -2086,7 +2081,7 @@ func getOrderData(c *gin.Context) {
 	statement.Exec(
 		time.Now(), Cinfo.User, Cinfo.Worksite, Cinfo.Floor, Cinfo.Unit, Cinfo.Part, Cinfo.Type, Cinfo.Side, Cinfo.Thickness,
 		Cinfo.Length, Cinfo.Length2, Cinfo.DA, Cinfo.DB, Cinfo.DC, Cinfo.DD, Cinfo.DE, Cinfo.D1A, Cinfo.D2A, Cinfo.D1B, Cinfo.D2B,
-		Cinfo.DR, Cinfo.DR_P, Cinfo.DH, Cinfo.DW, Cinfo.EdgeA, Cinfo.EdgeB, Cinfo.Price, Cinfo.Check, Cinfo.Rand, Cinfo.Sum,
+		Cinfo.DR, Cinfo.DR_P, Cinfo.DH, Cinfo.DW, Cinfo.Edge1, Cinfo.Edge2, Cinfo.Price, Cinfo.Check, Cinfo.Rand, Cinfo.Sum,
 		Cinfo.GroupO, Cinfo.Priority, Cinfo.Note)
 
 	rows, err := db.Query("SELECT id, Time, User, Worksite, Floor, Unit, Part FROM holdOrders")
@@ -2102,6 +2097,16 @@ func getOrderData(c *gin.Context) {
 		fmt.Println(id, time, user, worksite, floor, unit, part)
 	}
 }
+
+// func getTest(c *gin.Context) {
+// 	data, err := os.ReadFile("test.html")
+// 	if err != nil {
+// 		return
+// 	}
+// 	test_page := string(data)
+// 	c.Header("Content-Type", "text/html")
+// 	c.String(http.StatusOK, test_page)
+// }
 
 // ______________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________
@@ -2159,6 +2164,7 @@ func main() {
 			}
 		}
 	}
+	// router.GET("/getTest", authMiddleware, getTest)
 	router.POST("/getOrderData", authMiddleware, getOrderData)
 	router.GET("/loginOrder", authMiddleware, loginOrder)
 	router.GET("/loginReceiver", authMiddleware2, loginReceiver)
